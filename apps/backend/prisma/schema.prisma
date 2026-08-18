@@ -1,0 +1,126 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String?
+  fullName  String
+  role      Role
+  phone     String?
+  createdAt DateTime @default(now())
+  vendor    Vendor?
+  orders    Order[]
+
+  @@map("users")
+}
+
+model Vendor {
+  id          String     @id @default(uuid())
+  ownerId     String     @unique
+  owner       User       @relation(fields: [ownerId], references: [id])
+  name        String
+  description String?
+  logoUrl     String?
+  isOpen      Boolean    @default(true)
+  menuItems   MenuItem[]
+  orders      Order[]
+
+  @@map("vendors")
+}
+
+model MenuItem {
+  id             String      @id @default(uuid())
+  vendorId       String
+  vendor         Vendor      @relation(fields: [vendorId], references: [id])
+  name           String
+  description    String?
+  price          Decimal
+  imageUrl       String?
+  category       String
+  isDailySpecial Boolean     @default(false)
+  isAvailable    Boolean     @default(true)
+  deletedAt      DateTime?   // Soft delete: null = active, set = deleted
+  orderItems     OrderItem[]
+
+  @@index([vendorId])           // ดึงเมนูตามร้านค้า
+  @@index([vendorId, isAvailable]) // กรองเมนูที่ยังขายอยู่ของแต่ละร้าน
+  @@index([category])           // กรองตามประเภทอาหาร
+  @@map("menu_items")
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  studentId    String
+  student      User        @relation(fields: [studentId], references: [id])
+  vendorId     String
+  vendor       Vendor      @relation(fields: [vendorId], references: [id])
+  orderType    OrderType
+  status       OrderStatus @default(pending)
+  note         String?
+  totalPrice   Decimal
+  queueNumber  Int
+  items        OrderItem[]
+  createdAt    DateTime    @default(now())
+  readyAt      DateTime?
+  completedAt  DateTime?
+  cancelledBy  CancelledBy?
+  cancelReason String?
+
+  @@unique([vendorId, queueNumber])  // ป้องกันเลขคิวซ้ำในร้านเดียวกัน
+  @@index([vendorId])                // ดึงออเดอร์ตามร้านค้า
+  @@index([studentId])               // ดึงประวัติออเดอร์ของนักศึกษา
+  @@index([status])                  // กรองตามสถานะ
+  @@index([vendorId, createdAt])     // คำนวณ Queue Number รายวัน
+  @@map("orders")
+}
+
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity   Int
+  unitPrice  Decimal
+  options    Json?
+  subtotal   Decimal
+
+  @@map("order_items")
+}
+
+enum Role {
+  student
+  vendor
+  admin
+}
+
+enum OrderType {
+  dine_in
+  takeaway
+}
+
+enum OrderStatus {
+  pending
+  accepted
+  cooking
+  ready
+  completed
+  cancelled
+}
+
+enum CancelledBy {
+  user
+  vendor
+  system
+}
+
