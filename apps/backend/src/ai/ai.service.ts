@@ -493,6 +493,42 @@ ${recommendedDishes.map((d, i) => `${i + 1}. ${d.name} (฿${d.price}) จาก
   }
 
   /**
+   * Translates Thai culinary terms to vivid English food photography keywords
+   */
+  private translateThaiFoodToEnglish(dishName: string, category: string, customPrompt: string): string {
+    const raw = `${dishName} ${customPrompt}`.toLowerCase();
+    const parts: string[] = [];
+
+    if (raw.includes('กะเพรา') || raw.includes('กระเพรา')) parts.push('Thai holy basil stir-fry');
+    else if (raw.includes('ผัดไทย') || raw.includes('ผัดไท')) parts.push('authentic Pad Thai noodles with lime and crushed peanuts');
+    else if (raw.includes('ข้าวผัด')) parts.push('wok-fried Thai jasmine fried rice');
+    else if (raw.includes('ข้าวมันไก่')) parts.push('Hainanese poached and crispy chicken rice with ginger dipping sauce');
+    else if (raw.includes('ไก่ทอด')) parts.push('crispy golden Thai fried chicken cutlet over rice');
+    else if (raw.includes('หมูกรอบ')) parts.push('crispy roasted pork belly with crispy golden crackling skin');
+    else if (raw.includes('ต้มยำ')) parts.push('flavorful Tom Yum spicy soup with aromatic kaffir lime and chili paste');
+    else if (raw.includes('ส้มตำ')) parts.push('spicy Thai green papaya salad with roasted peanuts');
+    else if (raw.includes('เตี๋ยวเรือ') || raw.includes('ก๋วยเตี๋ยวเรือ')) parts.push('rich savory Thai boat noodle soup with tender braised meat');
+    else if (raw.includes('เตี๋ยว') || raw.includes('ก๋วยเตี๋ยว')) parts.push('steaming Thai noodle soup bowl');
+    else if (raw.includes('สเต็ก') || raw.includes('steak')) parts.push('sizzling tender grilled steak with crispy fries and pepper sauce');
+    else if (raw.includes('เบอร์เกอร์') || raw.includes('burger')) parts.push('gourmet juicy cheese burger with melted cheddar on toasted brioche');
+    else if (raw.includes('สลัด') || raw.includes('salad')) parts.push('fresh colorful organic salad bowl with sesame dressing');
+    else if (raw.includes('ชานม') || raw.includes('ชาไทย')) parts.push('refreshing Thai iced milk tea with black tapioca pearls');
+    else if (raw.includes('กาแฟ') || raw.includes('coffee')) parts.push('iced specialty espresso latte with creamy foam');
+    else if (raw.includes('ไข่ข้น')) parts.push('creamy silky soft-scrambled egg bowl over rice');
+    else if (raw.includes('แกง')) parts.push('fragrant rich Thai coconut curry');
+    else parts.push('authentic appetizing Thai cuisine');
+
+    if (raw.includes('ไข่ดาว')) parts.push('with crispy fried egg and runny golden yolk');
+    if (raw.includes('กุ้ง')) parts.push('and fresh jumbo prawns');
+    if (raw.includes('หมู')) parts.push('and savory seasoned pork');
+    if (raw.includes('เนื้อ')) parts.push('and premium sliced beef');
+    if (raw.includes('ไก่') && !parts.some((p) => p.includes('chicken'))) parts.push('and tender chicken');
+    if (raw.includes('ทะเล') || raw.includes('ซีฟู้ด')) parts.push('and mixed fresh seafood');
+
+    return parts.join(' ');
+  }
+
+  /**
    * Web AI: Menu Image Generator
    * Generates appetizing AI food photos based on dish name and style for vendors.
    */
@@ -508,23 +544,45 @@ ${recommendedDishes.map((d, i) => `${i + 1}. ${d.name} (฿${d.price}) จาก
     };
 
     const styleText = styleDescriptors[style] || styleDescriptors.realistic_studio;
-    const basePrompt = `Delicious appetizing ${dishName}, ${category}, ${customPrompt ? customPrompt + ', ' : ''}${styleText}, food styling, ultra detailed, award winning food photography`;
 
-    // Encode prompt for AI generation URL
-    const cleanPrompt = encodeURIComponent(basePrompt.trim());
-    const seed1 = Math.floor(Math.random() * 999999);
-    const seed2 = Math.floor(Math.random() * 999999);
-    const seed3 = Math.floor(Math.random() * 999999);
+    // Translate Thai dish name & extra details into clear English for the AI Diffusion model
+    let englishDishDescription = '';
+    try {
+      const translationPrompt = `Translate this Thai food dish and options into a concise, vivid English description for an AI food photography generator. Reply ONLY with the English food phrase (maximum 15 words).
+Thai dish: "${dishName}"
+Category: "${category}"
+Details: "${customPrompt || 'none'}"`;
 
-    // Fast, ultra-high-definition AI diffusion endpoint (Pollinations FLUX / Turbo Food Model)
-    const primaryUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=600&seed=${seed1}&model=flux&nologo=true&enhance=true`;
-    const var1 = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=600&seed=${seed2}&model=flux&nologo=true&enhance=true`;
-    const var2 = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=600&seed=${seed3}&model=flux&nologo=true&enhance=true`;
+      const aiTranslation = await this.callGemini(translationPrompt);
+      if (aiTranslation && aiTranslation.trim().length > 3) {
+        englishDishDescription = aiTranslation.replace(/["\n\r]/g, '').trim();
+      }
+    } catch {
+      // Fallback
+    }
+
+    if (!englishDishDescription) {
+      englishDishDescription = this.translateThaiFoodToEnglish(dishName, category, customPrompt);
+    }
+
+    // Generate 3 distinct photography angles from the vendor's prompt
+    const prompt1 = `Delicious appetizing ${englishDishDescription}, professional commercial food studio photography, 8k resolution, shot on 50mm f/1.8 lens, perfect lighting, crisp appetizing details, food styling, award winning food photography`;
+    const prompt2 = `Mouth-watering fresh ${englishDishDescription}, steaming hot, beautifully plated on ceramic dish, vibrant colors, appetizing texture, authentic culinary presentation, high resolution food photography`;
+    const prompt3 = `Top-down overhead flatlay of ${englishDishDescription}, garnished with fresh herbs and condiments, gourmet cafe restaurant style, 4k ultra detailed food photo`;
+
+    const seed1 = Math.floor(Math.random() * 899999) + 100000;
+    const seed2 = Math.floor(Math.random() * 899999) + 100000;
+    const seed3 = Math.floor(Math.random() * 899999) + 100000;
+
+    // Fast, ultra-high-definition AI diffusion endpoint (Pollinations FLUX Model)
+    const url1 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt1.trim())}?width=800&height=600&seed=${seed1}&model=flux&nologo=true`;
+    const url2 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt2.trim())}?width=800&height=600&seed=${seed2}&model=flux&nologo=true`;
+    const url3 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt3.trim())}?width=800&height=600&seed=${seed3}&model=flux&nologo=true`;
 
     return {
-      imageUrl: primaryUrl,
-      promptUsed: basePrompt,
-      variations: [primaryUrl, var1, var2],
+      imageUrl: url1,
+      promptUsed: prompt1,
+      variations: [url1, url2, url3],
     };
   }
 }

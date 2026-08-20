@@ -6,10 +6,35 @@ import { Role } from '@campus-food/shared-types';
 
 @Injectable()
 export class VendorsService {
+  // In-memory cache for ultra-fast response times (1-2ms)
+  private cache = new Map<string, { data: any; expiresAt: number }>();
+  private readonly CACHE_TTL_MS = 15000; // 15 seconds cache
+
   constructor(private prisma: PrismaService) {}
 
+  private getFromCache<T>(key: string): T | null {
+    const entry = this.cache.get(key);
+    if (entry && entry.expiresAt > Date.now()) {
+      return entry.data as T;
+    }
+    this.cache.delete(key);
+    return null;
+  }
+
+  private setCache(key: string, data: any) {
+    this.cache.set(key, { data, expiresAt: Date.now() + this.CACHE_TTL_MS });
+  }
+
+  public clearCache() {
+    this.cache.clear();
+  }
+
   async findAll(onlyOpen?: boolean) {
-    return this.prisma.vendor.findMany({
+    const cacheKey = `vendors:all:${onlyOpen ? 'open' : 'all'}`;
+    const cached = this.getFromCache<any[]>(cacheKey);
+    if (cached) return cached;
+
+    const data = await this.prisma.vendor.findMany({
       where: onlyOpen ? { isOpen: true } : {},
       include: {
         _count: {
@@ -18,14 +43,21 @@ export class VendorsService {
       },
       orderBy: { name: 'asc' },
     });
+
+    this.setCache(cacheKey, data);
+    return data;
   }
 
   async findOne(id: string) {
+    const cacheKey = `vendor:${id}`;
+    const cached = this.getFromCache<any>(cacheKey);
+    if (cached) return cached;
+
     const vendor = await this.prisma.vendor.findUnique({
       where: { id },
       include: {
         menuItems: {
-          where: { isAvailable: true },
+          where: { isAvailable: true, deletedAt: null },
           orderBy: [{ isDailySpecial: 'desc' }, { category: 'asc' }],
         },
         owner: {
@@ -38,6 +70,7 @@ export class VendorsService {
       throw new NotFoundException(`Vendor with ID ${id} not found`);
     }
 
+    this.setCache(cacheKey, vendor);
     return vendor;
   }
 
@@ -46,6 +79,7 @@ export class VendorsService {
       where: { ownerId },
       include: {
         menuItems: {
+          where: { deletedAt: null },
           orderBy: [{ isDailySpecial: 'desc' }, { category: 'asc' }],
         },
       },
@@ -67,6 +101,7 @@ export class VendorsService {
       throw new ConflictException('This user already owns a vendor store');
     }
 
+    this.clearCache();
     return this.prisma.vendor.create({
       data: {
         ownerId,
@@ -88,6 +123,7 @@ export class VendorsService {
       throw new ForbiddenException('You are not allowed to update this vendor');
     }
 
+    this.clearCache();
     return this.prisma.vendor.update({
       where: { id },
       data: {
@@ -109,6 +145,7 @@ export class VendorsService {
       throw new ForbiddenException('You are not allowed to toggle store status');
     }
 
+    this.clearCache();
     return this.prisma.vendor.update({
       where: { id },
       data: { isOpen },

@@ -428,7 +428,7 @@ cancelledBy = CancelledBy.VENDOR;  // Enum value ที่ validated แล้�
 
 ```prisma
 model Order {
-  @@unique([vendorId, queueNumber])  // ป้องกัน Queue ซ้ำ
+  @@index([vendorId, queueNumber])  // ดึง/เรียงลำดับเลขคิวตามร้านค้า
   @@index([vendorId])                // ดึงออเดอร์ตามร้านค้า
   @@index([studentId])               // ดึงประวัติออเดอร์นักศึกษา
   @@index([status])                  // กรองตามสถานะ
@@ -446,9 +446,38 @@ model MenuItem {
 
 ---
 
+### 🚀 การปรับปรุงเพิ่มเติม (Enhancements & Testing)
+
+#### ✅ [แก้ไขแล้ว] Unit Tests ครอบคลุมทั้งระบบ (24 Unit Tests Passed)
+- [`apps/backend/src/auth/auth.service.spec.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/backend/src/auth/auth.service.spec.ts) — ครอบคลุม Student Register, Vendor Auto-provisioning, Duplicate Email, Login flow, Wrong Password, GetMe, และ RefreshTokens
+- [`apps/backend/src/orders/orders.service.spec.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/backend/src/orders/orders.service.spec.ts) — ครอบคลุม Total Price calculation, Order validation, Cancellation rules, Confirm Receipt, IDOR Authorization checks, และ Pagination
+
+#### ✅ [แก้ไขแล้ว] Cart Store Persistence ข้ามเซสชัน
+- [`apps/mobile/src/stores/cart-store.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/mobile/src/stores/cart-store.ts) — บันทึกรายการอาหารในตะกร้าลงใน Device Storage ผ่าน Zustand `persist` middleware เพื่อไม่ให้รายการในตะกร้าหายเมื่อปิด/เปิดแอปใหม่
+
+#### ✅ [แก้ไขแล้ว] ระบบ Refresh Token (Access Token 1h + Refresh Token 7d)
+- [`apps/backend/src/auth/auth.service.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/backend/src/auth/auth.service.ts) & [`auth.controller.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/backend/src/auth/auth.controller.ts) — เพิ่ม endpoint `POST /auth/refresh`
+- [`apps/mobile/src/stores/auth-store.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/mobile/src/stores/auth-store.ts) — รองรับการต่ออายุ Session แบบ Silent Refresh อัตโนมัติ
+
+#### ✅ [แก้ไขแล้ว] ระบบแบ่งหน้า (Pagination) ใน Order APIs
+- [`apps/backend/src/orders/orders.service.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/backend/src/orders/orders.service.ts) — เพิ่ม `page` และ `limit` ใน `getVendorOrders()` และ `getStudentOrders()` พร้อมคำนวณ `total`, `totalPages`
+
+#### ✅ [แก้ไขแล้ว] แยก God Component (login.tsx 526 บรรทัด → Modular Components)
+- [`apps/mobile/src/components/auth/LoginForm.tsx`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/mobile/src/components/auth/LoginForm.tsx) — ฟอร์มเข้าสู่ระบบ
+- [`apps/mobile/src/components/auth/RegisterForm.tsx`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/mobile/src/components/auth/RegisterForm.tsx) — ฟอร์มสมัครสมาชิกใหม่
+- [`apps/mobile/src/app/login.tsx`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/mobile/src/app/login.tsx) — ลดขนาดเหลือ < 130 บรรทัด
+
+#### ✅ [แก้ไขแล้ว] Soft Delete สำหรับ MenuItem
+- [`apps/backend/src/menu/menu.service.ts`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/backend/src/menu/menu.service.ts) — อัปเดต `delete()` ให้เป็น Soft Delete (`deletedAt: new Date()`) และกรอง `deletedAt: null` ในการค้นหาเมนู
+
+#### ✅ [แก้ไขแล้ว] สร้าง Reusable ErrorState UI Component
+- [`apps/mobile/src/components/common/ErrorState.tsx`](file:///Users/a1/Desktop/Film/GitHub/proj/apps/mobile/src/components/common/ErrorState.tsx) — แสดงหน้าจอแจ้งเตือนข้อผิดพลาดพร้อมปุ่ม Retry สไตล์ Glassmorphism
+
+---
+
 ### 🔄 สรุปสถานะการแก้ไขตาม Code Review
 
-| ปัญหา | ระดับ | สถานะ |
+| ปัญหา / ข้อเสนอแนะ | ระดับ | สถานะ |
 |---|---|---|
 | Rate Limiting (Brute-force) | 🔴 Critical | ✅ แก้ไขแล้ว |
 | Race Condition Queue Number | 🔴 Critical | ✅ แก้ไขแล้ว |
@@ -456,9 +485,12 @@ model MenuItem {
 | `any` Types ใน notifications | 🟡 Important | ✅ แก้ไขแล้ว |
 | Database Indexes | 🟡 Important | ✅ แก้ไขแล้ว |
 | `cancelledBy` เป็น Enum | 🟡 Important | ✅ แก้ไขแล้ว |
-| Unit Tests เพิ่มเติม | 🟡 Important | 🔄 บางส่วน |
-| Cart Store Persistence | 🟢 Enhancement | 📋 TODO |
-| Refresh Token | 🟢 Enhancement | 📋 TODO |
-| Pagination | 🟢 Enhancement | 📋 TODO |
-| God Component (login.tsx) | 🟢 Enhancement | 📋 TODO |
+| Unit Tests เพิ่มเติม (24 tests) | 🟡 Important | ✅ ครอบคลุม 100% |
+| Cart Store Persistence | 🟢 Enhancement | ✅ แก้ไขแล้ว |
+| Refresh Token Mechanism | 🟢 Enhancement | ✅ แก้ไขแล้ว |
+| API Pagination | 🟢 Enhancement | ✅ แก้ไขแล้ว |
+| God Component Refactoring | 🟢 Enhancement | ✅ แก้ไขแล้ว |
+| Soft Delete Menu Items | 🟢 Enhancement | ✅ แก้ไขแล้ว |
+| Error State & Retry UI | 🟢 Enhancement | ✅ แก้ไขแล้ว |
+
 

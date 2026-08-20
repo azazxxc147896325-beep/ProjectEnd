@@ -24,8 +24,9 @@ export default function HomeScreen() {
 
   const fetchVendors = async () => {
     try {
-      const data = await mobileApi<Vendor[]>('/vendors');
-      setVendors(data);
+      const res = await mobileApi<any>('/vendors');
+      const vendorList = Array.isArray(res) ? res : res?.data || [];
+      setVendors(vendorList);
     } catch (err) {
       console.log('Error loading vendors:', err);
       setVendors([]);
@@ -34,7 +35,6 @@ export default function HomeScreen() {
       setRefreshing(false);
     }
   };
-
 
   useEffect(() => {
     fetchVendors();
@@ -45,9 +45,12 @@ export default function HomeScreen() {
     fetchVendors();
   };
 
-  const filteredVendors = vendors.filter((v) => {
+  const safeVendors = Array.isArray(vendors) ? vendors : [];
+
+  const filteredVendors = safeVendors.filter((v) => {
+    if (!v) return false;
     const matchesSearch =
-      v.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (v.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       (v.description && v.description.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesFilter = selectedFilter === 'all' || (selectedFilter === 'open' && v.isOpen);
     return matchesSearch && matchesFilter;

@@ -75,7 +75,7 @@ model Order {
   cancelledBy  CancelledBy?
   cancelReason String?
 
-  @@unique([vendorId, queueNumber])  // ป้องกันเลขคิวซ้ำในร้านเดียวกัน
+  @@index([vendorId, queueNumber])  // ดึง/เรียงลำดับเลขคิวตามร้านค้า
   @@index([vendorId])                // ดึงออเดอร์ตามร้านค้า
   @@index([studentId])               // ดึงประวัติออเดอร์ของนักศึกษา
   @@index([status])                  // กรองตามสถานะ

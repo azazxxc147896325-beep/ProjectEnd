@@ -7,9 +7,8 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   constructor() {
     super({
-      // เมื่อใช้ Supabase + PgBouncer (Transaction Mode):
-      // Prisma ต้องปล่อยให้ PgBouncer จัดการ connection pool เอง
-      // โดยกำหนด connection_limit=1 ใน DATABASE_URL และไม่สร้าง pool ในฝั่ง Prisma
+      // Supabase PgBouncer / Supavisor connection pooling configuration
+      // Uses DATABASE_URL with connection_limit and pool_timeout settings
       log: ['warn', 'error'],
       datasources: {
         db: {

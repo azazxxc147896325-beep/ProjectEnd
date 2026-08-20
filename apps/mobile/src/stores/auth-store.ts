@@ -41,27 +41,32 @@ interface RegisterData {
 interface AuthState {
   user: User | null;
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isHydrated: boolean; // true once SecureStore async load completes
-  setAuth: (user: User, token: string) => void;
+  setAuth: (user: User, token: string, refreshToken?: string) => void;
   logout: () => void;
   setHydrated: () => void;
   register: (data: RegisterData) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  refreshTokens: () => Promise<boolean>;
 }
 
 // ---- Store ----
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
+      refreshToken: null,
       isAuthenticated: false,
       isHydrated: false,
 
-      setAuth: (user, token) => set({ user, token, isAuthenticated: true }),
+      setAuth: (user, token, refreshToken) =>
+        set({ user, token, refreshToken: refreshToken || null, isAuthenticated: true }),
 
-      logout: () => set({ user: null, token: null, isAuthenticated: false }),
+      logout: () =>
+        set({ user: null, token: null, refreshToken: null, isAuthenticated: false }),
 
       setHydrated: () => set({ isHydrated: true }),
 
@@ -77,7 +82,12 @@ export const useAuthStore = create<AuthState>()(
           throw new Error(err.message || `เข้าสู่ระบบไม่สำเร็จ: ${res.status}`);
         }
         const data = await res.json();
-        set({ user: data.user, token: data.accessToken, isAuthenticated: true });
+        set({
+          user: data.user,
+          token: data.accessToken,
+          refreshToken: data.refreshToken || null,
+          isAuthenticated: true,
+        });
       },
 
       register: async (data: RegisterData) => {
@@ -98,7 +108,42 @@ export const useAuthStore = create<AuthState>()(
           throw new Error(err.message || `สมัครสมาชิกไม่สำเร็จ: ${res.status}`);
         }
         const authData = await res.json();
-        set({ user: authData.user, token: authData.accessToken, isAuthenticated: true });
+        set({
+          user: authData.user,
+          token: authData.accessToken,
+          refreshToken: authData.refreshToken || null,
+          isAuthenticated: true,
+        });
+      },
+
+      refreshTokens: async () => {
+        const { refreshToken } = get();
+        if (!refreshToken) return false;
+
+        try {
+          const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:4000/api';
+          const res = await fetch(`${API_BASE}/auth/refresh`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken }),
+          });
+
+          if (!res.ok) {
+            get().logout();
+            return false;
+          }
+
+          const data = await res.json();
+          set({
+            user: data.user,
+            token: data.accessToken,
+            refreshToken: data.refreshToken || refreshToken,
+            isAuthenticated: true,
+          });
+          return true;
+        } catch {
+          return false;
+        }
       },
     }),
 
@@ -109,6 +154,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
+        refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
       onRehydrateStorage: () => (state) => {

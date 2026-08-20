@@ -13,6 +13,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  generateTokens(payload: JwtPayload): { accessToken: string; refreshToken: string } {
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+    const refreshToken = this.jwtService.sign(
+      { sub: payload.sub, email: payload.email, role: payload.role, type: 'refresh' },
+      { expiresIn: '7d' },
+    );
+    return { accessToken, refreshToken };
+  }
+
   async register(dto: RegisterDto): Promise<AuthResponse> {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
@@ -55,10 +64,11 @@ export class AuthService {
       vendorId,
     };
 
-    const accessToken = this.jwtService.sign(tokenPayload);
+    const tokens = this.generateTokens(tokenPayload);
 
     return {
-      accessToken,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -92,10 +102,11 @@ export class AuthService {
       vendorId: user.vendor?.id,
     };
 
-    const accessToken = this.jwtService.sign(tokenPayload);
+    const tokens = this.generateTokens(tokenPayload);
 
     return {
-      accessToken,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -115,6 +126,58 @@ export class AuthService {
           : null,
       },
     };
+  }
+
+  async refreshTokens(refreshToken: string): Promise<AuthResponse> {
+    try {
+      const decoded = this.jwtService.verify(refreshToken) as JwtPayload & { type?: string };
+      if (!decoded || decoded.type !== 'refresh') {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: decoded.sub },
+        include: { vendor: true },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('User account no longer exists');
+      }
+
+      const tokenPayload: JwtPayload = {
+        sub: user.id,
+        email: user.email,
+        role: user.role as Role,
+        vendorId: user.vendor?.id,
+      };
+
+      const tokens = this.generateTokens(tokenPayload);
+
+      return {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role as Role,
+          phone: user.phone,
+          createdAt: user.createdAt,
+          vendor: user.vendor
+            ? {
+                id: user.vendor.id,
+                ownerId: user.vendor.ownerId,
+                name: user.vendor.name,
+                description: user.vendor.description,
+                logoUrl: user.vendor.logoUrl,
+                isOpen: user.vendor.isOpen,
+              }
+            : null,
+        },
+      };
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
   }
 
   async getMe(userId: string) {

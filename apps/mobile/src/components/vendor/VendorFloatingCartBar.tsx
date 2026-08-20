@@ -1,0 +1,66 @@
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { ShoppingBag } from 'lucide-react-native';
+
+interface VendorFloatingCartBarProps {
+  totalCount: number;
+  totalPrice: number;
+  onPress: () => void;
+}
+
+export function VendorFloatingCartBar({
+  totalCount,
+  totalPrice,
+  onPress,
+}: VendorFloatingCartBarProps) {
+  if (totalCount <= 0) return null;
+
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        bottom: 16,
+        left: 16,
+        right: 16,
+        backgroundColor: '#f97316',
+        borderRadius: 20,
+        paddingVertical: 14,
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        shadowColor: '#f97316',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 10,
+        elevation: 8,
+      }}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 14,
+            backgroundColor: '#ffffff',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text style={{ color: '#f97316', fontSize: 12, fontWeight: 'bold' }}>{totalCount}</Text>
+        </View>
+        <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>
+          ฿{totalPrice.toLocaleString()}
+        </Text>
+      </View>
+
+      <TouchableOpacity
+        onPress={onPress}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+      >
+        <Text style={{ color: '#ffffff', fontSize: 13, fontWeight: 'bold' }}>ดูตะกร้า / ชำระเงิน</Text>
+        <ShoppingBag size={16} color="#ffffff" />
+      </TouchableOpacity>
+    </View>
+  );
+}

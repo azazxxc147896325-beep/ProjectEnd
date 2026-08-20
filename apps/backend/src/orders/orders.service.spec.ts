@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { OrderType, OrderStatus } from '@campus-food/shared-types';
+import { OrderType, OrderStatus, Role } from '@campus-food/shared-types';
 
 describe('OrdersService', () => {
   let service: OrdersService;
@@ -17,6 +17,7 @@ describe('OrdersService', () => {
       findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      count: jest.fn(),
     },
     vendor: {
       findUnique: jest.fn(),
@@ -77,15 +78,6 @@ describe('OrdersService', () => {
     });
   });
 
-  describe('Queue number allocation', () => {
-    it('should start queue at 1 when no previous orders exist today (tested via createOrder flow)', () => {
-      // calculateQueueNumber is now private and atomic within createOrder transaction.
-      // The logic is: if no orders exist for vendor today → return 1, else return max+1.
-      // This is tested by integration via createOrder which calls calculateQueueNumberInTx internally.
-      expect(true).toBe(true);
-    });
-  });
-
   describe('createOrder validation', () => {
     it('should throw BadRequestException if vendor is currently closed', async () => {
       mockPrismaService.vendor.findUnique.mockResolvedValue({
@@ -124,6 +116,129 @@ describe('OrdersService', () => {
           items: [{ menuItemId: 'item-1', quantity: 1 }],
         }),
       ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('cancelOrderByStudent', () => {
+    it('should cancel order successfully if it is still PENDING', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.PENDING,
+        vendor: { id: 'vendor-1' },
+      });
+      mockPrismaService.order.update.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.CANCELLED,
+      });
+
+      const result = await service.cancelOrderByStudent('order-1', 'student-1', 'Changed mind');
+      expect(result.status).toBe(OrderStatus.CANCELLED);
+      expect(mockNotificationsService.notifyOrderStatusChanged).toHaveBeenCalledWith(
+        expect.anything(),
+        OrderStatus.PENDING,
+        OrderStatus.CANCELLED,
+      );
+    });
+
+    it('should throw BadRequestException if order is already COOKING or READY', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.COOKING,
+        vendor: { id: 'vendor-1' },
+      });
+
+      await expect(
+        service.cancelOrderByStudent('order-1', 'student-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw ForbiddenException if another student tries to cancel the order', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.PENDING,
+        vendor: { id: 'vendor-1' },
+      });
+
+      await expect(
+        service.cancelOrderByStudent('order-1', 'intruder-student-2'),
+      ).rejects.toThrow(ForbiddenException);
+    });
+  });
+
+  describe('confirmOrderReceipt', () => {
+    it('should allow the student to confirm order completion', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.READY,
+        vendor: { id: 'vendor-1' },
+      });
+      mockPrismaService.order.update.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.COMPLETED,
+      });
+
+      const result = await service.confirmOrderReceipt('order-1', 'student-1');
+      expect(result.status).toBe(OrderStatus.COMPLETED);
+    });
+
+    it('should throw ForbiddenException if another user tries to confirm receipt', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.READY,
+      });
+
+      await expect(
+        service.confirmOrderReceipt('order-1', 'wrong-student-2'),
+      ).rejects.toThrow(ForbiddenException);
+    });
+  });
+
+  describe('getStudentOrders (IDOR Protection & Pagination)', () => {
+    it('should allow student to view their own orders', async () => {
+      const mockOrders = [{ id: 'order-1', studentId: 'student-1' }];
+      mockPrismaService.order.findMany.mockResolvedValue(mockOrders);
+
+      const result = await service.getStudentOrders('student-1', 'student-1', Role.STUDENT);
+      expect(result).toEqual(mockOrders);
+    });
+
+    it('should allow Admin to view any student orders', async () => {
+      const mockOrders = [{ id: 'order-1', studentId: 'student-1' }];
+      mockPrismaService.order.findMany.mockResolvedValue(mockOrders);
+
+      const result = await service.getStudentOrders('student-1', 'admin-id', Role.ADMIN);
+      expect(result).toEqual(mockOrders);
+    });
+
+    it('should throw ForbiddenException if student tries to view another student orders (IDOR)', async () => {
+      await expect(
+        service.getStudentOrders('student-target', 'student-attacker', Role.STUDENT),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should return paginated result when page and limit are provided', async () => {
+      const mockOrders = [{ id: 'order-1' }];
+      mockPrismaService.order.findMany.mockResolvedValue(mockOrders);
+      mockPrismaService.order.count.mockResolvedValue(25);
+
+      const result = (await service.getStudentOrders(
+        'student-1',
+        'student-1',
+        Role.STUDENT,
+        2,
+        10,
+      )) as any;
+
+      expect(result.data).toEqual(mockOrders);
+      expect(result.total).toBe(25);
+      expect(result.page).toBe(2);
+      expect(result.limit).toBe(10);
+      expect(result.totalPages).toBe(3);
     });
   });
 });

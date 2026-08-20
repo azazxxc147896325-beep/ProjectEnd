@@ -27,9 +27,19 @@ export class AuthController {
   @Throttle({ default: { ttl: 60000, limit: 5 } }) // 5 login attempts per minute
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login with email and password' })
-  @ApiResponse({ status: 200, description: 'Login successful, returns JWT access token' })
+  @ApiResponse({ status: 200, description: 'Login successful, returns JWT access token and refresh token' })
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
+  }
+
+  @Public()
+  @Post('refresh')
+  @Throttle({ default: { ttl: 60000, limit: 10 } })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Refresh access token using valid refresh token' })
+  @ApiResponse({ status: 200, description: 'Tokens successfully refreshed' })
+  async refresh(@Body('refreshToken') refreshToken: string) {
+    return this.authService.refreshTokens(refreshToken);
   }
 
   @Get('me')

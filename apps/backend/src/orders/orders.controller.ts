@@ -68,33 +68,48 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.VENDOR, Role.ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get order queue for a vendor' })
+  @ApiOperation({ summary: 'Get order queue for a vendor (supports optional pagination)' })
   @ApiQuery({ name: 'status', enum: OrderStatus, required: false })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
   async getVendorOrders(
     @Param('vendorId') vendorId: string,
     @Query('status') status?: OrderStatus,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
   ) {
-    return this.ordersService.getVendorOrders(vendorId, status);
+    return this.ordersService.getVendorOrders(vendorId, status, page, limit);
   }
 
   @Get('student/:studentId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get order history for a student (own orders only, or Admin)' })
+  @ApiOperation({ summary: 'Get order history for a student (own orders only, or Admin, supports optional pagination)' })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
   async getStudentOrders(
     @Param('studentId') studentId: string,
     @CurrentUser('sub') requestingUserId: string,
     @CurrentUser('role') role: Role,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
   ) {
-    return this.ordersService.getStudentOrders(studentId, requestingUserId, role);
+    return this.ordersService.getStudentOrders(studentId, requestingUserId, role, page, limit);
   }
 
   @Get('my-orders')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get my order history' })
-  async getMyOrders(@CurrentUser('sub') userId: string, @CurrentUser('role') role: Role) {
-    return this.ordersService.getStudentOrders(userId, userId, role);
+  @ApiOperation({ summary: 'Get my order history (supports optional pagination)' })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
+  async getMyOrders(
+    @CurrentUser('sub') userId: string,
+    @CurrentUser('role') role: Role,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.ordersService.getStudentOrders(userId, userId, role, page, limit);
   }
 
   @Get(':id')

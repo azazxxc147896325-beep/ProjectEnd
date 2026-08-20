@@ -6,12 +6,46 @@ import { Role } from '@campus-food/shared-types';
 
 @Injectable()
 export class MenuService {
+  // In-memory cache for ultra-fast menu lookups (1-2ms)
+  private cache = new Map<string, { data: any; expiresAt: number }>();
+  private readonly CACHE_TTL_MS = 15000; // 15 seconds cache
+
   constructor(private prisma: PrismaService) {}
 
+  private getFromCache<T>(key: string): T | null {
+    const entry = this.cache.get(key);
+    if (entry && entry.expiresAt > Date.now()) {
+      return entry.data as T;
+    }
+    this.cache.delete(key);
+    return null;
+  }
+
+  private setCache(key: string, data: any) {
+    this.cache.set(key, { data, expiresAt: Date.now() + this.CACHE_TTL_MS });
+  }
+
+  public clearCache(vendorId?: string) {
+    if (vendorId) {
+      for (const key of this.cache.keys()) {
+        if (key.includes(vendorId)) {
+          this.cache.delete(key);
+        }
+      }
+    } else {
+      this.cache.clear();
+    }
+  }
+
   async findByVendor(vendorId: string, includeUnavailable: boolean = false) {
-    return this.prisma.menuItem.findMany({
+    const cacheKey = `menu:vendor:${vendorId}:${includeUnavailable ? 'all' : 'avail'}`;
+    const cached = this.getFromCache<any[]>(cacheKey);
+    if (cached) return cached;
+
+    const data = await this.prisma.menuItem.findMany({
       where: {
         vendorId,
+        deletedAt: null, // Only fetch non-deleted items
         ...(includeUnavailable ? {} : { isAvailable: true }),
       },
       orderBy: [
@@ -20,11 +54,18 @@ export class MenuService {
         { name: 'asc' },
       ],
     });
+
+    this.setCache(cacheKey, data);
+    return data;
   }
 
   async findOne(id: string) {
-    const item = await this.prisma.menuItem.findUnique({
-      where: { id },
+    const cacheKey = `menu:item:${id}`;
+    const cached = this.getFromCache<any>(cacheKey);
+    if (cached) return cached;
+
+    const item = await this.prisma.menuItem.findFirst({
+      where: { id, deletedAt: null },
       include: { vendor: true },
     });
 
@@ -32,6 +73,7 @@ export class MenuService {
       throw new NotFoundException(`Menu item with ID ${id} not found`);
     }
 
+    this.setCache(cacheKey, item);
     return item;
   }
 
@@ -46,6 +88,7 @@ export class MenuService {
       targetVendorId = vendor.id;
     }
 
+    this.clearCache(targetVendorId);
     return this.prisma.menuItem.create({
       data: {
         vendorId: targetVendorId,
@@ -74,6 +117,7 @@ export class MenuService {
       throw new ForbiddenException('Only the vendor owner can update this menu item');
     }
 
+    this.clearCache(item.vendorId);
     return this.prisma.menuItem.update({
       where: { id },
       data: {
@@ -102,6 +146,7 @@ export class MenuService {
       throw new ForbiddenException('Only the vendor owner can toggle daily special status');
     }
 
+    this.clearCache(item.vendorId);
     return this.prisma.menuItem.update({
       where: { id },
       data: { isDailySpecial },
@@ -122,6 +167,7 @@ export class MenuService {
       throw new ForbiddenException('Only the vendor owner can toggle availability');
     }
 
+    this.clearCache(item.vendorId);
     return this.prisma.menuItem.update({
       where: { id },
       data: { isAvailable },
@@ -129,8 +175,8 @@ export class MenuService {
   }
 
   async delete(id: string, userId: string, userRole: Role) {
-    const item = await this.prisma.menuItem.findUnique({
-      where: { id },
+    const item = await this.prisma.menuItem.findFirst({
+      where: { id, deletedAt: null },
       include: { vendor: true },
     });
 
@@ -142,8 +188,14 @@ export class MenuService {
       throw new ForbiddenException('Only the vendor owner can delete this menu item');
     }
 
-    return this.prisma.menuItem.delete({
+    this.clearCache(item.vendorId);
+    // Soft Delete: Preserve historical order references while hiding from active menu
+    return this.prisma.menuItem.update({
       where: { id },
+      data: {
+        deletedAt: new Date(),
+        isAvailable: false,
+      },
     });
   }
 }

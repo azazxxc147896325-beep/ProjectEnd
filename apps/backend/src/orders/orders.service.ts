@@ -68,7 +68,14 @@ export class OrdersService {
       throw new BadRequestException('Order must contain at least one item');
     }
 
-    const vendor = await this.prisma.vendor.findUnique({ where: { id: dto.vendorId } });
+    // Fetch vendor and menu items in parallel to reduce database roundtrips
+    const menuItemIds = dto.items.map((i) => i.menuItemId);
+    const [vendor, menuItems] = await Promise.all([
+      this.prisma.vendor.findUnique({ where: { id: dto.vendorId } }),
+      this.prisma.menuItem.findMany({
+        where: { id: { in: menuItemIds }, vendorId: dto.vendorId, deletedAt: null },
+      }),
+    ]);
 
     if (!vendor) {
       throw new NotFoundException(`Vendor with ID ${dto.vendorId} not found`);
@@ -77,12 +84,6 @@ export class OrdersService {
     if (!vendor.isOpen) {
       throw new BadRequestException('This vendor is currently closed and not accepting orders');
     }
-
-    // Fetch and validate menu items from database
-    const menuItemIds = dto.items.map((i) => i.menuItemId);
-    const menuItems = await this.prisma.menuItem.findMany({
-      where: { id: { in: menuItemIds }, vendorId: dto.vendorId },
-    });
 
     if (menuItems.length !== menuItemIds.length) {
       throw new BadRequestException('One or more menu items are invalid or do not belong to this vendor');
@@ -306,40 +307,101 @@ export class OrdersService {
   }
 
 
-  async getVendorOrders(vendorId: string, status?: OrderStatus) {
-    return this.prisma.order.findMany({
-      where: {
-        vendorId,
-        ...(status ? { status } : {}),
-      },
-      include: {
-        items: { include: { menuItem: true } },
-        student: { select: { id: true, fullName: true, phone: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+  async getVendorOrders(vendorId: string, status?: OrderStatus, page?: number, limit?: number) {
+    const isPaginated = page !== undefined || limit !== undefined;
+    const take = limit ? Number(limit) : undefined;
+    const skip = page && limit ? (Number(page) - 1) * Number(limit) : undefined;
+
+    const [orders, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where: {
+          vendorId,
+          ...(status ? { status } : {}),
+        },
+        include: {
+          items: { include: { menuItem: true } },
+          student: { select: { id: true, fullName: true, phone: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        ...(take ? { take } : {}),
+        ...(skip ? { skip } : {}),
+      }),
+      this.prisma.order.count({
+        where: {
+          vendorId,
+          ...(status ? { status } : {}),
+        },
+      }),
+    ]);
+
+    if (isPaginated) {
+      const pageNum = page ? Number(page) : 1;
+      const limitNum = limit ? Number(limit) : orders.length;
+      return {
+        data: orders,
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: limitNum > 0 ? Math.ceil(total / limitNum) : 1,
+      };
+    }
+
+    return orders;
   }
 
   /**
-   * Returns orders for a specific student.
+   * Returns orders for a specific student with optional pagination.
    * @param studentId  The student whose orders to fetch.
    * @param requestingUserId  The authenticated user making the request.
    * @param requestingRole  The role of the authenticated user.
+   * @param page  Optional page number (1-indexed).
+   * @param limit  Optional number of items per page.
    */
-  async getStudentOrders(studentId: string, requestingUserId: string, requestingRole: Role) {
+  async getStudentOrders(
+    studentId: string,
+    requestingUserId: string,
+    requestingRole: Role,
+    page?: number,
+    limit?: number,
+  ) {
     // 🔒 IDOR Guard: Only allow the student themselves or an Admin to see orders
     if (studentId !== requestingUserId && requestingRole !== Role.ADMIN) {
       throw new ForbiddenException('You can only view your own order history');
     }
 
-    return this.prisma.order.findMany({
-      where: { studentId },
-      include: {
-        vendor: { select: { id: true, name: true, logoUrl: true } },
-        items: { include: { menuItem: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    const isPaginated = page !== undefined || limit !== undefined;
+    const take = limit ? Number(limit) : undefined;
+    const skip = page && limit ? (Number(page) - 1) * Number(limit) : undefined;
+
+    const [orders, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where: { studentId },
+        include: {
+          vendor: { select: { id: true, name: true, logoUrl: true } },
+          items: { include: { menuItem: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        ...(take ? { take } : {}),
+        ...(skip ? { skip } : {}),
+      }),
+      this.prisma.order.count({
+        where: { studentId },
+      }),
+    ]);
+
+    if (isPaginated) {
+      const pageNum = page ? Number(page) : 1;
+      const limitNum = limit ? Number(limit) : orders.length;
+      return {
+        data: orders,
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: limitNum > 0 ? Math.ceil(total / limitNum) : 1,
+      };
+    }
+
+    return orders;
   }
 
   async getOrderById(orderId: string) {

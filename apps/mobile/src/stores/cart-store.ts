@@ -1,5 +1,32 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import * as SecureStore from 'expo-secure-store';
 import { MenuItem, Vendor, OrderType } from '@campus-food/shared-types';
+
+// ---- Secure Storage Adapter for Zustand persist ----
+const secureStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    try {
+      return await SecureStore.getItemAsync(name);
+    } catch {
+      return null;
+    }
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    try {
+      await SecureStore.setItemAsync(name, value);
+    } catch (err) {
+      console.warn('[SecureStore] Failed to persist cart state:', err);
+    }
+  },
+  removeItem: async (name: string): Promise<void> => {
+    try {
+      await SecureStore.deleteItemAsync(name);
+    } catch (err) {
+      console.warn('[SecureStore] Failed to remove cart state:', err);
+    }
+  },
+};
 
 export interface CartItem {
   menuItem: MenuItem;
@@ -25,12 +52,14 @@ interface CartState {
   getTotalCount: () => number;
 }
 
-export const useCartStore = create<CartState>((set, get) => ({
-  vendorId: null,
-  vendorName: null,
-  items: [],
-  orderType: OrderType.DINE_IN,
-  note: '',
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      vendorId: null,
+      vendorName: null,
+      items: [],
+      orderType: OrderType.DINE_IN,
+      note: '',
 
   addItem: (vendor, item, quantity = 1, options) => {
     const { vendorId, items } = get();
@@ -114,4 +143,10 @@ export const useCartStore = create<CartState>((set, get) => ({
   getTotalCount: () => {
     return get().items.reduce((sum, i) => sum + i.quantity, 0);
   },
-}));
+}),
+    {
+      name: 'campus-food-cart',
+      storage: createJSONStorage(() => secureStorage),
+    },
+  ),
+);

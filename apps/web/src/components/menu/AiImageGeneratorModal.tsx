@@ -1,22 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { apiClient } from '@/lib/api';
-import { AiFoodImageStyle, AiGenerateImageResponse } from '@campus-food/shared-types';
-import {
-  Sparkles,
-  X,
-  Wand2,
-  Check,
-  Camera,
-  Flame,
-  Coffee,
-  Layers,
-  Sparkle,
-  RefreshCw,
-  Image as ImageIcon,
-} from 'lucide-react';
-import { clsx } from 'clsx';
+import { AiGenerateImageResponse } from '@campus-food/shared-types';
+import { Sparkles, X, Wand2, Check } from 'lucide-react';
+import { AiImageGallery } from './AiImageGallery';
 
 interface AiImageGeneratorModalProps {
   isOpen: boolean;
@@ -35,51 +23,17 @@ export function AiImageGeneratorModal({
 }: AiImageGeneratorModalProps) {
   const [dishName, setDishName] = useState(defaultDishName);
   const [category, setCategory] = useState(defaultCategory);
-  const [style, setStyle] = useState<AiFoodImageStyle>('realistic_studio');
   const [customPrompt, setCustomPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [result, setResult] = useState<AiGenerateImageResponse | null>(null);
   const [selectedUrl, setSelectedUrl] = useState<string>('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (defaultDishName) setDishName(defaultDishName);
     if (defaultCategory) setCategory(defaultCategory);
   }, [defaultDishName, defaultCategory, isOpen]);
 
   if (!isOpen) return null;
-
-  const styleOptions: { id: AiFoodImageStyle; label: string; icon: any; desc: string }[] = [
-    {
-      id: 'realistic_studio',
-      label: 'สตูดิโอ 4K คมชัด',
-      icon: Camera,
-      desc: 'จัดแสงระดับมืออาชีพ ชัดเจน สวยงามเหมือนถ่ายในสตูดิโอ',
-    },
-    {
-      id: 'street_food',
-      label: 'สตรีทฟู้ดร้อนๆ ควันฉุย',
-      icon: Flame,
-      desc: 'บรรยากาศร้านอาหารตามสั่ง ควันกรุ่น สีสันจัดจ้าน น่ารับประทาน',
-    },
-    {
-      id: 'minimal_cafe',
-      label: 'คาเฟ่มินิมอลคลีนๆ',
-      icon: Coffee,
-      desc: 'แสงธรรมชาตินุ่มละมุน สไตล์คาเฟ่ จานชามเซรามิกโมเดิร์น',
-    },
-    {
-      id: 'overhead_flatlay',
-      label: 'Top-down Flatlay',
-      icon: Layers,
-      desc: 'มุมมองถ่ายจากด้านบน พร้อมองค์ประกอบวัตถุดิบและสมุนไพรรอบจาน',
-    },
-    {
-      id: 'cinematic_moody',
-      label: 'Cinematic หรูหรา',
-      icon: Sparkle,
-      desc: 'แสงเงาสไตล์ Fine Dining โทนเข้ม พรีเมียมระดับมิชลิน',
-    },
-  ];
 
   const handleGenerate = async () => {
     if (!dishName.trim()) return;
@@ -91,7 +45,7 @@ export function AiImageGeneratorModal({
         body: JSON.stringify({
           dishName,
           category,
-          style,
+          style: 'realistic_studio',
           customPrompt,
         }),
       });
@@ -100,15 +54,22 @@ export function AiImageGeneratorModal({
       setSelectedUrl(data.imageUrl);
     } catch (err) {
       console.error('Error generating AI image:', err);
-      // Fallback generator URL
-      const encoded = encodeURIComponent(`Delicious Thai food ${dishName}, food photography 4k`);
-      const fallbackUrl = `https://image.pollinations.ai/prompt/${encoded}?width=800&height=600&model=flux&nologo=true`;
+      // Generate AI diffusion images with prompt
+      const promptCombined = encodeURIComponent(
+        `Delicious appetizing ${dishName} ${customPrompt}, 8k food photography studio, gourmet plating`,
+      );
+      const s1 = Math.floor(Math.random() * 899999) + 100000;
+      const s2 = Math.floor(Math.random() * 899999) + 100000;
+      const s3 = Math.floor(Math.random() * 899999) + 100000;
+      const fallbackUrl1 = `https://image.pollinations.ai/prompt/${promptCombined}?width=800&height=600&seed=${s1}&model=flux&nologo=true`;
+      const fallbackUrl2 = `https://image.pollinations.ai/prompt/${promptCombined}?width=800&height=600&seed=${s2}&model=flux&nologo=true`;
+      const fallbackUrl3 = `https://image.pollinations.ai/prompt/${promptCombined}?width=800&height=600&seed=${s3}&model=flux&nologo=true`;
       setResult({
-        imageUrl: fallbackUrl,
-        promptUsed: dishName,
-        variations: [fallbackUrl],
+        imageUrl: fallbackUrl1,
+        promptUsed: `${dishName} ${customPrompt}`,
+        variations: [fallbackUrl1, fallbackUrl2, fallbackUrl3],
       });
-      setSelectedUrl(fallbackUrl);
+      setSelectedUrl(fallbackUrl1);
     } finally {
       setIsGenerating(false);
     }
@@ -123,7 +84,7 @@ export function AiImageGeneratorModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 shadow-2xl border-slate-700/80 max-h-[90vh] overflow-y-auto flex flex-col justify-between">
+      <div className="glass-panel w-full max-w-xl rounded-3xl p-6 shadow-2xl border-slate-700/80 max-h-[90vh] overflow-y-auto flex flex-col justify-between">
         <div>
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
@@ -185,41 +146,6 @@ export function AiImageGeneratorModal({
               </div>
             </div>
 
-            {/* AI Style Presets */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-2">
-                เลือกสไตล์และบรรยากาศภาพ (AI Style)
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 gap-2.5">
-                {styleOptions.map((opt) => {
-                  const Icon = opt.icon;
-                  const isSelected = style === opt.id;
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => setStyle(opt.id)}
-                      className={clsx(
-                        'p-3 rounded-2xl border text-left transition-all flex flex-col justify-between gap-1.5',
-                        isSelected
-                          ? 'bg-brand-500/15 border-brand-500 text-white shadow-md shadow-brand-500/10'
-                          : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700',
-                      )}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Icon className={clsx('w-4 h-4', isSelected ? 'text-brand-400' : 'text-slate-400')} />
-                          <span className="text-xs font-bold text-white">{opt.label}</span>
-                        </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-brand-400" />}
-                      </div>
-                      <p className="text-[10px] text-slate-400 line-clamp-2">{opt.desc}</p>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* Additional Custom Details */}
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
@@ -227,7 +153,7 @@ export function AiImageGeneratorModal({
               </label>
               <input
                 type="text"
-                placeholder="เช่น ไข่ดาวเยิ้มๆ, หมูกรอบหนาฉ่ำ, เสิร์ฟพร้อมน้ำซุปถ้วยเล็ก..."
+                placeholder="เช่น ไข่ดาวเยิ้มๆ, หมูกรอบหนาฉ่ำ, โรยผักชี..."
                 value={customPrompt}
                 onChange={(e) => setCustomPrompt(e.target.value)}
                 className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
@@ -255,68 +181,43 @@ export function AiImageGeneratorModal({
             </button>
           </div>
 
-          {/* Result Preview Gallery */}
+          {/* Result Preview Gallery Subcomponent */}
           {result && (
-            <div className="mt-6 pt-5 border-t border-slate-800 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                  <ImageIcon className="w-4 h-4 text-brand-400" />
-                  <span>ผลลัพธ์ภาพอาหารที่ได้ (แตะเลือกรูปที่ต้องการ):</span>
-                </span>
-                <span className="text-[11px] text-slate-400">เลือกแล้ว 1 รูป</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {(result.variations || [result.imageUrl]).map((url, idx) => {
-                  const isCurSelected = selectedUrl === url;
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => setSelectedUrl(url)}
-                      className={clsx(
-                        'relative rounded-2xl overflow-hidden cursor-pointer border-2 transition-all group aspect-video bg-slate-900',
-                        isCurSelected
-                          ? 'border-brand-500 shadow-lg shadow-brand-500/30 scale-[1.02]'
-                          : 'border-slate-800 hover:border-slate-600 opacity-75 hover:opacity-100',
-                      )}
-                    >
-                      <img
-                        src={url}
-                        alt={`Variation ${idx + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      {isCurSelected && (
-                        <div className="absolute top-2 right-2 bg-brand-500 text-white rounded-full p-1 shadow-md">
-                          <Check className="w-3.5 h-3.5" />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <AiImageGallery
+              result={result}
+              selectedUrl={selectedUrl}
+              onSelectUrl={setSelectedUrl}
+              onRegenerate={handleGenerate}
+              isGenerating={isGenerating}
+            />
           )}
         </div>
 
         {/* Footer Actions */}
-        <div className="pt-5 mt-6 border-t border-slate-800 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors"
-          >
-            ปิด
-          </button>
+        <div className="pt-5 mt-6 border-t border-slate-800 flex items-center justify-between gap-3">
+          <span className="text-[11px] text-slate-500">
+            {selectedUrl ? '✓ เลือกรูปภาพแล้ว พร้อมนำไปใช้' : 'กรุณาแตะเลือกรูปภาพที่ชอบ 1 รูป'}
+          </span>
 
-          <button
-            type="button"
-            disabled={!selectedUrl}
-            onClick={handleApply}
-            className="px-5 py-2 text-xs font-bold text-white rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 shadow-md shadow-emerald-500/25 active:scale-95 disabled:opacity-40 transition-all flex items-center gap-1.5"
-          >
-            <Check className="w-3.5 h-3.5" />
-            <span>นำรูปนี้ไปใช้กับเมนู</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors"
+            >
+              ปิด
+            </button>
+
+            <button
+              type="button"
+              disabled={!selectedUrl}
+              onClick={handleApply}
+              className="px-5 py-2 text-xs font-bold text-white rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 shadow-md shadow-emerald-500/25 active:scale-95 disabled:opacity-40 transition-all flex items-center gap-1.5"
+            >
+              <Check className="w-3.5 h-3.5" />
+              <span>นำรูปนี้ไปใช้กับเมนู</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

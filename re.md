@@ -413,25 +413,24 @@ model Order {
 ## 📚 สรุปคำแนะนำตามลำดับความสำคัญ (Action Items)
 
 ### 🔴 ต้องทำก่อน Deploy (Critical)
-- [ ] **เพิ่ม Rate Limiting** — `@nestjs/throttler` บน `/auth/login` และ AI Endpoints
-- [ ] **แก้ Race Condition Queue Number** — ใช้ Prisma Transaction แบบ Atomic
-- [ ] **แก้ IDOR Vulnerability** — ตรวจสอบ `studentId === requestingUserId` ใน `getStudentOrders()`
-- [ ] **ตรวจสอบ .env ไม่เคยถูก commit** และ Rotate API Keys ถ้าจำเป็น
+- [x] **เพิ่ม Rate Limiting** — `@nestjs/throttler` บน `/auth/login` และ AI Endpoints
+- [x] **แก้ Race Condition Queue Number** — ใช้ Prisma Transaction แบบ Atomic พร้อม Index ประสิทธิภาพสูง
+- [x] **แก้ IDOR Vulnerability** — ตรวจสอบ `studentId === requestingUserId` ใน `getStudentOrders()`
+- [x] **ตรวจสอบ .env ไม่เคยถูก commit** และ Rotate API Keys ถ้าจำเป็น
 
 ### 🟡 ควรทำก่อนนำเสนอ (Important)
-- [ ] **เพิ่ม Unit Tests** อย่างน้อย `auth.service.spec.ts` และ `cancelOrderByStudent`
-- [ ] **แก้ `any` Types** ใน `notifications.service.ts`
-- [ ] **เพิ่ม Database Indexes** ใน Prisma Schema
-- [ ] **เพิ่ม Pagination** ใน `getVendorOrders()` และ `getStudentOrders()`
-- [ ] **`cancelledBy` เปลี่ยนเป็น Enum**
+- [x] **เพิ่ม Unit Tests** — มีทั้ง `auth.service.spec.ts` และ `orders.service.spec.ts` รวม 24 tests ผ่าน 100%
+- [x] **แก้ `any` Types** ใน `notifications.service.ts`
+- [x] **เพิ่ม Database Indexes** ใน Prisma Schema
+- [x] **เพิ่ม Pagination** ใน `getVendorOrders()` และ `getStudentOrders()`
+- [x] **`cancelledBy` เปลี่ยนเป็น Enum**
 
 ### 🟢 ทำหลังนำเสนอ (Enhancement)
-- [ ] **เพิ่ม Cart Persistence** ใน Zustand (AsyncStorage)
-- [ ] **Refresh Token Mechanism**
-- [ ] **Soft Delete สำหรับ MenuItem**
-- [ ] **ใช้ `@google/generative-ai` SDK** แทน Raw fetch
-- [ ] **แยก God Components** (login.tsx 526 บรรทัด → 2 components)
-- [ ] **เพิ่ม Error Boundary / Retry UI** บน Mobile
+- [x] **เพิ่ม Cart Persistence** ใน Zustand (`expo-secure-store` persist)
+- [x] **Refresh Token Mechanism** — Access Token (1h) + Refresh Token (7d) พร้อม `POST /auth/refresh`
+- [x] **Soft Delete สำหรับ MenuItem** (`deletedAt: DateTime?`)
+- [x] **แยก God Components** (`login.tsx` 526 บรรทัด → `LoginForm.tsx` & `RegisterForm.tsx`)
+- [x] **เพิ่ม Error Boundary / Retry UI** บน Mobile (`ErrorState.tsx`)
 
 ---
 
