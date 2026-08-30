@@ -36,11 +36,11 @@ export function OrderReviewModal({
       >
         <View
           style={{
-            backgroundColor: '#0f172a',
+            backgroundColor: '#111E18',
             borderRadius: 24,
             padding: 20,
             borderWidth: 1,
-            borderColor: '#1e293b',
+            borderColor: '#1E352B',
           }}
         >
           <View
@@ -51,15 +51,15 @@ export function OrderReviewModal({
               marginBottom: 14,
             }}
           >
-            <Text style={{ color: '#f8fafc', fontSize: 16, fontWeight: 'bold' }}>
+            <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: 'bold' }}>
               ให้คะแนนและรีวิวอาหาร
             </Text>
             <TouchableOpacity onPress={onClose}>
-              <X size={20} color="#94a3b8" />
+              <X size={20} color="#88A096" />
             </TouchableOpacity>
           </View>
 
-          <Text style={{ color: '#94a3b8', fontSize: 12, marginBottom: 14 }}>
+          <Text style={{ color: '#88A096', fontSize: 12, marginBottom: 14 }}>
             {order?.vendor?.name || 'ร้านค้า'} (คิว #{order?.queueNumber})
           </Text>
 
@@ -69,8 +69,8 @@ export function OrderReviewModal({
               <TouchableOpacity key={star} onPress={() => onRatingChange(star)}>
                 <Star
                   size={32}
-                  color={star <= rating ? '#fbbf24' : '#334155'}
-                  fill={star <= rating ? '#fbbf24' : 'transparent'}
+                  color={star <= rating ? '#FBBF24' : '#244034'}
+                  fill={star <= rating ? '#FBBF24' : 'transparent'}
                 />
               </TouchableOpacity>
             ))}
@@ -78,31 +78,33 @@ export function OrderReviewModal({
 
           <TextInput
             placeholder="เขียนความประทับใจ หรือข้อเสนอแนะเรื่องรสชาติ/ความรวดเร็ว..."
-            placeholderTextColor="#64748b"
+            placeholderTextColor="#6E8B7E"
             value={comment}
             onChangeText={onCommentChange}
             multiline
             numberOfLines={3}
             style={{
-              backgroundColor: '#1e293b',
+              backgroundColor: '#162720',
               borderRadius: 14,
               padding: 12,
-              color: '#f8fafc',
+              color: '#F8FAFC',
               fontSize: 12,
               marginBottom: 16,
+              borderWidth: 1,
+              borderColor: '#244034',
             }}
           />
 
           <TouchableOpacity
             onPress={onSubmit}
             style={{
-              backgroundColor: '#f97316',
+              backgroundColor: '#10B981',
               borderRadius: 14,
               paddingVertical: 12,
               alignItems: 'center',
             }}
           >
-            <Text style={{ color: '#ffffff', fontSize: 13, fontWeight: 'bold' }}>ส่งรีวิว</Text>
+            <Text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: 'bold' }}>ส่งรีวิว</Text>
           </TouchableOpacity>
         </View>
       </View>

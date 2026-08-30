@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { Flame, Soup, Salad, Coffee, Dice5 } from 'lucide-react-native';
+import { Banknote, Soup, Salad, Coffee, Dices } from 'lucide-react-native';
 
 interface AiQuickPromptsProps {
   onSelectPrompt: (query: string) => void;
@@ -9,15 +9,15 @@ interface AiQuickPromptsProps {
 
 export function AiQuickPrompts({ onSelectPrompt, loading }: AiQuickPromptsProps) {
   const quickPrompts = [
-    { label: '🔥 งบไม่เกิน 60฿', query: 'อยากกินอาหารจานด่วน งบไม่เกิน 60 บาท', icon: Flame },
-    { label: '🍜 ก๋วยเตี๋ยวแซ่บๆ', query: 'อยากกินก๋วยเตี๋ยวต้มยำร้อนๆ รสแซ่บ', icon: Soup },
-    { label: '🥗 เมนูสุขภาพ/คลีน', query: 'แนะนำอาหารสุขภาพ แคลอรีต่ำ อิ่มกำลังดี', icon: Salad },
-    { label: '🧋 ของหวาน/แก้ง่วง', query: 'ขอชานม กาแฟ หรือของหวานเย็นๆ ชื่นใจ', icon: Coffee },
-    { label: '🎲 สุ่มเมนูเด็ดวันนี้', query: 'สุ่มเมนูเด็ดน่าทานมาให้หน่อย คิดไม่ออกเลย', icon: Dice5 },
+    { label: 'งบประหยัด ไม่เกิน 60฿', query: 'อยากกินอาหารจานด่วน งบไม่เกิน 60 บาท', icon: Banknote },
+    { label: 'ก๋วยเตี๋ยวและต้มซุป', query: 'อยากกินก๋วยเตี๋ยวต้มยำร้อนๆ หรือซุปร้อนๆ', icon: Soup },
+    { label: 'อาหารสุขภาพ แคลต่ำ', query: 'แนะนำอาหารสุขภาพ แคลอรีต่ำ อิ่มกำลังดี', icon: Salad },
+    { label: 'เครื่องดื่มและของหวาน', query: 'ขอชานม กาแฟ หรือของหวานเย็นๆ ชื่นใจ', icon: Coffee },
+    { label: 'สุ่มเมนูยอดนิยมวันนี้', query: 'สุ่มเมนูเด็ดน่าทานมาให้หน่อย คิดไม่ออกเลย', icon: Dices },
   ];
 
   return (
-    <View style={{ paddingVertical: 8, backgroundColor: '#090d16' }}>
+    <View style={{ paddingVertical: 8, backgroundColor: '#0A110E' }}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -33,17 +33,17 @@ export function AiQuickPrompts({ onSelectPrompt, loading }: AiQuickPromptsProps)
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap: 5,
+                gap: 6,
                 paddingHorizontal: 12,
                 paddingVertical: 7,
                 borderRadius: 16,
-                backgroundColor: '#131d31',
+                backgroundColor: '#111E18',
                 borderWidth: 1,
-                borderColor: '#1e293b',
+                borderColor: '#1E352B',
               }}
             >
-              <Icon size={13} color="#f97316" />
-              <Text style={{ color: '#cbd5e1', fontSize: 11, fontWeight: '600' }}>
+              <Icon size={14} color="#8FBC7A" />
+              <Text style={{ color: '#E2E8F0', fontSize: 11, fontWeight: '600' }}>
                 {item.label}
               </Text>
             </TouchableOpacity>

@@ -27,21 +27,37 @@ export function MenuItemCard({
         !item.isAvailable && 'opacity-60 grayscale-[40%]',
       )}
     >
-      {/* Image Banner */}
-      <div className="relative h-44 w-full bg-slate-900 overflow-hidden">
-        <img
-          src={
-            item.imageUrl ||
-            'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500'
-          }
-          alt={item.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+      {/* Image or Category Banner */}
+      <div className="relative h-40 w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+        {item.imageUrl ? (
+          <>
+            <img
+              src={item.imageUrl}
+              alt={item.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                // If broken URL, hide image to reveal fallback background
+                (e.target as HTMLElement).style.display = 'none';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+          </>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-slate-900 via-emerald-950/30 to-slate-950 flex flex-col items-center justify-center relative p-4 border-b border-slate-800/60">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-3xl shadow-inner mb-2">
+              {item.category === 'อาหารจานเดียว' ? '🍛' :
+               item.category === 'ก๋วยเตี๋ยว' ? '🍜' :
+               item.category === 'ของทานเล่น' ? '🍢' :
+               item.category === 'เครื่องดื่ม' ? '🧋' :
+               item.category === 'ของหวาน' ? '🍨' : '🍽️'}
+            </div>
+            <span className="text-[11px] text-emerald-400/80 font-medium">เมนูตามสั่ง</span>
+          </div>
+        )}
 
-        {/* Badges on Image */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <span className="px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[11px] font-semibold text-slate-200 border border-white/10">
+        {/* Badges on Image/Banner */}
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+          <span className="px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-[11px] font-semibold text-slate-200 border border-white/10">
             {item.category}
           </span>
           {item.isDailySpecial && (
@@ -52,11 +68,11 @@ export function MenuItemCard({
           )}
         </div>
 
-        <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
-          <div>
-            <h4 className="font-bold text-base text-white tracking-tight">{item.name}</h4>
+        <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between z-10">
+          <div className="flex-1 mr-2">
+            <h4 className="font-bold text-base text-white tracking-tight drop-shadow-sm truncate">{item.name}</h4>
           </div>
-          <span className="text-lg font-black text-brand-400 bg-slate-950/80 px-2.5 py-1 rounded-xl backdrop-blur-md border border-brand-500/30">
+          <span className="text-base font-black text-brand-400 bg-slate-950/85 px-2.5 py-1 rounded-xl backdrop-blur-md border border-brand-500/30 shrink-0">
             ฿{Number(item.price)}
           </span>
         </div>

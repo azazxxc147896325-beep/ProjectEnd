@@ -8,7 +8,7 @@
     "userInterfaceStyle": "dark",
     "scheme": "campusfood",
     "splash": {
-      "backgroundColor": "#0f172a"
+      "backgroundColor": "#8FBC7A"
     },
     "ios": {
       "supportsTablet": true,
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0f172a"
+        "backgroundColor": "#0A110E"
       },
       "package": "com.campusfood.mobile"
     },
@@ -27,7 +27,7 @@
         "expo-notifications",
         {
           "icon": "./assets/notification-icon.png",
-          "color": "#f97316"
+          "color": "#10B981"
         }
       ],
       "expo-font"

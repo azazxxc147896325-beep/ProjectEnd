@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { ShoppingBag } from 'lucide-react-native';
+import { ShoppingBag, ArrowRight } from 'lucide-react-native';
 
 interface CartEmptyStateProps {
   onBrowseVendors: () => void;
@@ -11,7 +11,7 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
     <View
       style={{
         flex: 1,
-        backgroundColor: '#090d16',
+        backgroundColor: '#0A110E',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
@@ -22,20 +22,22 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
           width: 80,
           height: 80,
           borderRadius: 40,
-          backgroundColor: '#1e293b',
+          backgroundColor: '#111E18',
+          borderWidth: 1,
+          borderColor: '#1E352B',
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 16,
         }}
       >
-        <ShoppingBag size={36} color="#64748b" />
+        <ShoppingBag size={36} color="#6E8B7E" />
       </View>
-      <Text style={{ color: '#f8fafc', fontSize: 18, fontWeight: 'bold' }}>
+      <Text style={{ color: '#F8FAFC', fontSize: 18, fontWeight: 'bold' }}>
         ไม่มีสินค้าในตะกร้า
       </Text>
       <Text
         style={{
-          color: '#64748b',
+          color: '#88A096',
           fontSize: 13,
           textAlign: 'center',
           marginTop: 6,
@@ -52,12 +54,16 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
           paddingHorizontal: 24,
           paddingVertical: 12,
           borderRadius: 14,
-          backgroundColor: '#f97316',
+          backgroundColor: '#10B981',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 6,
         }}
       >
-        <Text style={{ color: '#ffffff', fontSize: 13, fontWeight: 'bold' }}>
+        <Text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: 'bold' }}>
           ไปเลือกร้านอาหาร
         </Text>
+        <ArrowRight size={16} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );

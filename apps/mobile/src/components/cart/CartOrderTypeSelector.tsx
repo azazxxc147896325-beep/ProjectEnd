@@ -17,7 +17,7 @@ export function CartOrderTypeSelector({
 
   return (
     <View style={{ marginBottom: 18 }}>
-      <Text style={{ color: '#94a3b8', fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
+      <Text style={{ color: '#88A096', fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
         เลือกรูปแบบการรับประทาน *
       </Text>
 
@@ -32,20 +32,20 @@ export function CartOrderTypeSelector({
             gap: 8,
             paddingVertical: 12,
             borderRadius: 16,
-            backgroundColor: isDineIn ? '#f97316' : '#0f172a',
+            backgroundColor: isDineIn ? '#10B981' : '#111E18',
             borderWidth: 1,
-            borderColor: isDineIn ? '#f97316' : '#1e293b',
+            borderColor: isDineIn ? '#10B981' : '#1E352B',
           }}
         >
-          <Utensils size={16} color={isDineIn ? '#ffffff' : '#94a3b8'} />
+          <Utensils size={16} color={isDineIn ? '#FFFFFF' : '#88A096'} />
           <Text
             style={{
-              color: isDineIn ? '#ffffff' : '#94a3b8',
+              color: isDineIn ? '#FFFFFF' : '#88A096',
               fontSize: 13,
               fontWeight: 'bold',
             }}
           >
-            🍽️ ทานที่ร้าน
+            ทานที่ร้าน
           </Text>
         </TouchableOpacity>
 
@@ -59,20 +59,20 @@ export function CartOrderTypeSelector({
             gap: 8,
             paddingVertical: 12,
             borderRadius: 16,
-            backgroundColor: isTakeaway ? '#f97316' : '#0f172a',
+            backgroundColor: isTakeaway ? '#10B981' : '#111E18',
             borderWidth: 1,
-            borderColor: isTakeaway ? '#f97316' : '#1e293b',
+            borderColor: isTakeaway ? '#10B981' : '#1E352B',
           }}
         >
-          <Package size={16} color={isTakeaway ? '#ffffff' : '#94a3b8'} />
+          <Package size={16} color={isTakeaway ? '#FFFFFF' : '#88A096'} />
           <Text
             style={{
-              color: isTakeaway ? '#ffffff' : '#94a3b8',
+              color: isTakeaway ? '#FFFFFF' : '#88A096',
               fontSize: 13,
               fontWeight: 'bold',
             }}
           >
-            🛍️ กลับบ้าน
+            รับกลับบ้าน
           </Text>
         </TouchableOpacity>
       </View>

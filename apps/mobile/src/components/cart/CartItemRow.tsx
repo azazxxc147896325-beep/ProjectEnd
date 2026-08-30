@@ -22,14 +22,14 @@ export function CartItemRow({ item, isFirst, onUpdateQuantity }: CartItemRowProp
         alignItems: 'center',
         paddingVertical: 12,
         borderTopWidth: isFirst ? 0 : 1,
-        borderColor: '#1e293b',
+        borderColor: '#1E352B',
       }}
     >
       <View style={{ flex: 1, marginRight: 10 }}>
-        <Text style={{ color: '#f8fafc', fontSize: 13, fontWeight: 'bold' }}>
+        <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: 'bold' }}>
           {item.menuItem.name}
         </Text>
-        <Text style={{ color: '#f97316', fontSize: 12, fontWeight: '600', marginTop: 2 }}>
+        <Text style={{ color: '#8FBC7A', fontSize: 12, fontWeight: '600', marginTop: 2 }}>
           ฿{Number(item.menuItem.price)} / จาน
         </Text>
       </View>
@@ -42,15 +42,17 @@ export function CartItemRow({ item, isFirst, onUpdateQuantity }: CartItemRowProp
             width: 28,
             height: 28,
             borderRadius: 8,
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
+            borderWidth: 1,
+            borderColor: '#244034',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Minus size={14} color="#f8fafc" />
+          <Minus size={14} color="#F8FAFC" />
         </TouchableOpacity>
 
-        <Text style={{ color: '#f8fafc', fontSize: 13, fontWeight: 'bold', minWidth: 16, textAlign: 'center' }}>
+        <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: 'bold', minWidth: 16, textAlign: 'center' }}>
           {item.quantity}
         </Text>
 
@@ -60,15 +62,15 @@ export function CartItemRow({ item, isFirst, onUpdateQuantity }: CartItemRowProp
             width: 28,
             height: 28,
             borderRadius: 8,
-            backgroundColor: '#f97316',
+            backgroundColor: '#10B981',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Plus size={14} color="#ffffff" />
+          <Plus size={14} color="#FFFFFF" />
         </TouchableOpacity>
 
-        <Text style={{ color: '#f8fafc', fontSize: 13, fontWeight: 'bold', width: 55, textAlign: 'right' }}>
+        <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: 'bold', width: 55, textAlign: 'right' }}>
           ฿{item.subtotal}
         </Text>
       </View>

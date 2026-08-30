@@ -14,7 +14,7 @@ export function VendorCategoryFilter({
 }: VendorCategoryFilterProps) {
   return (
     <View style={{ marginTop: 24, paddingHorizontal: 16 }}>
-      <Text style={{ color: '#f8fafc', fontSize: 15, fontWeight: 'bold', marginBottom: 10 }}>
+      <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold', marginBottom: 10 }}>
         รายการอาหารทั้งหมด
       </Text>
 
@@ -27,12 +27,14 @@ export function VendorCategoryFilter({
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: 16,
-              backgroundColor: selectedCategory === cat ? '#f97316' : '#1e293b',
+              backgroundColor: selectedCategory === cat ? '#10B981' : '#162720',
+              borderWidth: 1,
+              borderColor: selectedCategory === cat ? '#10B981' : '#244034',
             }}
           >
             <Text
               style={{
-                color: selectedCategory === cat ? '#ffffff' : '#94a3b8',
+                color: selectedCategory === cat ? '#FFFFFF' : '#88A096',
                 fontSize: 12,
                 fontWeight: 'bold',
               }}

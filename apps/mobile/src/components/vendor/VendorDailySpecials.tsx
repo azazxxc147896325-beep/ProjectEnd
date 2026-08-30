@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { MenuItem } from '@campus-food/shared-types';
-import { Sparkles, Plus, Minus } from 'lucide-react-native';
+import { Star, Plus, Minus } from 'lucide-react-native';
 
 interface VendorDailySpecialsProps {
   dailySpecials: MenuItem[];
@@ -21,8 +21,8 @@ export function VendorDailySpecials({
   return (
     <View style={{ marginTop: 20, paddingHorizontal: 16 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-        <Sparkles size={16} color="#fbbf24" />
-        <Text style={{ color: '#fbbf24', fontSize: 14, fontWeight: 'bold' }}>
+        <Star size={16} color="#FBBF24" fill="#FBBF24" />
+        <Text style={{ color: '#FBBF24', fontSize: 14, fontWeight: 'bold' }}>
           เมนูพิเศษแนะนำประจำวัน (Daily Specials)
         </Text>
       </View>
@@ -36,26 +36,46 @@ export function VendorDailySpecials({
               key={item.id}
               style={{
                 width: 200,
-                backgroundColor: '#0f172a',
+                backgroundColor: '#111E18',
                 borderRadius: 18,
                 overflow: 'hidden',
                 borderWidth: 1,
-                borderColor: '#f59e0b',
+                borderColor: 'rgba(245, 158, 11, 0.5)',
               }}
             >
-              <Image
-                source={{
-                  uri: item.imageUrl || 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500',
-                }}
-                style={{ width: '100%', height: 100 }}
-              />
+              {item.imageUrl ? (
+                <Image
+                  source={{
+                    uri: item.imageUrl,
+                  }}
+                  style={{ width: '100%', height: 100 }}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: '100%',
+                    height: 100,
+                    backgroundColor: '#162720',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ fontSize: 36 }}>
+                    {item.category === 'อาหารจานเดียว' ? '🍛' :
+                     item.category === 'ก๋วยเตี๋ยว' ? '🍜' :
+                     item.category === 'ของทานเล่น' ? '🍢' :
+                     item.category === 'เครื่องดื่ม' ? '🧋' :
+                     item.category === 'ของหวาน' ? '🍨' : '🍽️'}
+                  </Text>
+                </View>
+              )}
               <View style={{ padding: 10 }}>
-                <Text numberOfLines={1} style={{ color: '#f8fafc', fontSize: 13, fontWeight: 'bold' }}>
+                <Text numberOfLines={1} style={{ color: '#F8FAFC', fontSize: 13, fontWeight: 'bold' }}>
                   {item.name}
                 </Text>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-                  <Text style={{ color: '#f97316', fontSize: 13, fontWeight: 'bold' }}>
+                  <Text style={{ color: '#8FBC7A', fontSize: 13, fontWeight: 'bold' }}>
                     ฿{Number(item.price)}
                   </Text>
 
@@ -64,10 +84,10 @@ export function VendorDailySpecials({
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        backgroundColor: '#1e293b',
+                        backgroundColor: '#162720',
                         borderRadius: 12,
                         borderWidth: 1,
-                        borderColor: '#f97316',
+                        borderColor: '#10B981',
                         paddingHorizontal: 3,
                         paddingVertical: 2,
                         gap: 6,
@@ -80,17 +100,17 @@ export function VendorDailySpecials({
                           width: 24,
                           height: 24,
                           borderRadius: 8,
-                          backgroundColor: '#334155',
+                          backgroundColor: '#244034',
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}
                       >
-                        <Minus size={12} color="#f8fafc" />
+                        <Minus size={12} color="#F8FAFC" />
                       </TouchableOpacity>
 
                       <Text
                         style={{
-                          color: '#f97316',
+                          color: '#8FBC7A',
                           fontSize: 12,
                           fontWeight: 'bold',
                           minWidth: 14,
@@ -107,12 +127,12 @@ export function VendorDailySpecials({
                           width: 24,
                           height: 24,
                           borderRadius: 8,
-                          backgroundColor: '#f97316',
+                          backgroundColor: '#10B981',
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}
                       >
-                        <Plus size={12} color="#ffffff" />
+                        <Plus size={12} color="#FFFFFF" />
                       </TouchableOpacity>
                     </View>
                   ) : (
@@ -120,7 +140,7 @@ export function VendorDailySpecials({
                       onPress={() => onAddToCart(item)}
                       activeOpacity={0.8}
                       style={{
-                        backgroundColor: '#f97316',
+                        backgroundColor: '#10B981',
                         borderRadius: 10,
                         paddingHorizontal: 8,
                         paddingVertical: 5,
@@ -130,8 +150,8 @@ export function VendorDailySpecials({
                         gap: 3,
                       }}
                     >
-                      <Plus size={12} color="#ffffff" />
-                      <Text style={{ color: '#ffffff', fontSize: 10, fontWeight: 'bold' }}>ใส่ตะกร้า</Text>
+                      <Plus size={12} color="#FFFFFF" />
+                      <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: 'bold' }}>ใส่ตะกร้า</Text>
                     </TouchableOpacity>
                   )}
                 </View>

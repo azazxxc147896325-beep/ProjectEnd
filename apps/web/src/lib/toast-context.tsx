@@ -1,0 +1,170 @@
+'use client';
+
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import { CheckCircle2, AlertCircle, Info, Sparkles, X } from 'lucide-react';
+import { clsx } from 'clsx';
+
+export type ToastType = 'success' | 'error' | 'info' | 'warning';
+
+export interface ToastItem {
+  id: string;
+  type: ToastType;
+  title: string;
+  message?: string;
+  duration?: number;
+}
+
+interface ToastContextType {
+  toasts: ToastItem[];
+  showToast: (toast: Omit<ToastItem, 'id'>) => void;
+  success: (title: string, message?: string, duration?: number) => void;
+  error: (title: string, message?: string, duration?: number) => void;
+  info: (title: string, message?: string, duration?: number) => void;
+  warning: (title: string, message?: string, duration?: number) => void;
+  removeToast: (id: string) => void;
+}
+
+const ToastContext = createContext<ToastContextType | undefined>(undefined);
+
+let globalToastFn: ((toast: Omit<ToastItem, 'id'>) => void) | null = null;
+
+export const toast = {
+  success: (title: string, message?: string, duration?: number) => {
+    globalToastFn?.({ type: 'success', title, message, duration });
+  },
+  error: (title: string, message?: string, duration?: number) => {
+    globalToastFn?.({ type: 'error', title, message, duration });
+  },
+  info: (title: string, message?: string, duration?: number) => {
+    globalToastFn?.({ type: 'info', title, message, duration });
+  },
+  warning: (title: string, message?: string, duration?: number) => {
+    globalToastFn?.({ type: 'warning', title, message, duration });
+  },
+};
+
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const showToast = useCallback((newToast: Omit<ToastItem, 'id'>) => {
+    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const duration = newToast.duration ?? 4000;
+
+    setToasts((prev) => [...prev, { ...newToast, id, duration }]);
+
+    if (duration > 0) {
+      setTimeout(() => {
+        removeToast(id);
+      }, duration);
+    }
+  }, [removeToast]);
+
+  globalToastFn = showToast;
+
+  const success = (title: string, message?: string, duration?: number) =>
+    showToast({ type: 'success', title, message, duration });
+  const error = (title: string, message?: string, duration?: number) =>
+    showToast({ type: 'error', title, message, duration });
+  const info = (title: string, message?: string, duration?: number) =>
+    showToast({ type: 'info', title, message, duration });
+  const warning = (title: string, message?: string, duration?: number) =>
+    showToast({ type: 'warning', title, message, duration });
+
+  return (
+    <ToastContext.Provider
+      value={{
+        toasts,
+        showToast,
+        success,
+        error,
+        info,
+        warning,
+        removeToast,
+      }}
+    >
+      {children}
+
+      {/* Floating Toasts Container */}
+      <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4 sm:px-0">
+        {toasts.map((t) => {
+          const isSuccess = t.type === 'success';
+          const isError = t.type === 'error';
+          const isWarning = t.type === 'warning';
+          const isInfo = t.type === 'info';
+
+          return (
+            <div
+              key={t.id}
+              className={clsx(
+                'pointer-events-auto p-4 rounded-2xl border shadow-2xl backdrop-blur-xl transition-all animate-in slide-in-from-top-4 fade-in duration-200 relative overflow-hidden flex items-start gap-3.5',
+                isSuccess && 'bg-slate-950/90 border-emerald-500/50 shadow-emerald-500/15',
+                isError && 'bg-slate-950/90 border-rose-500/50 shadow-rose-500/15',
+                isWarning && 'bg-slate-950/90 border-amber-500/50 shadow-amber-500/15',
+                isInfo && 'bg-slate-950/90 border-cyan-500/50 shadow-cyan-500/15',
+              )}
+            >
+              {/* Subtle top indicator bar */}
+              <div
+                className={clsx(
+                  'absolute top-0 left-0 right-0 h-1',
+                  isSuccess && 'bg-gradient-to-r from-emerald-500 to-teal-400',
+                  isError && 'bg-gradient-to-r from-rose-500 to-red-400',
+                  isWarning && 'bg-gradient-to-r from-amber-500 to-yellow-400',
+                  isInfo && 'bg-gradient-to-r from-cyan-500 to-blue-400',
+                )}
+              />
+
+              {/* Icon */}
+              <div
+                className={clsx(
+                  'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md',
+                  isSuccess && 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
+                  isError && 'bg-rose-500/20 text-rose-400 border border-rose-500/30',
+                  isWarning && 'bg-amber-500/20 text-amber-400 border border-amber-500/30',
+                  isInfo && 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
+                )}
+              >
+                {isSuccess && <CheckCircle2 className="w-5 h-5" />}
+                {isError && <AlertCircle className="w-5 h-5" />}
+                {isWarning && <Sparkles className="w-5 h-5" />}
+                {isInfo && <Info className="w-5 h-5" />}
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0 pr-2">
+                <h4 className="font-bold text-sm text-white tracking-tight leading-snug">
+                  {t.title}
+                </h4>
+                {t.message && (
+                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed break-words">
+                    {t.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => removeToast(t.id)}
+                className="w-6 h-6 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors shrink-0"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { ShoppingBag } from 'lucide-react-native';
+import { ShoppingBag, ArrowRight } from 'lucide-react-native';
 
 interface VendorFloatingCartBarProps {
   totalCount: number;
@@ -22,14 +22,14 @@ export function VendorFloatingCartBar({
         bottom: 16,
         left: 16,
         right: 16,
-        backgroundColor: '#f97316',
+        backgroundColor: '#10B981',
         borderRadius: 20,
         paddingVertical: 14,
         paddingHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        shadowColor: '#f97316',
+        shadowColor: '#10B981',
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.4,
         shadowRadius: 10,
@@ -42,14 +42,14 @@ export function VendorFloatingCartBar({
             width: 28,
             height: 28,
             borderRadius: 14,
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FFFFFF',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#f97316', fontSize: 12, fontWeight: 'bold' }}>{totalCount}</Text>
+          <Text style={{ color: '#10B981', fontSize: 12, fontWeight: 'bold' }}>{totalCount}</Text>
         </View>
-        <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>
+        <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' }}>
           ฿{totalPrice.toLocaleString()}
         </Text>
       </View>
@@ -58,8 +58,8 @@ export function VendorFloatingCartBar({
         onPress={onPress}
         style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
       >
-        <Text style={{ color: '#ffffff', fontSize: 13, fontWeight: 'bold' }}>ดูตะกร้า / ชำระเงิน</Text>
-        <ShoppingBag size={16} color="#ffffff" />
+        <Text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: 'bold' }}>ดูตะกร้า / ชำระเงิน</Text>
+        <ArrowRight size={16} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );

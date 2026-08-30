@@ -10,6 +10,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { mobileApi } from '../../lib/api';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCartStore } from '../../stores/cart-store';
+import { mobileToast } from '../../stores/toast-store';
 import { Order, OrderStatus } from '@campus-food/shared-types';
 import {
   OrderHistoryTabs,
@@ -81,10 +82,7 @@ export default function OrdersHistoryScreen() {
         addItem({ id: order.vendor.id, name: order.vendor.name }, item.menuItem, item.quantity);
       }
     }
-    Alert.alert('เพิ่มรายการลงตะกร้าแล้ว', 'นำรายการเดิมใส่ตะกร้าเรียบร้อยแล้วครับ', [
-      { text: 'ไปที่ตะกร้า', onPress: () => router.push('/(tabs)/cart') },
-      { text: 'ตกลง' },
-    ]);
+    mobileToast.success('เพิ่มรายการเดิมลงในตะกร้าแล้ว 🛍️', 'แตะที่แท็บตะกร้าเพื่อตรวจสอบออเดอร์');
   };
 
   const handleOpenReview = (order: Order) => {
@@ -95,12 +93,12 @@ export default function OrdersHistoryScreen() {
   };
 
   const handleSubmitReview = () => {
-    Alert.alert('ขอบคุณสำหรับรีวิว! ⭐', 'ความคิดเห็นของคุณช่วยให้ร้านค้าพัฒนาอาหารให้อร่อยยิ่งขึ้นครับ');
+    mobileToast.success('ขอบคุณสำหรับรีวิว! ⭐', 'ความคิดเห็นของคุณช่วยให้ร้านค้าพัฒนาอาหารให้อร่อยยิ่งขึ้นครับ');
     setIsReviewOpen(false);
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#090d16' }}>
+    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
       {/* Top Tabs Bar Subcomponent */}
       <OrderHistoryTabs
         activeTab={activeTab}
@@ -112,14 +110,14 @@ export default function OrdersHistoryScreen() {
       {/* Orders List */}
       {loading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#f97316" />
+          <ActivityIndicator size="large" color="#8FBC7A" />
         </View>
       ) : (
         <FlatList
           data={displayedOrders}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 80 }}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#f97316" />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#8FBC7A" />}
           ListEmptyComponent={<OrderHistoryEmptyState activeTab={activeTab} />}
           renderItem={({ item }) => (
             <OrderHistoryCard

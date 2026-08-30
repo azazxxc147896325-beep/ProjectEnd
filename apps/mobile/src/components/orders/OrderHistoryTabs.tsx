@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { Clock, History } from 'lucide-react-native';
 
 interface OrderHistoryTabsProps {
   activeTab: 'active' | 'history';
@@ -14,34 +15,42 @@ export function OrderHistoryTabs({
   activeCount,
   historyCount,
 }: OrderHistoryTabsProps) {
+  const isActive = activeTab === 'active';
+  const isHistory = activeTab === 'history';
+
   return (
     <View
       style={{
         flexDirection: 'row',
-        backgroundColor: '#0f172a',
+        backgroundColor: '#111E18',
         padding: 8,
         borderBottomWidth: 1,
-        borderColor: '#1e293b',
+        borderColor: '#1E352B',
+        gap: 8,
       }}
     >
       <TouchableOpacity
         onPress={() => onTabChange('active')}
         style={{
           flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 6,
           paddingVertical: 10,
           borderRadius: 14,
-          backgroundColor: activeTab === 'active' ? '#f97316' : 'transparent',
-          alignItems: 'center',
+          backgroundColor: isActive ? '#10B981' : 'transparent',
         }}
       >
+        <Clock size={15} color={isActive ? '#FFFFFF' : '#88A096'} />
         <Text
           style={{
-            color: activeTab === 'active' ? '#ffffff' : '#94a3b8',
+            color: isActive ? '#FFFFFF' : '#88A096',
             fontSize: 13,
             fontWeight: 'bold',
           }}
         >
-          🔥 กำลังดำเนินการ ({activeCount})
+          กำลังดำเนินการ ({activeCount})
         </Text>
       </TouchableOpacity>
 
@@ -49,20 +58,24 @@ export function OrderHistoryTabs({
         onPress={() => onTabChange('history')}
         style={{
           flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 6,
           paddingVertical: 10,
           borderRadius: 14,
-          backgroundColor: activeTab === 'history' ? '#f97316' : 'transparent',
-          alignItems: 'center',
+          backgroundColor: isHistory ? '#10B981' : 'transparent',
         }}
       >
+        <History size={15} color={isHistory ? '#FFFFFF' : '#88A096'} />
         <Text
           style={{
-            color: activeTab === 'history' ? '#ffffff' : '#94a3b8',
+            color: isHistory ? '#FFFFFF' : '#88A096',
             fontSize: 13,
             fontWeight: 'bold',
           }}
         >
-          📜 ประวัติคำสั่งซื้อ ({historyCount})
+          ประวัติคำสั่งซื้อ ({historyCount})
         </Text>
       </TouchableOpacity>
     </View>

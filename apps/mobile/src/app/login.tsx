@@ -17,7 +17,7 @@ export default function MobileLoginScreen() {
   const { isAuthenticated, isHydrated } = useAuthStore();
   const [mode, setMode] = useState<'login' | 'register'>('login');
 
-  // หากเข้าสู่ระบบแล้ว ให้ไปหน้าแท็บหลักทันที (ต้องอยู่หลัง hooks ทุกตัว)
+  // หากเข้าสู่ระบบแล้ว ให้ไปหน้าแท็บหลักทันที
   if (isHydrated && isAuthenticated) {
     return <Redirect href="/(tabs)" />;
   }
@@ -25,7 +25,7 @@ export default function MobileLoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: '#090d16' }}
+      style={{ flex: 1, backgroundColor: '#0A110E' }}
     >
       <ScrollView
         contentContainerStyle={{
@@ -44,24 +44,24 @@ export default function MobileLoginScreen() {
               width: 68,
               height: 68,
               borderRadius: 22,
-              backgroundColor: 'rgba(249, 115, 22, 0.15)',
+              backgroundColor: 'rgba(143, 188, 122, 0.15)',
               borderWidth: 1.5,
-              borderColor: 'rgba(249, 115, 22, 0.4)',
+              borderColor: 'rgba(143, 188, 122, 0.4)',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: 14,
-              shadowColor: '#f97316',
+              shadowColor: '#8FBC7A',
               shadowOffset: { width: 0, height: 8 },
               shadowOpacity: 0.25,
               shadowRadius: 16,
               elevation: 8,
             }}
           >
-            <Utensils size={32} color="#f97316" />
+            <Utensils size={32} color="#8FBC7A" />
           </View>
           <Text
             style={{
-              color: '#f8fafc',
+              color: '#F8FAFC',
               fontSize: 22,
               fontWeight: '900',
               letterSpacing: -0.5,
@@ -71,7 +71,7 @@ export default function MobileLoginScreen() {
           </Text>
           <Text
             style={{
-              color: '#94a3b8',
+              color: '#88A096',
               fontSize: 12,
               marginTop: 4,
               textAlign: 'center',
@@ -85,11 +85,11 @@ export default function MobileLoginScreen() {
         <View
           style={{
             flexDirection: 'row',
-            backgroundColor: '#0f172a',
+            backgroundColor: '#111E18',
             borderRadius: 16,
             padding: 4,
             borderWidth: 1,
-            borderColor: '#1e293b',
+            borderColor: '#1E352B',
             marginBottom: 16,
           }}
         >
@@ -100,17 +100,17 @@ export default function MobileLoginScreen() {
               flex: 1,
               paddingVertical: 10,
               borderRadius: 12,
-              backgroundColor: mode === 'login' ? '#f97316' : 'transparent',
+              backgroundColor: mode === 'login' ? '#10B981' : 'transparent',
               alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'center',
               gap: 6,
             }}
           >
-            <LogIn size={15} color={mode === 'login' ? '#ffffff' : '#94a3b8'} />
+            <LogIn size={15} color={mode === 'login' ? '#FFFFFF' : '#88A096'} />
             <Text
               style={{
-                color: mode === 'login' ? '#ffffff' : '#94a3b8',
+                color: mode === 'login' ? '#FFFFFF' : '#88A096',
                 fontSize: 13,
                 fontWeight: 'bold',
               }}
@@ -126,17 +126,17 @@ export default function MobileLoginScreen() {
               flex: 1,
               paddingVertical: 10,
               borderRadius: 12,
-              backgroundColor: mode === 'register' ? '#f97316' : 'transparent',
+              backgroundColor: mode === 'register' ? '#10B981' : 'transparent',
               alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'center',
               gap: 6,
             }}
           >
-            <UserPlus size={15} color={mode === 'register' ? '#ffffff' : '#94a3b8'} />
+            <UserPlus size={15} color={mode === 'register' ? '#FFFFFF' : '#88A096'} />
             <Text
               style={{
-                color: mode === 'register' ? '#ffffff' : '#94a3b8',
+                color: mode === 'register' ? '#FFFFFF' : '#88A096',
                 fontSize: 13,
                 fontWeight: 'bold',
               }}
@@ -149,11 +149,11 @@ export default function MobileLoginScreen() {
         {/* Form Card */}
         <View
           style={{
-            backgroundColor: '#0f172a',
+            backgroundColor: '#111E18',
             borderRadius: 24,
             padding: 20,
             borderWidth: 1,
-            borderColor: '#1e293b',
+            borderColor: '#1E352B',
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 10 },
             shadowOpacity: 0.4,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { MenuItem } from '@campus-food/shared-types';
-import { Plus, Minus, Check } from 'lucide-react-native';
+import { Plus, Minus, Check, Star } from 'lucide-react-native';
 
 interface VendorMenuItemCardProps {
   item: MenuItem;
@@ -22,40 +22,69 @@ export function VendorMenuItemCard({
     <View
       style={{
         flexDirection: 'row',
-        backgroundColor: '#0f172a',
+        backgroundColor: '#111E18',
         borderRadius: 18,
         padding: 12,
         borderWidth: 1,
-        borderColor: quantity > 0 ? '#f97316' : '#1e293b',
+        borderColor: quantity > 0 ? '#10B981' : '#1E352B',
         alignItems: 'center',
         gap: 12,
       }}
     >
-      <Image
-        source={{
-          uri: item.imageUrl || 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500',
-        }}
-        style={{ width: 75, height: 75, borderRadius: 14, backgroundColor: '#1e293b' }}
-      />
+      {item.imageUrl ? (
+        <Image
+          source={{
+            uri: item.imageUrl,
+          }}
+          style={{ width: 75, height: 75, borderRadius: 14, backgroundColor: '#162720' }}
+        />
+      ) : (
+        <View
+          style={{
+            width: 75,
+            height: 75,
+            borderRadius: 14,
+            backgroundColor: '#162720',
+            borderWidth: 1,
+            borderColor: '#244034',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text style={{ fontSize: 28 }}>
+            {item.category === 'อาหารจานเดียว' ? '🍛' :
+             item.category === 'ก๋วยเตี๋ยว' ? '🍜' :
+             item.category === 'ของทานเล่น' ? '🍢' :
+             item.category === 'เครื่องดื่ม' ? '🧋' :
+             item.category === 'ของหวาน' ? '🍨' : '🍽️'}
+          </Text>
+          <Text style={{ color: '#88A096', fontSize: 9, marginTop: 2, fontWeight: '600' }}>
+            ตามสั่ง
+          </Text>
+        </View>
+      )}
 
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Text numberOfLines={1} style={{ color: '#f8fafc', fontSize: 14, fontWeight: 'bold', flex: 1 }}>
+          <Text numberOfLines={1} style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold', flex: 1 }}>
             {item.name}
           </Text>
           {item.isDailySpecial && (
-            <Text style={{ color: '#fbbf24', fontSize: 10, fontWeight: 'bold' }}>⭐ แนะนำ</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+              <Star size={10} color="#FBBF24" fill="#FBBF24" />
+              <Text style={{ color: '#FBBF24', fontSize: 10, fontWeight: 'bold' }}>แนะนำ</Text>
+            </View>
           )}
         </View>
 
         {item.description && (
-          <Text numberOfLines={1} style={{ color: '#94a3b8', fontSize: 11, marginTop: 2 }}>
+          <Text numberOfLines={1} style={{ color: '#88A096', fontSize: 11, marginTop: 2 }}>
             {item.description}
           </Text>
         )}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-          <Text style={{ color: '#f97316', fontSize: 14, fontWeight: 'bold' }}>
+          <Text style={{ color: '#8FBC7A', fontSize: 14, fontWeight: 'bold' }}>
             ฿{Number(item.price)}
           </Text>
 
@@ -64,10 +93,10 @@ export function VendorMenuItemCard({
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                backgroundColor: '#1e293b',
+                backgroundColor: '#162720',
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: '#f97316',
+                borderColor: '#10B981',
                 paddingHorizontal: 4,
                 paddingVertical: 3,
                 gap: 8,
@@ -80,17 +109,17 @@ export function VendorMenuItemCard({
                   width: 26,
                   height: 26,
                   borderRadius: 8,
-                  backgroundColor: '#334155',
+                  backgroundColor: '#244034',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
-                <Minus size={13} color="#f8fafc" />
+                <Minus size={13} color="#F8FAFC" />
               </TouchableOpacity>
 
               <Text
                 style={{
-                  color: '#f97316',
+                  color: '#8FBC7A',
                   fontSize: 14,
                   fontWeight: 'bold',
                   minWidth: 16,
@@ -107,12 +136,12 @@ export function VendorMenuItemCard({
                   width: 26,
                   height: 26,
                   borderRadius: 8,
-                  backgroundColor: '#f97316',
+                  backgroundColor: '#10B981',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
-                <Plus size={13} color="#ffffff" />
+                <Plus size={13} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           ) : (
@@ -123,7 +152,7 @@ export function VendorMenuItemCard({
                 paddingHorizontal: 12,
                 paddingVertical: 6,
                 borderRadius: 12,
-                backgroundColor: isAddedAnimation ? '#10b981' : '#f97316',
+                backgroundColor: isAddedAnimation ? '#059669' : '#10B981',
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 4,
@@ -131,13 +160,13 @@ export function VendorMenuItemCard({
             >
               {isAddedAnimation ? (
                 <>
-                  <Check size={14} color="#ffffff" />
-                  <Text style={{ color: '#ffffff', fontSize: 11, fontWeight: 'bold' }}>เพิ่มแล้ว</Text>
+                  <Check size={14} color="#FFFFFF" />
+                  <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>เพิ่มแล้ว</Text>
                 </>
               ) : (
                 <>
-                  <Plus size={14} color="#ffffff" />
-                  <Text style={{ color: '#ffffff', fontSize: 11, fontWeight: 'bold' }}>สั่งอาหาร</Text>
+                  <Plus size={14} color="#FFFFFF" />
+                  <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>สั่งอาหาร</Text>
                 </>
               )}
             </TouchableOpacity>

@@ -14,11 +14,11 @@ export function getMobileSocket(): Socket {
     });
 
     mobileSocket.on('connect', () => {
-      console.log('⚡ Mobile connected to WebSocket Gateway:', mobileSocket?.id);
+      console.log('[Socket] Mobile connected to WebSocket Gateway:', mobileSocket?.id);
     });
 
     mobileSocket.on('disconnect', () => {
-      console.log('⚡ Mobile disconnected from WebSocket');
+      console.log('[Socket] Mobile disconnected from WebSocket');
     });
   }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { Vendor } from '@campus-food/shared-types';
+import { CheckCircle2, XCircle } from 'lucide-react-native';
 
 interface VendorHeaderProps {
   vendor: Vendor;
@@ -10,7 +11,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
   return (
     <>
       {/* Banner */}
-      <View style={{ height: 160, backgroundColor: '#1e293b' }}>
+      <View style={{ height: 160, backgroundColor: '#162720' }}>
         <Image
           source={{
             uri: vendor.logoUrl || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500',
@@ -22,7 +23,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            backgroundColor: 'rgba(10, 17, 14, 0.5)',
           }}
         />
       </View>
@@ -32,11 +33,11 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
         style={{
           marginHorizontal: 16,
           marginTop: -30,
-          backgroundColor: '#0f172a',
+          backgroundColor: '#111E18',
           borderRadius: 20,
           padding: 16,
           borderWidth: 1,
-          borderColor: '#1e293b',
+          borderColor: '#1E352B',
           shadowColor: '#000',
           shadowOpacity: 0.4,
           shadowRadius: 8,
@@ -44,7 +45,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
         }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text style={{ color: '#f8fafc', fontSize: 18, fontWeight: 'bold', flex: 1 }}>
+          <Text style={{ color: '#F8FAFC', fontSize: 18, fontWeight: 'bold', flex: 1 }}>
             {vendor.name}
           </Text>
           <View
@@ -52,23 +53,33 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
               paddingHorizontal: 8,
               paddingVertical: 3,
               borderRadius: 10,
-              backgroundColor: vendor.isOpen ? 'rgba(6, 78, 59, 0.8)' : 'rgba(136, 19, 55, 0.8)',
+              backgroundColor: vendor.isOpen ? 'rgba(6, 78, 59, 0.85)' : 'rgba(136, 19, 55, 0.85)',
+              borderWidth: 1,
+              borderColor: vendor.isOpen ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 4,
             }}
           >
+            {vendor.isOpen ? (
+              <CheckCircle2 size={11} color="#6EE7B7" />
+            ) : (
+              <XCircle size={11} color="#FDA4AF" />
+            )}
             <Text
               style={{
-                color: vendor.isOpen ? '#6ee7b7' : '#fda4af',
+                color: vendor.isOpen ? '#6EE7B7' : '#FDA4AF',
                 fontSize: 10,
                 fontWeight: 'bold',
               }}
             >
-              {vendor.isOpen ? '🟢 พร้อมรับออเดอร์' : '🔴 ปิดร้าน'}
+              {vendor.isOpen ? 'พร้อมรับออเดอร์' : 'ปิดร้าน'}
             </Text>
           </View>
         </View>
 
         {vendor.description && (
-          <Text style={{ color: '#94a3b8', fontSize: 12, marginTop: 6, lineHeight: 17 }}>
+          <Text style={{ color: '#88A096', fontSize: 12, marginTop: 6, lineHeight: 17 }}>
             {vendor.description}
           </Text>
         )}

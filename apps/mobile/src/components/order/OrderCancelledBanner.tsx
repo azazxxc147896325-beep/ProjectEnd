@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Order } from '@campus-food/shared-types';
-import { Ban } from 'lucide-react-native';
+import { AlertCircle, History } from 'lucide-react-native';
 
 interface OrderCancelledBannerProps {
   order: Order;
@@ -16,7 +16,7 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
         borderRadius: 24,
         padding: 20,
         borderWidth: 1.5,
-        borderColor: '#ef4444',
+        borderColor: '#EF4444',
         marginBottom: 20,
         alignItems: 'center',
       }}
@@ -32,14 +32,14 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
           marginBottom: 10,
         }}
       >
-        <Ban size={30} color="#ef4444" />
+        <AlertCircle size={30} color="#EF4444" />
       </View>
 
-      <Text style={{ color: '#ef4444', fontSize: 17, fontWeight: 'bold', marginBottom: 4 }}>
-        {order.cancelledBy === 'vendor' ? '⚠️ ร้านค้ายกเลิกคำสั่งซื้อนี้' : '🛑 คุณได้ยกเลิกคำสั่งซื้อนี้แล้ว'}
+      <Text style={{ color: '#EF4444', fontSize: 17, fontWeight: 'bold', marginBottom: 4 }}>
+        {order.cancelledBy === 'vendor' ? 'ร้านค้ายกเลิกคำสั่งซื้อนี้' : 'คุณได้ยกเลิกคำสั่งซื้อนี้แล้ว'}
       </Text>
 
-      <Text style={{ color: '#cbd5e1', fontSize: 13, textAlign: 'center', marginTop: 4 }}>
+      <Text style={{ color: '#CBD5E1', fontSize: 13, textAlign: 'center', marginTop: 4 }}>
         สาเหตุ: {order.cancelReason || (order.cancelledBy === 'vendor' ? 'ร้านค้าไม่สะดวกรับออเดอร์ หรือวัตถุดิบหมด' : 'ผู้สั่งขอยกเลิกออเดอร์')}
       </Text>
 
@@ -48,16 +48,20 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
         activeOpacity={0.85}
         style={{
           marginTop: 16,
-          backgroundColor: '#1e293b',
+          backgroundColor: '#162720',
           borderWidth: 1,
-          borderColor: '#334155',
+          borderColor: '#244034',
           paddingVertical: 10,
           paddingHorizontal: 18,
           borderRadius: 12,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 6,
         }}
       >
-        <Text style={{ color: '#f8fafc', fontSize: 12, fontWeight: 'bold' }}>
-          ดูประวัติคำสั่งซื้อทั้งหมด 📋
+        <History size={14} color="#F8FAFC" />
+        <Text style={{ color: '#F8FAFC', fontSize: 12, fontWeight: 'bold' }}>
+          ดูประวัติคำสั่งซื้อทั้งหมด
         </Text>
       </TouchableOpacity>
     </View>

@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Sparkles, RefreshCw } from 'lucide-react-native';
+import { Bot, RefreshCw } from 'lucide-react-native';
 import { mobileApi } from '../../lib/api';
 import { useCartStore } from '../../stores/cart-store';
 import {
@@ -37,7 +37,7 @@ export default function AiRecommendScreen() {
       id: 'welcome',
       role: 'assistant',
       content:
-        'สวัสดีค่ะ! ✨ น้องหยก AI กูรูอาหารประจำมอมาแล้วค่ะ 🍽️ วันนี้ไม่รู้จะทานอะไรดี บอกงบประมาณ ความอยาก หรือให้สุ่มเมนูเด็ดจากร้านค้าจริงในโรงอาหารได้เลยนะคะ! 😋',
+        'สวัสดีค่ะ! หนูคือ AI น้องหยก ผู้ช่วยแนะนำอาหารประจำโรงอาหาร วันนี้อยากทานเมนูแบบไหน งบประมาณเท่าไหร่ หรือต้องการให้น้องหยกช่วยสุ่มเมนูเด็ด แจ้งได้เลยนะคะ ✨',
       timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -81,7 +81,7 @@ export default function AiRecommendScreen() {
         id: `ai-err-${Date.now()}`,
         role: 'assistant',
         content:
-          'ขออภัยครับ ไม่สามารถเชื่อมต่อกับระบบ AI หรือไม่พบรายการอาหารในขณะนี้ กรุณาลองใหม่อีกครั้งครับ',
+          'ขออภัยนะคะ ไม่สามารถเชื่อมต่อกับระบบ AI หรือไม่พบรายการอาหารในขณะนี้ กรุณาลองใหม่อีกครั้งนะคะ',
         dishes: [],
         timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
       };
@@ -122,16 +122,16 @@ export default function AiRecommendScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={85}
-      style={{ flex: 1, backgroundColor: '#090d16' }}
+      style={{ flex: 1, backgroundColor: '#0A110E' }}
     >
       {/* Header Banner */}
       <View
         style={{
           paddingHorizontal: 16,
           paddingVertical: 12,
-          backgroundColor: '#0f172a',
+          backgroundColor: '#111E18',
           borderBottomWidth: 1,
-          borderColor: '#1e293b',
+          borderColor: '#1E352B',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -143,23 +143,23 @@ export default function AiRecommendScreen() {
               width: 38,
               height: 38,
               borderRadius: 12,
-              backgroundColor: '#f97316',
+              backgroundColor: '#10B981',
               alignItems: 'center',
               justifyContent: 'center',
-              shadowColor: '#f97316',
+              shadowColor: '#10B981',
               shadowOpacity: 0.4,
               shadowRadius: 8,
               elevation: 4,
             }}
           >
-            <Sparkles size={20} color="#ffffff" />
+            <Bot size={20} color="#FFFFFF" />
           </View>
           <View>
-            <Text style={{ color: '#f8fafc', fontSize: 15, fontWeight: 'bold' }}>
-              น้องหยก AI 🤖
+            <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold' }}>
+              AI น้องหยก
             </Text>
-            <Text style={{ color: '#94a3b8', fontSize: 11 }}>
-              ผู้ช่วยค้นหาและแนะนำเมนูอาหารในมอ
+            <Text style={{ color: '#88A096', fontSize: 11 }}>
+              ผู้ช่วยค้นหาและแนะนำเมนูอาหารในโรงอาหาร
             </Text>
           </View>
         </View>
@@ -171,7 +171,7 @@ export default function AiRecommendScreen() {
                 id: 'welcome',
                 role: 'assistant',
                 content:
-                  'สวัสดีครับ! 🤖 แตะปุ่มลัดด้านล่างหรือพิมพ์ถามได้เลยว่าวันนี้อยากทานอะไรดีครับ ✨',
+                  'สวัสดีค่ะ! แตะปุ่มลัดด้านล่างหรือพิมพ์ถามได้เลยว่าวันนี้อยากทานอะไรดีคะ ✨',
                 timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
               },
             ])
@@ -179,10 +179,12 @@ export default function AiRecommendScreen() {
           style={{
             padding: 8,
             borderRadius: 10,
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
+            borderWidth: 1,
+            borderColor: '#244034',
           }}
         >
-          <RefreshCw size={16} color="#94a3b8" />
+          <RefreshCw size={16} color="#88A096" />
         </TouchableOpacity>
       </View>
 
@@ -210,12 +212,14 @@ export default function AiRecommendScreen() {
               gap: 8,
               padding: 12,
               borderRadius: 16,
-              backgroundColor: '#131d31',
+              backgroundColor: '#111E18',
+              borderWidth: 1,
+              borderColor: '#1E352B',
               alignSelf: 'flex-start',
             }}
           >
-            <ActivityIndicator size="small" color="#f97316" />
-            <Text style={{ color: '#94a3b8', fontSize: 12 }}>น้องหยกกำลังค้นหาเมนูอร่อยๆ...</Text>
+            <ActivityIndicator size="small" color="#8FBC7A" />
+            <Text style={{ color: '#88A096', fontSize: 12 }}>น้องหยกกำลังค้นหาเมนูที่เหมาะกับคุณให้ค่ะ...</Text>
           </View>
         )}
       </ScrollView>

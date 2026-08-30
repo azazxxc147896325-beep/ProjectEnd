@@ -6,6 +6,8 @@ import { AiGenerateImageResponse } from '@campus-food/shared-types';
 import { Sparkles, X, Wand2, Check } from 'lucide-react';
 import { AiImageGallery } from './AiImageGallery';
 
+import { useToast } from '@/lib/toast-context';
+
 interface AiImageGeneratorModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,6 +23,7 @@ export function AiImageGeneratorModal({
   defaultDishName = '',
   defaultCategory = 'อาหารจานเดียว',
 }: AiImageGeneratorModalProps) {
+  const { success } = useToast();
   const [dishName, setDishName] = useState(defaultDishName);
   const [category, setCategory] = useState(defaultCategory);
   const [customPrompt, setCustomPrompt] = useState('');
@@ -52,6 +55,7 @@ export function AiImageGeneratorModal({
 
       setResult(data);
       setSelectedUrl(data.imageUrl);
+      success('สร้างรูปภาพสำเร็จ! 🎨', `NanoBanana AI สร้างรูป "${dishName}" พร้อมให้เลือกใช้งาน`);
     } catch (err) {
       console.error('Error generating AI image:', err);
       // Generate AI diffusion images with prompt
@@ -70,6 +74,7 @@ export function AiImageGeneratorModal({
         variations: [fallbackUrl1, fallbackUrl2, fallbackUrl3],
       });
       setSelectedUrl(fallbackUrl1);
+      success('สร้างรูปภาพสำเร็จ! 🎨', `สร้างตัวเลือกรูปภาพสำหรับ "${dishName}" เรียบร้อยแล้ว`);
     } finally {
       setIsGenerating(false);
     }
@@ -78,6 +83,7 @@ export function AiImageGeneratorModal({
   const handleApply = () => {
     if (selectedUrl) {
       onSelectImage(selectedUrl);
+      success('เลือกรูปภาพสำเร็จ! 🖼️', 'นำรูปภาพไปใส่ในเมนูอาหารเรียบร้อยแล้ว');
       onClose();
     }
   };
@@ -96,11 +102,11 @@ export function AiImageGeneratorModal({
                 <h3 className="font-bold text-lg text-white flex items-center gap-2">
                   <span>AI Menu Image Studio</span>
                   <span className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold">
-                    PRO
+                    NanoBanana
                   </span>
                 </h3>
                 <p className="text-xs text-slate-400">
-                  สร้างและเจนรูปภาพจานอาหารระดับ 4K สำหรับเมนูของคุณด้วย AI ในไม่กี่วินาที
+                  สร้างและเจนรูปภาพจานอาหารด้วย NanoBanana AI
                 </p>
               </div>
             </div>
@@ -170,7 +176,7 @@ export function AiImageGeneratorModal({
               {isGenerating ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>AI กำลังปรุงแต่งและสร้างรูปภาพ 4K...</span>
+                  <span>AI กำลังปรุงแต่งและสร้างรูปภาพ...</span>
                 </>
               ) : (
                 <>

@@ -22,7 +22,7 @@ export function ErrorState({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
-        backgroundColor: '#090d16',
+        backgroundColor: '#0A110E',
       }}
     >
       <View
@@ -38,12 +38,12 @@ export function ErrorState({
           marginBottom: 18,
         }}
       >
-        <AlertCircle size={36} color="#ef4444" />
+        <AlertCircle size={36} color="#EF4444" />
       </View>
 
       <Text
         style={{
-          color: '#f8fafc',
+          color: '#F8FAFC',
           fontSize: 18,
           fontWeight: 'bold',
           textAlign: 'center',
@@ -55,7 +55,7 @@ export function ErrorState({
 
       <Text
         style={{
-          color: '#94a3b8',
+          color: '#88A096',
           fontSize: 13,
           textAlign: 'center',
           lineHeight: 20,
@@ -74,19 +74,19 @@ export function ErrorState({
             flexDirection: 'row',
             alignItems: 'center',
             gap: 8,
-            backgroundColor: '#f97316',
+            backgroundColor: '#10B981',
             paddingVertical: 12,
             paddingHorizontal: 22,
             borderRadius: 14,
-            shadowColor: '#f97316',
+            shadowColor: '#10B981',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 8,
             elevation: 4,
           }}
         >
-          <RefreshCw size={16} color="#ffffff" />
-          <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>
+          <RefreshCw size={16} color="#FFFFFF" />
+          <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' }}>
             {retryText}
           </Text>
         </TouchableOpacity>

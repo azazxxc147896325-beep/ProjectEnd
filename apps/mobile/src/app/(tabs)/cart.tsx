@@ -4,70 +4,69 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useCartStore } from '../../stores/cart-store';
+import { useCartStore, VendorCartGroup } from '../../stores/cart-store';
 import { useAuthStore } from '../../stores/auth-store';
 import { mobileApi } from '../../lib/api';
-import { Order, OrderType } from '@campus-food/shared-types';
+import { Order } from '@campus-food/shared-types';
+import { Lock, ChevronRight, Store } from 'lucide-react-native';
 import {
   CartEmptyState,
-  CartVendorHeader,
-  CartOrderTypeSelector,
-  CartItemRow,
-  CartNoteInput,
+  CartVendorCard,
+  CartVendorDetailView,
   CartSummaryCard,
 } from '../../components/cart';
+import { mobileToast } from '../../stores/toast-store';
 
 export default function CartScreen() {
   const router = useRouter();
   const {
     items,
-    vendorId,
-    vendorName,
-    orderType,
-    note,
+    getVendorGroups,
     updateQuantity,
-    setOrderType,
-    setNote,
+    setVendorOrderType,
+    setVendorNote,
+    clearVendor,
     clearCart,
     getTotalPrice,
+    getTotalCount,
   } = useCartStore();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedVendorId, setSelectedVendorId] = useState<string | null>(null);
+  const [submittingVendorId, setSubmittingVendorId] = useState<string | null>(null);
+  const [isSubmittingAll, setIsSubmittingAll] = useState(false);
 
+  const vendorGroups = getVendorGroups();
   const totalPrice = getTotalPrice();
+  const totalCount = getTotalCount();
 
-  const handleCheckout = async () => {
-    if (!vendorId || items.length === 0) {
-      Alert.alert('ตะกร้าว่างเปล่า', 'กรุณาเลือกรายการอาหารก่อนสั่งซื้อครับ');
+  // จัดการสั่งซื้อเฉพาะร้านค้าเดียว
+  const handleCheckoutSingleVendor = async (group: VendorCartGroup) => {
+    if (!isAuthenticated) {
+      mobileToast.confirm({
+        title: 'กรุณาเข้าสู่ระบบ',
+        message: 'กรุณาเข้าสู่ระบบเพื่อยืนยันออเดอร์และรับหมายเลขคิวอาหารครับ',
+        confirmText: 'เข้าสู่ระบบ',
+        cancelText: 'ภายหลัง',
+        onConfirm: () => router.push('/login'),
+      });
       return;
     }
 
-    if (!isAuthenticated) {
-      Alert.alert(
-        'กรุณาเข้าสู่ระบบ 🔐',
-        'คุณยังไม่ได้เข้าสู่ระบบ กรุณาเข้าสู่ระบบนักศึกษาเพื่อยืนยันออเดอร์และรับหมายเลขคิวอาหารครับ',
-        [
-          { text: 'ยกเลิก', style: 'cancel' },
-          {
-            text: 'เข้าสู่ระบบทันที',
-            onPress: () => router.push('/login'),
-          },
-        ],
-      );
+    if (group.items.length === 0) {
+      mobileToast.warning('ไม่มีรายการอาหาร', 'ร้านนี้ไม่มีรายการอาหารในตะกร้า');
       return;
     }
 
     try {
-      setIsSubmitting(true);
+      setSubmittingVendorId(group.vendorId);
       const payload = {
-        vendorId,
-        orderType,
-        note: note.trim() || undefined,
-        items: items.map((i) => ({
+        vendorId: group.vendorId,
+        orderType: group.orderType,
+        note: group.note?.trim() || undefined,
+        items: group.items.map((i) => ({
           menuItemId: i.menuItem.id,
           quantity: i.quantity,
           options: i.options,
@@ -79,45 +78,135 @@ export default function CartScreen() {
         body: JSON.stringify(payload),
       });
 
-      clearCart();
-      Alert.alert(
-        'สั่งอาหารสำเร็จ! 🎉',
-        `หมายเลขคิวของคุณคือ #${createdOrder.queueNumber}\nกำลังพาคุณไปหน้าติดตามสถานะอาหาร`,
-        [
-          {
-            text: 'ติดตามคิวทันที',
-            onPress: () => router.push(`/order/${createdOrder.id}`),
-          },
-        ],
+      // ลบเฉพาะรายการของร้านนี้ออกจากตะกร้า
+      clearVendor(group.vendorId);
+      setSelectedVendorId(null);
+
+      mobileToast.success(
+        `สั่งร้าน "${group.vendorName}" สำเร็จ! คิว #${createdOrder.queueNumber}`,
+        'ระบบส่งออเดอร์ถึงห้องครัวเรียบร้อยแล้ว'
       );
+      router.push(`/order/${createdOrder.id}`);
     } catch (err: any) {
       if (err?.message?.includes('Unauthorized') || err?.message?.includes('401')) {
-        Alert.alert(
-          'เข้าสู่ระบบหมดอายุ 🔐',
-          'กรุณาเข้าสู่ระบบใหม่อีกครั้งเพื่อสั่งอาหารครับ',
-          [
-            { text: 'ยกเลิก', style: 'cancel' },
-            {
-              text: 'เข้าสู่ระบบ',
-              onPress: () => router.push('/login'),
-            },
-          ],
-        );
+        mobileToast.confirm({
+          title: 'เซสชันหมดอายุ',
+          message: 'กรุณาเข้าสู่ระบบใหม่อีกครั้งเพื่อสั่งอาหารครับ',
+          confirmText: 'เข้าสู่ระบบ',
+          cancelText: 'ปิด',
+          onConfirm: () => router.push('/login'),
+        });
       } else {
-        Alert.alert('เกิดข้อผิดพลาด', err.message || 'ไม่สามารถส่งออเดอร์ได้ กรุณาลองใหม่อีกครั้ง');
+        mobileToast.error('เกิดข้อผิดพลาด', err.message || 'ไม่สามารถส่งออเดอร์ได้ กรุณาลองใหม่อีกครั้ง');
       }
     } finally {
-      setIsSubmitting(false);
+      setSubmittingVendorId(null);
     }
   };
 
-  if (items.length === 0) {
+  // จัดการสั่งซื้อทุกร้านค้าพร้อมกัน
+  const handleCheckoutAll = async () => {
+    if (vendorGroups.length === 0) {
+      mobileToast.warning('ตะกร้าว่างเปล่า', 'กรุณาเลือกรายการอาหารก่อนสั่งซื้อครับ');
+      return;
+    }
+
+    if (!isAuthenticated) {
+      mobileToast.confirm({
+        title: 'กรุณาเข้าสู่ระบบ',
+        message: 'กรุณาเข้าสู่ระบบเพื่อยืนยันออเดอร์และรับหมายเลขคิวอาหารครับ',
+        confirmText: 'เข้าสู่ระบบ',
+        cancelText: 'ภายหลัง',
+        onConfirm: () => router.push('/login'),
+      });
+      return;
+    }
+
+    try {
+      setIsSubmittingAll(true);
+      const createdOrders: Order[] = [];
+
+      for (const group of vendorGroups) {
+        const payload = {
+          vendorId: group.vendorId,
+          orderType: group.orderType,
+          note: group.note?.trim() || undefined,
+          items: group.items.map((i) => ({
+            menuItemId: i.menuItem.id,
+            quantity: i.quantity,
+            options: i.options,
+          })),
+        };
+
+        const created = await mobileApi<Order>('/orders', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        createdOrders.push(created);
+      }
+
+      clearCart();
+      setSelectedVendorId(null);
+
+      const queueList = createdOrders.map((o) => `#${o.queueNumber}`).join(', ');
+      mobileToast.success(
+        `สั่งอาหารสำเร็จ ${createdOrders.length} ร้าน! คิว (${queueList})`,
+        'ระบบส่งออเดอร์ไปยังทุกร้านค้าเรียบร้อยแล้ว'
+      );
+
+      if (createdOrders.length === 1) {
+        router.push(`/order/${createdOrders[0].id}`);
+      } else {
+        router.push('/(tabs)/orders');
+      }
+    } catch (err: any) {
+      if (err?.message?.includes('Unauthorized') || err?.message?.includes('401')) {
+        mobileToast.confirm({
+          title: 'เซสชันหมดอายุ',
+          message: 'กรุณาเข้าสู่ระบบใหม่อีกครั้งเพื่อสั่งอาหารครับ',
+          confirmText: 'เข้าสู่ระบบ',
+          cancelText: 'ปิด',
+          onConfirm: () => router.push('/login'),
+        });
+      } else {
+        mobileToast.error('เกิดข้อผิดพลาด', err.message || 'ไม่สามารถส่งออเดอร์ได้ กรุณาลองใหม่อีกครั้ง');
+      }
+    } finally {
+      setIsSubmittingAll(false);
+    }
+  };
+
+  // หากตะกร้าว่างเปล่า
+  if (items.length === 0 || vendorGroups.length === 0) {
     return <CartEmptyState onBrowseVendors={() => router.push('/(tabs)')} />;
   }
 
+  // หากผู้ใช้เลือกกดเข้าไปดูรายละเอียดของร้านใดร้านหนึ่ง
+  if (selectedVendorId) {
+    const selectedGroup = vendorGroups.find((g) => g.vendorId === selectedVendorId);
+    if (selectedGroup) {
+      return (
+        <CartVendorDetailView
+          group={selectedGroup}
+          isSubmitting={submittingVendorId === selectedGroup.vendorId}
+          onBack={() => setSelectedVendorId(null)}
+          onUpdateQuantity={updateQuantity}
+          onSelectOrderType={setVendorOrderType}
+          onNoteChange={setVendorNote}
+          onClearVendor={(vId) => {
+            clearVendor(vId);
+            setSelectedVendorId(null);
+          }}
+          onCheckout={handleCheckoutSingleVendor}
+        />
+      );
+    }
+  }
+
+  // หน้าหลักของตะกร้า: แสดงรายการการ์ดร้านค้าทั้งหมด + ปุ่มสั่งพร้อมกัน
   return (
-    <View style={{ flex: 1, backgroundColor: '#090d16' }}>
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>
+    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 140 }}>
         {/* Auth Notice Banner if not logged in */}
         {!isAuthenticated && (
           <TouchableOpacity
@@ -127,71 +216,84 @@ export default function CartScreen() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              backgroundColor: 'rgba(249, 115, 22, 0.15)',
+              backgroundColor: 'rgba(143, 188, 122, 0.12)',
               borderWidth: 1,
-              borderColor: 'rgba(249, 115, 22, 0.4)',
+              borderColor: 'rgba(143, 188, 122, 0.35)',
               borderRadius: 16,
               padding: 12,
               marginBottom: 16,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}>
-              <Text style={{ fontSize: 16 }}>🔐</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+              <Lock size={18} color="#8FBC7A" />
               <View style={{ flex: 1 }}>
-                <Text style={{ color: '#f8fafc', fontSize: 12, fontWeight: 'bold' }}>
+                <Text style={{ color: '#F8FAFC', fontSize: 12, fontWeight: 'bold' }}>
                   ยังไม่ได้เข้าสู่ระบบ
                 </Text>
-                <Text style={{ color: '#fb923c', fontSize: 11 }}>
+                <Text style={{ color: '#8FBC7A', fontSize: 11 }}>
                   แตะเพื่อเข้าสู่ระบบนักศึกษาสำหรับสั่งอาหารและรับคิว
                 </Text>
               </View>
             </View>
-            <Text style={{ color: '#f97316', fontSize: 12, fontWeight: 'bold' }}>เข้าสู่ระบบ ›</Text>
+            <ChevronRight size={16} color="#8FBC7A" />
           </TouchableOpacity>
         )}
 
-        {/* Vendor Header Subcomponent */}
-        <CartVendorHeader vendorName={vendorName || 'ร้านค้า'} />
-
-        {/* Order Type Selector Subcomponent */}
-        <CartOrderTypeSelector
-          orderType={orderType}
-          onSelectOrderType={setOrderType}
-        />
-
-        {/* Item List */}
+        {/* Multi-vendor Header Banner */}
         <View
           style={{
-            backgroundColor: '#0f172a',
-            borderRadius: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: '#111E18',
+            borderRadius: 18,
             padding: 14,
             borderWidth: 1,
-            borderColor: '#1e293b',
+            borderColor: '#1E352B',
             marginBottom: 16,
+            gap: 12,
           }}
         >
-          <Text style={{ color: '#f8fafc', fontSize: 14, fontWeight: 'bold', marginBottom: 12 }}>
-            รายการอาหารในตะกร้า ({items.length})
-          </Text>
-
-          {items.map((item, idx) => (
-            <CartItemRow
-              key={item.menuItem.id}
-              item={item}
-              isFirst={idx === 0}
-              onUpdateQuantity={(itemId, delta) => updateQuantity(itemId, delta)}
-            />
-          ))}
+          <View
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 12,
+              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              borderWidth: 1,
+              borderColor: 'rgba(16, 185, 129, 0.3)',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Store size={20} color="#10B981" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold' }}>
+              ร้านค้าในตะกร้า ({vendorGroups.length} ร้าน)
+            </Text>
+            <Text style={{ color: '#88A096', fontSize: 12, marginTop: 2 }}>
+              แตะที่การ์ดร้านค้าเพื่อดูรายการ หรือกดสั่งพร้อมกันทั้งหมดด้านล่าง
+            </Text>
+          </View>
         </View>
 
-        {/* Note / Special Instructions Input Subcomponent */}
-        <CartNoteInput note={note} onNoteChange={setNote} />
+        {/* Render Store Cards list */}
+        {vendorGroups.map((group) => (
+          <CartVendorCard
+            key={group.vendorId}
+            group={group}
+            onPress={() => setSelectedVendorId(group.vendorId)}
+            onClearVendor={clearVendor}
+          />
+        ))}
 
-        {/* Payment Summary & Checkout Button Subcomponent */}
+        {/* Total Summary Card & Sticky Bottom Checkout All Button */}
         <CartSummaryCard
           totalPrice={totalPrice}
-          isSubmitting={isSubmitting}
-          onCheckout={handleCheckout}
+          totalCount={totalCount}
+          vendorCount={vendorGroups.length}
+          isSubmitting={isSubmittingAll}
+          onCheckout={handleCheckoutAll}
         />
       </ScrollView>
     </View>

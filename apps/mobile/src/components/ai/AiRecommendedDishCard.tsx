@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { RecommendedDishItem } from '@campus-food/shared-types';
-import { ShoppingBag, Check } from 'lucide-react-native';
+import { ShoppingBag, Check, Store } from 'lucide-react-native';
 
 interface AiRecommendedDishCardProps {
   dish: RecommendedDishItem;
@@ -19,10 +19,10 @@ export function AiRecommendedDishCard({
   return (
     <View
       style={{
-        backgroundColor: '#0f172a',
+        backgroundColor: '#111E18',
         borderRadius: 18,
         borderWidth: 1,
-        borderColor: '#334155',
+        borderColor: '#1E352B',
         overflow: 'hidden',
         shadowColor: '#000',
         shadowOpacity: 0.3,
@@ -31,16 +31,32 @@ export function AiRecommendedDishCard({
       }}
     >
       <View style={{ flexDirection: 'row', padding: 10, gap: 12 }}>
-        {/* Dish Image */}
-        <Image
-          source={{
-            uri:
-              dish.imageUrl ||
-              'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500',
-          }}
-          style={{ width: 85, height: 85, borderRadius: 12, backgroundColor: '#1e293b' }}
-          resizeMode="cover"
-        />
+        {/* Dish Image or Icon */}
+        {dish.imageUrl ? (
+          <Image
+            source={{
+              uri: dish.imageUrl,
+            }}
+            style={{ width: 85, height: 85, borderRadius: 12, backgroundColor: '#162720' }}
+            resizeMode="cover"
+          />
+        ) : (
+          <View
+            style={{
+              width: 85,
+              height: 85,
+              borderRadius: 12,
+              backgroundColor: '#162720',
+              borderWidth: 1,
+              borderColor: '#244034',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ fontSize: 32 }}>🍛</Text>
+            <Text style={{ color: '#88A096', fontSize: 9, marginTop: 2, fontWeight: '600' }}>ตามสั่ง</Text>
+          </View>
+        )}
 
         {/* Info */}
         <View style={{ flex: 1, justifyContent: 'space-between' }}>
@@ -52,21 +68,24 @@ export function AiRecommendedDishCard({
                   paddingHorizontal: 7,
                   paddingVertical: 2,
                   borderRadius: 6,
-                  backgroundColor: 'rgba(249, 115, 22, 0.15)',
+                  backgroundColor: 'rgba(143, 188, 122, 0.15)',
                   marginBottom: 4,
                 }}
               >
-                <Text style={{ color: '#fb923c', fontSize: 10, fontWeight: '700' }}>
+                <Text style={{ color: '#8FBC7A', fontSize: 10, fontWeight: '700' }}>
                   {dish.matchReason}
                 </Text>
               </View>
             )}
-            <Text numberOfLines={1} style={{ color: '#f8fafc', fontSize: 14, fontWeight: 'bold' }}>
+            <Text numberOfLines={1} style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold' }}>
               {dish.name}
             </Text>
-            <Text numberOfLines={1} style={{ color: '#94a3b8', fontSize: 11, marginTop: 2 }}>
-              🏪 {dish.vendorName}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
+              <Store size={12} color="#88A096" />
+              <Text numberOfLines={1} style={{ color: '#88A096', fontSize: 11, flex: 1 }}>
+                {dish.vendorName}
+              </Text>
+            </View>
           </View>
 
           <View
@@ -77,7 +96,7 @@ export function AiRecommendedDishCard({
               marginTop: 6,
             }}
           >
-            <Text style={{ color: '#f97316', fontSize: 15, fontWeight: '900' }}>
+            <Text style={{ color: '#8FBC7A', fontSize: 15, fontWeight: '900' }}>
               ฿{dish.price}
             </Text>
 
@@ -88,10 +107,12 @@ export function AiRecommendedDishCard({
                   paddingHorizontal: 8,
                   paddingVertical: 5,
                   borderRadius: 8,
-                  backgroundColor: '#1e293b',
+                  backgroundColor: '#162720',
+                  borderWidth: 1,
+                  borderColor: '#244034',
                 }}
               >
-                <Text style={{ color: '#cbd5e1', fontSize: 11, fontWeight: '600' }}>หน้าร้าน</Text>
+                <Text style={{ color: '#CBD5E1', fontSize: 11, fontWeight: '600' }}>หน้าร้าน</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -104,18 +125,18 @@ export function AiRecommendedDishCard({
                   paddingHorizontal: 10,
                   paddingVertical: 5,
                   borderRadius: 8,
-                  backgroundColor: isJustAdded ? '#10b981' : '#f97316',
+                  backgroundColor: isJustAdded ? '#059669' : '#10B981',
                 }}
               >
                 {isJustAdded ? (
                   <>
-                    <Check size={12} color="#ffffff" />
-                    <Text style={{ color: '#ffffff', fontSize: 11, fontWeight: 'bold' }}>ใส่แล้ว!</Text>
+                    <Check size={12} color="#FFFFFF" />
+                    <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>ใส่แล้ว</Text>
                   </>
                 ) : (
                   <>
-                    <ShoppingBag size={12} color="#ffffff" />
-                    <Text style={{ color: '#ffffff', fontSize: 11, fontWeight: 'bold' }}>ใส่ตะกร้า</Text>
+                    <ShoppingBag size={12} color="#FFFFFF" />
+                    <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>ใส่ตะกร้า</Text>
                   </>
                 )}
               </TouchableOpacity>

@@ -72,48 +72,64 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (email: string, password: string) => {
         const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:4000/api';
-        const res = await fetch(`${API_BASE}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.message || `เข้าสู่ระบบไม่สำเร็จ: ${res.status}`);
+        try {
+          const res = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            const msg = Array.isArray(err.message) ? err.message.join(', ') : err.message;
+            throw new Error(msg || `เข้าสู่ระบบไม่สำเร็จ: ${res.status}`);
+          }
+          const data = await res.json();
+          set({
+            user: data.user,
+            token: data.accessToken,
+            refreshToken: data.refreshToken || null,
+            isAuthenticated: true,
+          });
+        } catch (error: any) {
+          if (error.message?.includes('Network request failed') || error.message?.includes('Failed to fetch')) {
+            throw new Error(`ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (${API_BASE}) กรุณาตรวจสอบการเชื่อมต่อ Wi-Fi หรือ IP เครื่องเซิร์ฟเวอร์`);
+          }
+          throw error;
         }
-        const data = await res.json();
-        set({
-          user: data.user,
-          token: data.accessToken,
-          refreshToken: data.refreshToken || null,
-          isAuthenticated: true,
-        });
       },
 
       register: async (data: RegisterData) => {
         const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:4000/api';
-        const res = await fetch(`${API_BASE}/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fullName: data.fullName.trim(),
-            email: data.email.trim().toLowerCase(),
-            password: data.password,
-            phone: data.phone?.trim() || undefined,
-            role: Role.STUDENT,
-          }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.message || `สมัครสมาชิกไม่สำเร็จ: ${res.status}`);
+        try {
+          const res = await fetch(`${API_BASE}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fullName: data.fullName.trim(),
+              email: data.email.trim().toLowerCase(),
+              password: data.password,
+              phone: data.phone?.trim() || undefined,
+              role: Role.STUDENT,
+            }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            const msg = Array.isArray(err.message) ? err.message.join(', ') : err.message;
+            throw new Error(msg || `สมัครสมาชิกไม่สำเร็จ: ${res.status}`);
+          }
+          const authData = await res.json();
+          set({
+            user: authData.user,
+            token: authData.accessToken,
+            refreshToken: authData.refreshToken || null,
+            isAuthenticated: true,
+          });
+        } catch (error: any) {
+          if (error.message?.includes('Network request failed') || error.message?.includes('Failed to fetch')) {
+            throw new Error(`ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (${API_BASE}) กรุณาตรวจสอบการเชื่อมต่อ Wi-Fi หรือ IP เครื่องเซิร์ฟเวอร์`);
+          }
+          throw error;
         }
-        const authData = await res.json();
-        set({
-          user: authData.user,
-          token: authData.accessToken,
-          refreshToken: authData.refreshToken || null,
-          isAuthenticated: true,
-        });
       },
 
       refreshTokens: async () => {

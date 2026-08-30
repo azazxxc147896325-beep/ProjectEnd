@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { User as UserIcon, Mail, Phone, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react-native';
+import { User as UserIcon, Mail, Phone, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react-native';
 import { useAuthStore } from '../../stores/auth-store';
 
 interface RegisterFormProps {
@@ -68,158 +68,162 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             borderRadius: 14,
             padding: 12,
             marginBottom: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
           }}
         >
-          <Text style={{ color: '#fca5a5', fontSize: 12, fontWeight: '600' }}>
-            ⚠️ {errorMessage}
+          <AlertCircle size={16} color="#FCA5A5" />
+          <Text style={{ color: '#FCA5A5', fontSize: 12, fontWeight: '600', flex: 1 }}>
+            {errorMessage}
           </Text>
         </View>
       )}
 
       {/* Full Name */}
       <View style={{ marginBottom: 14 }}>
-        <Text style={{ color: '#cbd5e1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           ชื่อ-นามสกุล *
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#334155',
+            borderColor: '#244034',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <UserIcon size={18} color="#64748b" style={{ marginRight: 10 }} />
+          <UserIcon size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="เช่น สมชาย ใจดี"
-            placeholderTextColor="#475569"
+            placeholderTextColor="#6E8B7E"
             value={fullName}
             onChangeText={setFullName}
-            style={{ flex: 1, color: '#f8fafc', fontSize: 14 }}
+            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
           />
         </View>
       </View>
 
       {/* Email Field */}
       <View style={{ marginBottom: 14 }}>
-        <Text style={{ color: '#cbd5e1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           อีเมลสำหรับเข้าสู่ระบบ *
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#334155',
+            borderColor: '#244034',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <Mail size={18} color="#64748b" style={{ marginRight: 10 }} />
+          <Mail size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="your.email@campus.ac.th"
-            placeholderTextColor="#475569"
+            placeholderTextColor="#6E8B7E"
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
-            style={{ flex: 1, color: '#f8fafc', fontSize: 14 }}
+            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
           />
         </View>
       </View>
 
       {/* Phone Number */}
       <View style={{ marginBottom: 14 }}>
-        <Text style={{ color: '#cbd5e1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           เบอร์โทรศัพท์ (สำหรับแจ้งเตือนออเดอร์)
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#334155',
+            borderColor: '#244034',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <Phone size={18} color="#64748b" style={{ marginRight: 10 }} />
+          <Phone size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="0812345678"
-            placeholderTextColor="#475569"
+            placeholderTextColor="#6E8B7E"
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
-            style={{ flex: 1, color: '#f8fafc', fontSize: 14 }}
+            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
           />
         </View>
       </View>
 
       {/* Password Field */}
       <View style={{ marginBottom: 14 }}>
-        <Text style={{ color: '#cbd5e1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           รหัสผ่าน (อย่างน้อย 6 ตัวอักษร) *
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#334155',
+            borderColor: '#244034',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <Lock size={18} color="#64748b" style={{ marginRight: 10 }} />
+          <Lock size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="••••••••"
-            placeholderTextColor="#475569"
+            placeholderTextColor="#6E8B7E"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
-            style={{ flex: 1, color: '#f8fafc', fontSize: 14 }}
+            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
           />
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={{ padding: 4 }}>
-            {showPassword ? <EyeOff size={18} color="#94a3b8" /> : <Eye size={18} color="#94a3b8" />}
+            {showPassword ? <EyeOff size={18} color="#88A096" /> : <Eye size={18} color="#88A096" />}
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Confirm Password */}
       <View style={{ marginBottom: 20 }}>
-        <Text style={{ color: '#cbd5e1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           ยืนยันรหัสผ่านอีกครั้ง *
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#1e293b',
+            backgroundColor: '#162720',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#334155',
+            borderColor: '#244034',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <Lock size={18} color="#64748b" style={{ marginRight: 10 }} />
+          <Lock size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="••••••••"
-            placeholderTextColor="#475569"
+            placeholderTextColor="#6E8B7E"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={!showPassword}
-            style={{ flex: 1, color: '#f8fafc', fontSize: 14 }}
+            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
           />
         </View>
       </View>
@@ -230,14 +234,14 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         disabled={loading}
         activeOpacity={0.85}
         style={{
-          backgroundColor: '#f97316',
+          backgroundColor: '#10B981',
           borderRadius: 16,
           height: 48,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
-          shadowColor: '#f97316',
+          shadowColor: '#10B981',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.35,
           shadowRadius: 10,
@@ -246,22 +250,22 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         }}
       >
         {loading ? (
-          <ActivityIndicator size="small" color="#ffffff" />
+          <ActivityIndicator size="small" color="#FFFFFF" />
         ) : (
           <>
-            <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>
+            <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' }}>
               สร้างบัญชีและเข้าสู่ระบบ
             </Text>
-            <ArrowRight size={16} color="#ffffff" />
+            <ArrowRight size={16} color="#FFFFFF" />
           </>
         )}
       </TouchableOpacity>
 
       {/* Toggle Helper Footer */}
       <TouchableOpacity onPress={onSwitchToLogin} style={{ marginTop: 16, alignItems: 'center' }}>
-        <Text style={{ color: '#94a3b8', fontSize: 12 }}>
+        <Text style={{ color: '#88A096', fontSize: 12 }}>
           มีบัญชีอยู่แล้ว?{' '}
-          <Text style={{ color: '#f97316', fontWeight: 'bold' }}>เข้าสู่ระบบที่นี่</Text>
+          <Text style={{ color: '#8FBC7A', fontWeight: 'bold' }}>เข้าสู่ระบบที่นี่</Text>
         </Text>
       </TouchableOpacity>
     </View>

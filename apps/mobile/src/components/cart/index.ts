@@ -1,5 +1,8 @@
 export { CartEmptyState } from './CartEmptyState';
 export { CartVendorHeader } from './CartVendorHeader';
+export { CartVendorCard } from './CartVendorCard';
+export { CartVendorDetailView } from './CartVendorDetailView';
+export { CartVendorGroup } from './CartVendorGroup';
 export { CartOrderTypeSelector } from './CartOrderTypeSelector';
 export { CartItemRow } from './CartItemRow';
 export { CartNoteInput } from './CartNoteInput';

@@ -1,15 +1,19 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { ArrowRight } from 'lucide-react-native';
+import { ArrowRight, ShoppingBag } from 'lucide-react-native';
 
 interface CartSummaryCardProps {
   totalPrice: number;
+  totalCount: number;
+  vendorCount: number;
   isSubmitting: boolean;
   onCheckout: () => void;
 }
 
 export function CartSummaryCard({
   totalPrice,
+  totalCount,
+  vendorCount,
   isSubmitting,
   onCheckout,
 }: CartSummaryCardProps) {
@@ -18,32 +22,46 @@ export function CartSummaryCard({
       {/* Payment Breakdown Card */}
       <View
         style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: '#111E18',
           borderRadius: 20,
-          padding: 14,
+          padding: 16,
           borderWidth: 1,
-          borderColor: '#1e293b',
+          borderColor: '#1E352B',
+          marginBottom: 16,
         }}
       >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
-          <Text style={{ color: '#94a3b8', fontSize: 12 }}>ยอดรวมค่าอาหาร</Text>
-          <Text style={{ color: '#f8fafc', fontSize: 12, fontWeight: '600' }}>฿{totalPrice}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+          <Text style={{ color: '#88A096', fontSize: 13 }}>จำนวนร้านค้าในตะกร้า</Text>
+          <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: '600' }}>{vendorCount} ร้าน</Text>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-          <Text style={{ color: '#94a3b8', fontSize: 12 }}>ค่าบริการระบบ</Text>
-          <Text style={{ color: '#10b981', fontSize: 12, fontWeight: '600' }}>ฟรี (0 บาท)</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+          <Text style={{ color: '#88A096', fontSize: 13 }}>จำนวนรายการทั้งหมด</Text>
+          <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: '600' }}>{totalCount} จาน</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+          <Text style={{ color: '#88A096', fontSize: 13 }}>ยอดรวมค่าอาหารทั้งหมด</Text>
+          <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: '600' }}>
+            ฿{totalPrice.toLocaleString()}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+          <Text style={{ color: '#88A096', fontSize: 13 }}>ค่าบริการระบบ</Text>
+          <Text style={{ color: '#10B981', fontSize: 13, fontWeight: '600' }}>ฟรี (0 บาท)</Text>
         </View>
         <View
           style={{
             borderTopWidth: 1,
-            borderColor: '#1e293b',
-            paddingTop: 10,
+            borderColor: '#1E352B',
+            paddingTop: 12,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#f8fafc', fontSize: 15, fontWeight: 'bold' }}>ยอดชำระสุทธิ</Text>
-          <Text style={{ color: '#f97316', fontSize: 18, fontWeight: 'bold' }}>฿{totalPrice}</Text>
+          <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold' }}>ยอดชำระสุทธิรวม</Text>
+          <Text style={{ color: '#8FBC7A', fontSize: 20, fontWeight: 'bold' }}>
+            ฿{totalPrice.toLocaleString()}
+          </Text>
         </View>
       </View>
 
@@ -54,11 +72,16 @@ export function CartSummaryCard({
           bottom: 16,
           left: 16,
           right: 16,
-          backgroundColor: '#0f172a',
+          backgroundColor: '#111E18',
           borderRadius: 22,
           padding: 12,
           borderWidth: 1,
-          borderColor: '#1e293b',
+          borderColor: '#1E352B',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.4,
+          shadowRadius: 10,
+          elevation: 8,
         }}
       >
         <TouchableOpacity
@@ -66,7 +89,7 @@ export function CartSummaryCard({
           disabled={isSubmitting}
           activeOpacity={0.85}
           style={{
-            backgroundColor: '#f97316',
+            backgroundColor: '#10B981',
             borderRadius: 16,
             paddingVertical: 14,
             flexDirection: 'row',
@@ -76,13 +99,16 @@ export function CartSummaryCard({
           }}
         >
           {isSubmitting ? (
-            <ActivityIndicator color="#ffffff" size="small" />
+            <ActivityIndicator color="#FFFFFF" size="small" />
           ) : (
             <>
-              <Text style={{ color: '#ffffff', fontSize: 15, fontWeight: 'bold' }}>
-                ยืนยันการสั่งซื้อ (฿{totalPrice})
+              <ShoppingBag size={18} color="#FFFFFF" />
+              <Text style={{ color: '#FFFFFF', fontSize: 15, fontWeight: 'bold' }}>
+                {vendorCount > 1
+                  ? `สั่งซื้อทุกร้านพร้อมกัน (${vendorCount} ร้าน • ฿${totalPrice.toLocaleString()})`
+                  : `ยืนยันการสั่งซื้อ (฿${totalPrice.toLocaleString()})`}
               </Text>
-              <ArrowRight size={18} color="#ffffff" />
+              <ArrowRight size={18} color="#FFFFFF" />
             </>
           )}
         </TouchableOpacity>

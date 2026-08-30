@@ -88,8 +88,7 @@ export class MenuService {
       targetVendorId = vendor.id;
     }
 
-    this.clearCache(targetVendorId);
-    return this.prisma.menuItem.create({
+    const created = await this.prisma.menuItem.create({
       data: {
         vendorId: targetVendorId,
         name: dto.name,
@@ -101,6 +100,9 @@ export class MenuService {
         isAvailable: dto.isAvailable ?? true,
       },
     });
+
+    this.clearCache(targetVendorId);
+    return created;
   }
 
   async update(id: string, userId: string, userRole: Role, dto: UpdateMenuItemDto) {

@@ -34,7 +34,7 @@ export async function registerForPushNotificationsAsync(): Promise<string | unde
         name: 'Campus Food Orders',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#f97316',
+        lightColor: '#10B981',
       });
     }
   } catch (error) {

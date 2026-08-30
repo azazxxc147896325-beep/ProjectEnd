@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  RefreshControl,
 } from 'react-native';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack, useFocusEffect } from 'expo-router';
 import { mobileApi } from '../../lib/api';
 import { useCartStore } from '../../stores/cart-store';
+import { mobileToast } from '../../stores/toast-store';
 import { MenuItem, Vendor } from '@campus-food/shared-types';
 import { ChevronLeft } from 'lucide-react-native';
 import {
@@ -26,6 +28,7 @@ export default function VendorDetailScreen() {
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [addedAnimationId, setAddedAnimationId] = useState<string | null>(null);
 
@@ -36,45 +39,54 @@ export default function VendorDetailScreen() {
     return found ? found.quantity : 0;
   };
 
-  useEffect(() => {
-    async function loadVendorData() {
-      try {
-        if (!id) return;
-        const [vData, mData] = await Promise.all([
-          mobileApi<Vendor>(`/vendors/${id}`),
-          mobileApi<MenuItem[]>(`/menu/vendor/${id}`),
-        ]);
-        setVendor(vData);
-        setMenuItems(Array.isArray(mData) ? mData : (mData as any)?.data || []);
-      } catch (err: any) {
-        console.log('Error fetching vendor details:', err);
+  const loadVendorData = useCallback(async (isPullToRefresh = false) => {
+    try {
+      if (!id) return;
+      if (isPullToRefresh) setRefreshing(true);
+
+      const [vData, mData] = await Promise.all([
+        mobileApi<Vendor>(`/vendors/${id}`),
+        mobileApi<MenuItem[]>(`/menu/vendor/${id}`),
+      ]);
+      setVendor(vData);
+      setMenuItems(Array.isArray(mData) ? mData : (mData as any)?.data || []);
+    } catch (err: any) {
+      console.log('Error fetching vendor details:', err);
+      if (!isPullToRefresh) {
         setVendor(null);
         setMenuItems([]);
-        Alert.alert('ข้อผิดพลาด', 'ไม่พบข้อมูลร้านค้านี้ในระบบ');
-      } finally {
-        setLoading(false);
+        mobileToast.error('ข้อผิดพลาด', 'ไม่พบข้อมูลร้านค้านี้ในระบบ');
       }
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
-    loadVendorData();
   }, [id]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadVendorData();
+    }, [loadVendorData])
+  );
 
   const handleAddToCart = (item: MenuItem) => {
     if (!vendor) return;
     if (!vendor.isOpen) {
-      Alert.alert('ร้านปิดชั่วคราว', 'ร้านนี้ปิดรับออเดอร์ในขณะนี้ครับ');
+      mobileToast.warning('ร้านปิดชั่วคราว', 'ร้านนี้ปิดรับออเดอร์ในขณะนี้ครับ');
       return;
     }
 
     addItem({ id: vendor.id, name: vendor.name }, item, 1);
     setAddedAnimationId(item.id);
     setTimeout(() => setAddedAnimationId(null), 1200);
+    mobileToast.success(`เพิ่ม "${item.name}" ลงในตะกร้าแล้ว`, `฿${Number(item.price)} บาท`);
   };
 
   if (loading || !vendor) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#090d16' }}>
-        <ActivityIndicator size="large" color="#f97316" />
-        <Text style={{ color: '#64748b', fontSize: 12, marginTop: 8 }}>กำลังโหลดเมนูร้านค้า...</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0A110E' }}>
+        <ActivityIndicator size="large" color="#8FBC7A" />
+        <Text style={{ color: '#88A096', fontSize: 12, marginTop: 8 }}>กำลังโหลดเมนูร้านค้า...</Text>
       </View>
     );
   }
@@ -93,7 +105,7 @@ export default function VendorDetailScreen() {
   const totalPrice = getTotalPrice();
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#090d16' }}>
+    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
       <Stack.Screen
         options={{
           title: vendor.name,
@@ -108,14 +120,24 @@ export default function VendorDetailScreen() {
                 paddingRight: 12,
               }}
             >
-              <ChevronLeft size={22} color="#f8fafc" />
-              <Text style={{ color: '#f8fafc', fontSize: 14, fontWeight: 'bold' }}>ย้อนกลับ</Text>
+              <ChevronLeft size={22} color="#F8FAFC" />
+              <Text style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold' }}>ย้อนกลับ</Text>
             </TouchableOpacity>
           ),
         }}
       />
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 100 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => loadVendorData(true)}
+            tintColor="#8FBC7A"
+            colors={['#10B981']}
+          />
+        }
+      >
         {/* Vendor Header Banner & Info Subcomponent */}
         <VendorHeader vendor={vendor} />
 

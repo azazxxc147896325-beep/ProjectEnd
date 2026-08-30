@@ -20,6 +20,7 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private anthropic: Anthropic | null = null;
   private geminiApiKey: string | null = null;
+  private nanoBananaApiKey: string | null = null;
 
   constructor(
     private configService: ConfigService,
@@ -38,6 +39,12 @@ export class AiService {
     if (geminiKey && geminiKey.trim() !== '') {
       this.geminiApiKey = geminiKey.trim();
       this.logger.log('AI API Key (Gemini) configured successfully');
+    }
+
+    const nanoKey = this.configService.get<string>('NANOBANANA_API_KEY');
+    if (nanoKey && nanoKey.trim() !== '') {
+      this.nanoBananaApiKey = nanoKey.trim();
+      this.logger.log('NanoBanana AI Image Generator API Key configured successfully');
     }
   }
 
@@ -310,7 +317,7 @@ export class AiService {
     // If database is completely empty
     if (menuItems.length === 0) {
       return {
-        answer: 'ขณะนี้ยังไม่มีรายการอาหารที่เปิดขายในระบบครับ เมื่อร้านค้าเปิดและเพิ่มเมนูแล้ว น้องหยกจะช่วยแนะนำเมนูเด็ดๆ ให้ทันทีเลยค่ะ ✨',
+        answer: 'ขณะนี้ยังไม่มีรายการอาหารที่เปิดขายในระบบค่ะ เมื่อร้านค้าเปิดและเพิ่มเมนูแล้ว น้องหยกจะช่วยแนะนำเมนูเด็ดๆ ให้ทันทีเลยนะคะ ✨',
         recommendedDishes: [],
         suggestedPrompts: [
           '🔥 เมนูยอดนิยมงบไม่เกิน 60 บาท',
@@ -422,19 +429,19 @@ export class AiService {
 
     // Natural Thai AI response text
     let answer = '';
-    const aiPrompt = `คุณคือ "น้องหยก" AI กูรูอาหารประจำโรงอาหารมหาวิทยาลัย
+    const aiPrompt = `คุณคือ "น้องหยก" AI สาวน้อยผู้ช่วยแนะนำอาหารประจำโรงอาหารมหาวิทยาลัย พูดจาน่ารัก สดใส เป็นกันเอง ใช้คำลงท้าย "ค่ะ/นะคะ" และแทนตัวเองว่า "น้องหยก" หรือ "หนู"
 นักศึกษาถามว่า: "${query}"
 (งบประมาณ: ${budget ? budget + ' บาท' : 'ไม่ระบุ'}, อารมณ์: ${mood || 'ทั่วไป'})
 
 นี่คือเมนูที่ตรงกับความต้องการที่สุดจากร้านค้าจริงในโรงอาหาร:
 ${recommendedDishes.map((d, i) => `${i + 1}. ${d.name} (฿${d.price}) จากร้าน "${d.vendorName}" - ${d.matchReason}`).join('\n')}
 
-เขียนข้อความแนะนำอาหารสั้นๆ 2-3 บรรทัด สไตล์น่ารัก เป็นกันเอง น่าทาน ชวนหิว แล้วบอกว่าสามารถกดสั่งซื้อใส่ตะกร้าด้านล่างได้เลย`;
+เขียนข้อความแนะนำอาหารสั้นๆ 2-3 บรรทัด สไตล์สาวน้อยน่ารัก สดใส ชวนหิว ใช้สรรพนามเพศหญิง (ค่ะ, นะคะ, น้องหยก/หนู) แล้วบอกว่าสามารถกดเลือกดูหรือกดสั่งซื้อใส่ตะกร้าด้านล่างได้เลยนะคะ`;
 
     // Try Google Gemini first if key available
     if (this.geminiApiKey) {
       try {
-        const geminiRes = await this.callGemini(aiPrompt, 'คุณคือผู้ช่วยแนะนำอาหารในโรงอาหารมหาวิทยาลัย ตอบสั้นๆ น่ารัก เป็นกันเอง ภาษาไทย');
+        const geminiRes = await this.callGemini(aiPrompt, 'คุณคือน้องหยก AI สาวน้อยผู้ช่วยแนะนำอาหารในโรงอาหารมหาวิทยาลัย พูดจาน่ารัก สดใส สุภาพ ใช้คำลงท้าย "ค่ะ/นะคะ" ภาษาไทย');
         if (geminiRes) {
           answer = geminiRes;
         }
@@ -468,11 +475,11 @@ ${recommendedDishes.map((d, i) => `${i + 1}. ${d.name} (฿${d.price}) จาก
       } else if (q.includes('งบ') || (budget && budget > 0)) {
         answer = `💰 สบายกระเป๋าแน่นอนค่ะ! น้องหยกคัดเมนูราคาสุดคุ้ม${budget ? ` ในงบไม่เกิน ${budget} บาท` : ''} มาให้เรียบร้อยแล้ว อร่อย อิ่ม คุ้มราคาแน่นอนค่ะ 😋`;
       } else if (q.includes('เผ็ด') || q.includes('แซ่บ') || q.includes('ต้มยำ')) {
-        answer = `🌶️ สายแซ่บต้องถูกใจสิ่งนี้! จัดเมนูรสเด็ดจัดจ้านมาให้เติมพลังช่วงนี้เลยค่ะ กดสั่งล่วงหน้าไว้ได้เลยไม่ต้องรอคิวนานจ้า`;
+        answer = `🌶️ สายแซ่บต้องถูกใจสิ่งนี้แน่นอนค่ะ! จัดเมนูรสเด็ดจัดจ้านมาให้เติมพลังช่วงนี้เลยน้า กดสั่งล่วงหน้าไว้ได้เลยไม่ต้องรอคิวนานค่ะ ✨`;
       } else if (q.includes('หวาน') || q.includes('น้ำ') || q.includes('ชานม')) {
         answer = `🧋 เมนูเครื่องดื่มและของหวานเย็นชื่นใจมาแล้วค่ะ ดื่มแล้วตื่นพร้อมลุยเรียนต่อแน่นอน! เลือกร้านที่ชอบด้านล่างได้เลยนะคะ ✨`;
       } else {
-        answer = `✨ วันนี้น้องหยกขอแนะนำเมนูยอดนิยมเหล่านี้เลยค่ะ สดใหม่ ทำร้อนๆ พร้อมเสิร์ฟจากร้านในโรงอาหาร กด **"ใส่ตะกร้า"** แล้วสั่งล่วงหน้าได้เลยค่ะ! 🍽️`;
+        answer = `✨ วันนี้น้องหยกขอแนะนำเมนูยอดนิยมเหล่านี้เลยค่ะ สดใหม่ ทำร้อนๆ พร้อมเสิร์ฟจากร้านในโรงอาหาร กด **"ใส่ตะกร้า"** แล้วสั่งล่วงหน้าได้เลยนะคะ! 🍽️`;
       }
     }
 
@@ -529,60 +536,155 @@ ${recommendedDishes.map((d, i) => `${i + 1}. ${d.name} (฿${d.price}) จาก
   }
 
   /**
+   * Call NanoBanana AI API to generate high quality realistic food photography
+   * Reference: https://docs.nanobananaapi.ai/nanobanana-api/generate-or-edit-image
+   */
+  /**
+   * Call NanoBanana AI API to generate fast 720p food photography
+   * Reference: https://docs.nanobananaapi.ai/nanobanana-api/generate-or-edit-image
+   */
+  private async generateWithNanoBanana(
+    prompt: string,
+    numImages = 1,
+    imageSize = '4:3',
+  ): Promise<string | null> {
+    const apiKey = this.nanoBananaApiKey || 'f714661c24e133fce3b01f855eb3e10d';
+    if (!apiKey) return null;
+
+    try {
+      this.logger.log(`[NanoBanana AI Fast 720p] Submitting task: "${prompt.slice(0, 60)}..."`);
+      const createRes = await fetch('https://api.nanobananaapi.ai/api/v1/nanobanana/generate', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          numImages,
+          type: 'TEXTTOIAMGE',
+          image_size: imageSize,
+          callBackUrl: 'https://api.nanobananaapi.ai/callback',
+        }),
+      });
+
+      if (!createRes.ok) {
+        this.logger.warn(`[NanoBanana AI] Create task failed with HTTP ${createRes.status}`);
+        return null;
+      }
+
+      const createData = await createRes.json();
+      const taskId = createData?.data?.taskId;
+      if (!taskId) {
+        this.logger.warn(`[NanoBanana AI] No taskId returned: ${JSON.stringify(createData)}`);
+        return null;
+      }
+
+      this.logger.log(`[NanoBanana AI] Task created (${taskId}). Polling result every 1s...`);
+
+      // Fast polling: wait 1.5s first, then check every 1s up to 12 attempts
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const maxAttempts = 12;
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const pollRes = await fetch(
+          `https://api.nanobananaapi.ai/api/v1/nanobanana/record-info?taskId=${encodeURIComponent(taskId)}`,
+          {
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+            },
+          },
+        );
+
+        if (pollRes.ok) {
+          const pollData = await pollRes.json();
+          const successFlag = pollData?.data?.successFlag;
+
+          if (successFlag === 1) {
+            const imgUrl = pollData?.data?.response?.resultImageUrl || pollData?.data?.response?.originImageUrl;
+            if (imgUrl) {
+              this.logger.log(`[NanoBanana AI] Fast 720p image ready in attempt #${attempt}: ${imgUrl}`);
+              return imgUrl;
+            }
+          } else if (successFlag === 2 || successFlag === 3) {
+            this.logger.warn(`[NanoBanana AI] Task failed with flag: ${successFlag}`);
+            return null;
+          }
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
+      this.logger.warn(`[NanoBanana AI] Polling timed out for task ${taskId}`);
+      return null;
+    } catch (err: any) {
+      this.logger.warn(`[NanoBanana AI] Error during image generation: ${err?.message || err}`);
+      return null;
+    }
+  }
+
+  /**
    * Web AI: Menu Image Generator
-   * Generates appetizing AI food photos based on dish name and style for vendors.
+   * Generates fast, appetizing 720p AI food photos based on dish name and style for vendors using NanoBanana AI.
    */
   async generateMenuImage(dto: AiGenerateImageDto): Promise<AiGenerateImageResponse> {
     const { dishName, category = 'อาหารจานเดียว', style = 'realistic_studio', customPrompt = '' } = dto;
 
     const styleDescriptors: Record<AiFoodImageStyle, string> = {
-      realistic_studio: 'professional commercial food studio photography, 8k resolution, shot on 50mm f/1.8 lens, perfect lighting, crisp appetizing details, fresh garnish, food magazine hero shot',
-      street_food: 'authentic sizzling street food photography, steamy hot and freshly cooked, vibrant market lights, mouth-watering rich texture, savory street dish',
-      minimal_cafe: 'clean minimalist modern cafe food aesthetic, soft morning natural sunlight, ceramic plate, cozy warm ambiance, high-end bistro styling',
-      overhead_flatlay: 'top-down overhead flatlay food photography, beautifully plated on textured dark stone table, fresh raw ingredients and herbs around, culinary art',
-      cinematic_moody: 'cinematic moody food photography, dark luxury aesthetic, dramatic rim lighting, rich deep colors, gourmet Michelin star dish presentation',
+      realistic_studio: 'delicious appetizing 720p commercial food photography, clean studio lighting, crisp vibrant details, fresh garnish, cafe menu shot',
+      street_food: 'authentic sizzling street food photography, steamy hot and freshly cooked, vibrant market lights, mouth-watering texture, 720p HD',
+      minimal_cafe: 'clean minimalist modern cafe food aesthetic, soft morning natural sunlight, ceramic plate, cozy warm ambiance, 720p HD',
+      overhead_flatlay: 'top-down overhead flatlay food photography, beautifully plated on textured table, fresh herbs, 720p HD',
+      cinematic_moody: 'cinematic moody food photography, warm rim lighting, rich deep colors, gourmet dish presentation, 720p HD',
     };
 
     const styleText = styleDescriptors[style] || styleDescriptors.realistic_studio;
 
-    // Translate Thai dish name & extra details into clear English for the AI Diffusion model
-    let englishDishDescription = '';
-    try {
-      const translationPrompt = `Translate this Thai food dish and options into a concise, vivid English description for an AI food photography generator. Reply ONLY with the English food phrase (maximum 15 words).
-Thai dish: "${dishName}"
-Category: "${category}"
-Details: "${customPrompt || 'none'}"`;
-
-      const aiTranslation = await this.callGemini(translationPrompt);
-      if (aiTranslation && aiTranslation.trim().length > 3) {
-        englishDishDescription = aiTranslation.replace(/["\n\r]/g, '').trim();
+    // Fast Translation: Use built-in dictionary first for instant response (0ms), fallback to Gemini if needed
+    let englishDishDescription = this.translateThaiFoodToEnglish(dishName, category, customPrompt);
+    
+    // Quick refinement with Gemini if custom prompt has unknown words
+    if (customPrompt && customPrompt.length > 5) {
+      try {
+        const translationPrompt = `Translate this Thai food dish into English (max 10 words): "${dishName}" with "${customPrompt}"`;
+        const aiTranslation = await Promise.race([
+          this.callGemini(translationPrompt),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), 1000)), // Max 1s timeout
+        ]);
+        if (aiTranslation && aiTranslation.trim().length > 3) {
+          englishDishDescription = aiTranslation.replace(/["\n\r]/g, '').trim();
+        }
+      } catch {
+        // Keep dictionary result
       }
-    } catch {
-      // Fallback
     }
 
-    if (!englishDishDescription) {
-      englishDishDescription = this.translateThaiFoodToEnglish(dishName, category, customPrompt);
-    }
+    // Generate photography prompts optimized for fast 720p rendering
+    const prompt1 = `Appetizing ${englishDishDescription}, ${styleText}`;
+    const prompt2 = `Mouth-watering fresh ${englishDishDescription}, steaming hot, beautifully plated on ceramic dish, vibrant colors, 720p HD food photography`;
+    const prompt3 = `Top-down overhead flatlay of ${englishDishDescription}, garnished with fresh herbs, gourmet cafe style, 720p food photo`;
 
-    // Generate 3 distinct photography angles from the vendor's prompt
-    const prompt1 = `Delicious appetizing ${englishDishDescription}, professional commercial food studio photography, 8k resolution, shot on 50mm f/1.8 lens, perfect lighting, crisp appetizing details, food styling, award winning food photography`;
-    const prompt2 = `Mouth-watering fresh ${englishDishDescription}, steaming hot, beautifully plated on ceramic dish, vibrant colors, appetizing texture, authentic culinary presentation, high resolution food photography`;
-    const prompt3 = `Top-down overhead flatlay of ${englishDishDescription}, garnished with fresh herbs and condiments, gourmet cafe restaurant style, 4k ultra detailed food photo`;
-
-    const seed1 = Math.floor(Math.random() * 899999) + 100000;
     const seed2 = Math.floor(Math.random() * 899999) + 100000;
     const seed3 = Math.floor(Math.random() * 899999) + 100000;
 
-    // Fast, ultra-high-definition AI diffusion endpoint (Pollinations FLUX Model)
-    const url1 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt1.trim())}?width=800&height=600&seed=${seed1}&model=flux&nologo=true`;
-    const url2 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt2.trim())}?width=800&height=600&seed=${seed2}&model=flux&nologo=true`;
-    const url3 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt3.trim())}?width=800&height=600&seed=${seed3}&model=flux&nologo=true`;
+    // Fast 720p backup/variation URLs (640x480 / 800x600 standard definition)
+    const fallbackUrl1 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt1.trim())}?width=720&height=540&seed=101010&model=flux&nologo=true`;
+    const fallbackUrl2 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt2.trim())}?width=720&height=540&seed=${seed2}&model=flux&nologo=true`;
+    const fallbackUrl3 = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt3.trim())}?width=720&height=540&seed=${seed3}&model=flux&nologo=true`;
+
+    // Try generating with NanoBanana AI (fast 4:3 720p)
+    let primaryImageUrl: string | null = null;
+    try {
+      primaryImageUrl = await this.generateWithNanoBanana(prompt1, 1, '4:3');
+    } catch (err) {
+      this.logger.warn(`NanoBanana generation call error: ${err}`);
+    }
+
+    const finalMainUrl = primaryImageUrl || fallbackUrl1;
 
     return {
-      imageUrl: url1,
+      imageUrl: finalMainUrl,
       promptUsed: prompt1,
-      variations: [url1, url2, url3],
+      variations: [finalMainUrl, fallbackUrl2, fallbackUrl3],
     };
   }
 }

@@ -13,6 +13,7 @@ import { getMobileSocket } from '../../lib/socket';
 import { sendLocalNotification } from '../../lib/notifications';
 import { Order, OrderStatus, WsEvents } from '@campus-food/shared-types';
 import { ChevronLeft } from 'lucide-react-native';
+import { mobileToast } from '../../stores/toast-store';
 import {
   OrderCancelledBanner,
   OrderReadyCard,
@@ -43,69 +44,57 @@ export default function OrderTrackingScreen() {
   };
 
   const handleCancelOrder = () => {
-    Alert.alert(
-      'ยกเลิกคำสั่งซื้อ ❌',
-      'คุณต้องการยกเลิกคำสั่งซื้อนี้ใช่หรือไม่? (สามารถยกเลิกได้ก่อนร้านเริ่มปรุงอาหาร)',
-      [
-        { text: 'ไม่ยกเลิก', style: 'cancel' },
-        {
-          text: 'ยืนยันยกเลิก',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              setIsCancelling(true);
-              const updated = await mobileApi<Order>(`/orders/${id}/cancel`, {
-                method: 'PATCH',
-                body: JSON.stringify({ reason: 'ผู้สั่งขอยกเลิกคำสั่งซื้อ' }),
-              });
-              setOrder(updated);
-              Alert.alert('ยกเลิกสำเร็จ', 'คำสั่งซื้อของคุณถูกยกเลิกและบันทึกในประวัติแล้ว');
-            } catch (err: any) {
-              Alert.alert('ไม่สามารถยกเลิกได้', err?.message || 'ร้านค้าอาจเริ่มปรุงอาหารแล้ว กรุณาติดต่อหน้าร้าน');
-            } finally {
-              setIsCancelling(false);
-            }
-          },
-        },
-      ],
-    );
+    mobileToast.confirm({
+      title: 'ยกเลิกคำสั่งซื้อ',
+      message: 'คุณต้องการยกเลิกคำสั่งซื้อนี้ใช่หรือไม่? (สามารถยกเลิกได้ก่อนร้านเริ่มปรุงอาหาร)',
+      confirmText: 'ยืนยันยกเลิก',
+      cancelText: 'ไม่ยกเลิก',
+      isDestructive: true,
+      onConfirm: async () => {
+        try {
+          setIsCancelling(true);
+          const updated = await mobileApi<Order>(`/orders/${id}/cancel`, {
+            method: 'PATCH',
+            body: JSON.stringify({ reason: 'ผู้สั่งขอยกเลิกคำสั่งซื้อ' }),
+          });
+          setOrder(updated);
+          mobileToast.success('ยกเลิกสำเร็จ', 'คำสั่งซื้อของคุณถูกยกเลิกและบันทึกในประวัติแล้ว');
+        } catch (err: any) {
+          mobileToast.error('ไม่สามารถยกเลิกได้', err?.message || 'ร้านค้าอาจเริ่มปรุงอาหารแล้ว กรุณาติดต่อหน้าร้าน');
+        } finally {
+          setIsCancelling(false);
+        }
+      },
+    });
   };
 
   const handleConfirmReceipt = () => {
-    Alert.alert(
-      'ยืนยันการรับอาหาร 🍱',
-      'คุณได้รับอาหารจากร้านค้าครบถ้วนเรียบร้อยแล้วใช่หรือไม่?',
-      [
-        { text: 'ยังไม่ได้รับ', style: 'cancel' },
-        {
-          text: 'ได้รับอาหารแล้ว',
-          style: 'default',
-          onPress: async () => {
-            try {
-              setIsConfirming(true);
-              const updated = await mobileApi<Order>(`/orders/${id}/confirm-receipt`, {
-                method: 'PATCH',
-              });
-              setOrder(updated);
-              Alert.alert(
-                'บันทึกสำเร็จ! 🎉',
-                'ออเดอร์ถูกย้ายไปยังประวัติการสั่งซื้อเรียบร้อยแล้ว ขอให้อร่อยกับมื้ออาหารนะครับ! 😋',
-                [
-                  {
-                    text: 'ดูประวัติการสั่งซื้อ',
-                    onPress: () => router.replace('/(tabs)/orders'),
-                  },
-                ],
-              );
-            } catch (err: any) {
-              Alert.alert('เกิดข้อผิดพลาด', err?.message || 'ไม่สามารถยืนยันการรับอาหารได้ กรุณาลองใหม่อีกครั้ง');
-            } finally {
-              setIsConfirming(false);
-            }
-          },
-        },
-      ],
-    );
+    mobileToast.confirm({
+      title: 'ยืนยันการรับอาหาร',
+      message: 'คุณได้รับอาหารจากร้านค้าครบถ้วนเรียบร้อยแล้วใช่หรือไม่?',
+      confirmText: 'ได้รับอาหารแล้ว',
+      cancelText: 'ยังไม่ได้รับ',
+      onConfirm: async () => {
+        try {
+          setIsConfirming(true);
+          const updated = await mobileApi<Order>(`/orders/${id}/confirm-receipt`, {
+            method: 'PATCH',
+          });
+          setOrder(updated);
+          mobileToast.success(
+            'บันทึกสำเร็จ! 🍽️',
+            'ขอให้อร่อยกับมื้ออาหารนะครับ'
+          );
+          setTimeout(() => {
+            router.replace('/(tabs)/orders');
+          }, 1500);
+        } catch (err: any) {
+          mobileToast.error('เกิดข้อผิดพลาด', err?.message || 'ไม่สามารถยืนยันการรับอาหารได้ กรุณาลองใหม่อีกครั้ง');
+        } finally {
+          setIsConfirming(false);
+        }
+      },
+    });
   };
 
   useEffect(() => {
@@ -118,12 +107,12 @@ export default function OrderTrackingScreen() {
     socket.emit(WsEvents.JOIN_ORDER_ROOM, { orderId: id });
 
     const handleStatusUpdate = (payload: { order: Order; newStatus: OrderStatus }) => {
-      console.log('⚡ Order Status Updated via WS:', payload);
+      console.log('[Socket] Order Status Updated via WS:', payload);
       setOrder(payload.order);
 
       if (payload.newStatus === OrderStatus.READY) {
         sendLocalNotification(
-          'อาหารของคุณพร้อมรับแล้ว! 🍱🎉',
+          'อาหารของคุณพร้อมรับแล้ว',
           `คิว #${payload.order.queueNumber} จากร้านค้าเสร็จเรียบร้อยแล้ว กรุณาไปรับที่หน้าร้านได้เลยครับ`,
           { orderId: id },
         );
@@ -131,10 +120,10 @@ export default function OrderTrackingScreen() {
     };
 
     const handleOrderReady = (payload: { order: Order }) => {
-      console.log('⚡ ORDER READY RECEIVED:', payload);
+      console.log('[Socket] ORDER READY RECEIVED:', payload);
       setOrder(payload.order);
       sendLocalNotification(
-        'อาหารของคุณพร้อมรับแล้ว! 🍱🎉',
+        'อาหารของคุณพร้อมรับแล้ว',
         `คิว #${payload.order.queueNumber} จากร้านค้าเสร็จเรียบร้อยแล้ว กรุณาไปรับที่หน้าร้านได้เลยครับ`,
         { orderId: id },
       );
@@ -152,9 +141,9 @@ export default function OrderTrackingScreen() {
 
   if (loading || !order) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#090d16' }}>
-        <ActivityIndicator size="large" color="#f97316" />
-        <Text style={{ color: '#64748b', fontSize: 12, marginTop: 8 }}>กำลังโหลดสถานะออเดอร์...</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0A110E' }}>
+        <ActivityIndicator size="large" color="#8FBC7A" />
+        <Text style={{ color: '#88A096', fontSize: 12, marginTop: 8 }}>กำลังโหลดสถานะออเดอร์...</Text>
       </View>
     );
   }
@@ -168,7 +157,7 @@ export default function OrderTrackingScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#090d16' }}>
+    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
       <Stack.Screen
         options={{
           title: `คิว #${order.queueNumber} (${order.vendor?.name || 'ร้านค้า'})`,
@@ -183,8 +172,8 @@ export default function OrderTrackingScreen() {
                 paddingRight: 12,
               }}
             >
-              <ChevronLeft size={22} color="#f8fafc" />
-              <Text style={{ color: '#f8fafc', fontSize: 14, fontWeight: 'bold' }}>ย้อนกลับ</Text>
+              <ChevronLeft size={22} color="#F8FAFC" />
+              <Text style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold' }}>ย้อนกลับ</Text>
             </TouchableOpacity>
           ),
           headerRight: () => (
@@ -194,10 +183,12 @@ export default function OrderTrackingScreen() {
                 paddingVertical: 6,
                 paddingHorizontal: 10,
                 borderRadius: 10,
-                backgroundColor: '#1e293b',
+                backgroundColor: '#162720',
+                borderWidth: 1,
+                borderColor: '#244034',
               }}
             >
-              <Text style={{ color: '#f97316', fontSize: 12, fontWeight: 'bold' }}>ออเดอร์</Text>
+              <Text style={{ color: '#8FBC7A', fontSize: 12, fontWeight: 'bold' }}>ออเดอร์</Text>
             </TouchableOpacity>
           ),
         }}

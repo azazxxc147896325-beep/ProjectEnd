@@ -13,8 +13,11 @@ import {
 } from '@/components/menu';
 import { MenuItem, CreateMenuItemDto, UpdateMenuItemDto } from '@campus-food/shared-types';
 
+import { useToast } from '@/lib/toast-context';
+
 export default function MenuManagementPage() {
   const { vendor } = useAuth();
+  const { success, error: toastError, info } = useToast();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAiStudioOpen, setIsAiStudioOpen] = useState(false);
@@ -43,8 +46,12 @@ export default function MenuManagementPage() {
         body: JSON.stringify({ ...dto, vendorId: vendor?.id }),
       });
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['vendor-menu', vendor?.id] });
+      success('เพิ่มเมนูสำเร็จ! ✨', `เพิ่ม "${variables.name}" เข้าสู่รายการอาหารเรียบร้อยแล้ว`);
+    },
+    onError: (err: any) => {
+      toastError('ไม่สามารถเพิ่มเมนูได้', err?.message || 'กรุณาลองใหม่อีกครั้ง');
     },
   });
 
@@ -56,8 +63,12 @@ export default function MenuManagementPage() {
         body: JSON.stringify(dto),
       });
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['vendor-menu', vendor?.id] });
+      success('บันทึกการแก้ไขสำเร็จ! ✅', `อัปเดตข้อมูลเมนูเรียบร้อยแล้ว`);
+    },
+    onError: (err: any) => {
+      toastError('ไม่สามารถแก้ไขเมนูได้', err?.message || 'กรุณาลองใหม่อีกครั้ง');
     },
   });
 
@@ -69,8 +80,12 @@ export default function MenuManagementPage() {
         body: JSON.stringify({ isDailySpecial }),
       });
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['vendor-menu', vendor?.id] });
+      info(
+        variables.isDailySpecial ? '⭐ ตั้งเป็นเมนูพิเศษประจำวัน' : 'นำออกจากเมนูพิเศษ',
+        'อัปเดตการแสดงผลหน้าแรกของลูกค้าทันที',
+      );
     },
   });
 
@@ -82,8 +97,12 @@ export default function MenuManagementPage() {
         body: JSON.stringify({ isAvailable }),
       });
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['vendor-menu', vendor?.id] });
+      info(
+        variables.isAvailable ? '🟢 เปิดสถานะพร้อมขาย' : '🔴 ปรับเป็นของหมดชั่วคราว',
+        'สถานะเมนูจะแสดงให้ลูกค้าทราบบนแอปทันที',
+      );
     },
   });
 
@@ -96,6 +115,10 @@ export default function MenuManagementPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vendor-menu', vendor?.id] });
+      success('ลบเมนูเรียบร้อย', 'รายการอาหารถูกนำออกจากระบบแล้ว');
+    },
+    onError: (err: any) => {
+      toastError('เกิดข้อผิดพลาดในการลบ', err?.message || 'กรุณาลองใหม่อีกครั้ง');
     },
   });
 

@@ -20,28 +20,30 @@ export function AiInputBar({
       style={{
         paddingHorizontal: 16,
         paddingVertical: 10,
-        backgroundColor: '#0f172a',
+        backgroundColor: '#111E18',
         borderTopWidth: 1,
-        borderColor: '#1e293b',
+        borderColor: '#1E352B',
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
       }}
     >
       <TextInput
-        placeholder="ถามน้องหยกได้เลย เช่น งบ 50 บาท, ของเผ็ดๆ..."
-        placeholderTextColor="#64748b"
+        placeholder="พิมพ์คำถาม เช่น เมนูไม่เกิน 50 บาท, อาหารคลีน..."
+        placeholderTextColor="#6E8B7E"
         value={inputQuery}
         onChangeText={onInputChange}
         onSubmitEditing={onSend}
         style={{
           flex: 1,
-          backgroundColor: '#1e293b',
+          backgroundColor: '#162720',
           borderRadius: 20,
           paddingHorizontal: 16,
           height: 42,
-          color: '#f8fafc',
+          color: '#F8FAFC',
           fontSize: 13,
+          borderWidth: 1,
+          borderColor: '#244034',
         }}
       />
 
@@ -52,12 +54,12 @@ export function AiInputBar({
           width: 42,
           height: 42,
           borderRadius: 21,
-          backgroundColor: inputQuery.trim() && !loading ? '#f97316' : '#334155',
+          backgroundColor: inputQuery.trim() && !loading ? '#10B981' : '#1E352B',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Send size={16} color="#ffffff" />
+        <Send size={16} color={inputQuery.trim() && !loading ? '#FFFFFF' : '#6E8B7E'} />
       </TouchableOpacity>
     </View>
   );
