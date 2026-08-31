@@ -11,12 +11,12 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'default', size = 'md', className }: BadgeProps) {
   const variantStyles = {
-    default: 'bg-slate-700/60 text-slate-300 border-slate-600/40',
-    success: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/30',
-    warning: 'bg-amber-950/60 text-amber-300 border-amber-500/30',
-    info: 'bg-blue-950/60 text-blue-300 border-blue-500/30',
-    danger: 'bg-rose-950/60 text-rose-300 border-rose-500/30',
-    purple: 'bg-purple-950/60 text-purple-300 border-purple-500/30',
+    default: 'bg-slate-100 text-slate-700 border-slate-200',
+    success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    warning: 'bg-amber-50 text-amber-800 border-amber-200',
+    info: 'bg-sky-50 text-sky-700 border-sky-200',
+    danger: 'bg-rose-50 text-rose-700 border-rose-200',
+    purple: 'bg-indigo-50 text-indigo-700 border-indigo-200',
   };
 
   const sizeStyles = {
@@ -64,3 +64,43 @@ export function OrderTypeBadge({ type }: { type: OrderType }) {
     </Badge>
   );
 }
+
+export function PaymentBadge({
+  method,
+  status,
+  size = 'sm',
+}: {
+  method?: string;
+  status?: string;
+  size?: 'sm' | 'md';
+}) {
+  const isPaid = status === 'paid';
+  const isPromptPay = method === 'promptpay';
+
+  if (isPromptPay) {
+    return isPaid ? (
+      <Badge variant="success" size={size} className="gap-1">
+        <span>📱 พร้อมเพย์</span>
+        <span className="font-bold">(ชำระแล้ว)</span>
+      </Badge>
+    ) : (
+      <Badge variant="warning" size={size} className="gap-1">
+        <span>📱 พร้อมเพย์</span>
+        <span className="font-bold">(รอโอน)</span>
+      </Badge>
+    );
+  }
+
+  return isPaid ? (
+    <Badge variant="success" size={size} className="gap-1">
+      <span>💵 เงินสด</span>
+      <span className="font-bold">(ชำระแล้ว)</span>
+    </Badge>
+  ) : (
+    <Badge variant="warning" size={size} className="gap-1">
+      <span>💵 เงินสด</span>
+      <span className="font-bold">(รอเก็บเงิน)</span>
+    </Badge>
+  );
+}
+

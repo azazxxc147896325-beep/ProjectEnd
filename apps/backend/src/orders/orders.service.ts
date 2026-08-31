@@ -9,7 +9,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-import { OrderStatus, Role, CancelledBy, Order } from '@campus-food/shared-types';
+import { OrderStatus, Role, CancelledBy, Order, PaymentMethod, PaymentStatus } from '@campus-food/shared-types';
+import { generatePromptPayPayload } from './promptpay.util';
 
 @Injectable()
 export class OrdersService {
@@ -108,6 +109,12 @@ export class OrdersService {
 
     const totalPrice = itemCalculations.reduce((sum, item) => sum + item.subtotal, 0);
 
+    const paymentMethod = dto.paymentMethod || PaymentMethod.CASH;
+    let promptpayQrPayload: string | null = null;
+    if (paymentMethod === PaymentMethod.PROMPTPAY) {
+      promptpayQrPayload = generatePromptPayPayload('0812345678', totalPrice);
+    }
+
     // 🔒 Use a Transaction to atomically assign queue number + create order
     // This prevents Race Conditions when multiple students order simultaneously
     const order = await this.prisma.$transaction(async (tx) => {
@@ -119,6 +126,9 @@ export class OrdersService {
           vendorId: dto.vendorId,
           orderType: dto.orderType,
           status: OrderStatus.PENDING,
+          paymentMethod,
+          paymentStatus: PaymentStatus.PENDING,
+          promptpayQrPayload,
           note: dto.note,
           totalPrice,
           queueNumber,
@@ -326,7 +336,7 @@ export class OrdersService {
           items: { include: { menuItem: true } },
           student: { select: { id: true, fullName: true, phone: true } },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: 'asc' },
         ...(take ? { take } : {}),
         ...(skip ? { skip } : {}),
       }),
@@ -428,4 +438,87 @@ export class OrdersService {
 
     return order;
   }
+
+  /**
+   * Verify PromptPay payment by student / mock bank gateway.
+   */
+  async verifyPayment(orderId: string, studentId: string, transactionId?: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { vendor: true, student: true, items: { include: { menuItem: true } } },
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+
+    if (order.studentId !== studentId) {
+      throw new ForbiddenException('You can only verify payment for your own orders');
+    }
+
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: {
+        paymentStatus: PaymentStatus.PAID,
+        paidAt: new Date(),
+        transactionId: transactionId || `TXN-PP-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+      },
+      include: {
+        items: { include: { menuItem: true } },
+        vendor: true,
+        student: { select: { id: true, fullName: true, phone: true, email: true } },
+      },
+    });
+
+    // Notify vendor dashboard in real-time
+    this.notificationsService.notifyOrderStatusChanged(
+      updatedOrder as unknown as Order,
+      order.status as OrderStatus,
+      updatedOrder.status as OrderStatus,
+    );
+
+    return updatedOrder;
+  }
+
+  /**
+   * Mark cash payment received at counter by vendor.
+   */
+  async markCashPaid(orderId: string, vendorUserId: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { vendor: true, student: true, items: { include: { menuItem: true } } },
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+
+    if (order.vendor.ownerId !== vendorUserId) {
+      throw new ForbiddenException('Only the vendor owner can mark this order as paid');
+    }
+
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: {
+        paymentStatus: PaymentStatus.PAID,
+        paidAt: new Date(),
+        transactionId: `CASH-${Date.now()}`,
+      },
+      include: {
+        items: { include: { menuItem: true } },
+        vendor: true,
+        student: { select: { id: true, fullName: true, phone: true, email: true } },
+      },
+    });
+
+    // Notify real-time
+    this.notificationsService.notifyOrderStatusChanged(
+      updatedOrder as unknown as Order,
+      order.status as OrderStatus,
+      updatedOrder.status as OrderStatus,
+    );
+
+    return updatedOrder;
+  }
 }
+

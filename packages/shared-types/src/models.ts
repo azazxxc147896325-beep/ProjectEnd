@@ -1,4 +1,4 @@
-import { Role, OrderStatus, OrderType, CancelledBy } from './enums';
+import { Role, OrderStatus, OrderType, CancelledBy, PaymentMethod, PaymentStatus } from './enums';
 
 export interface User {
   id: string;
@@ -64,6 +64,11 @@ export interface Order {
   vendor?: Vendor;
   orderType: OrderType;
   status: OrderStatus;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  paidAt?: string | Date | null;
+  transactionId?: string | null;
+  promptpayQrPayload?: string | null;
   note?: string | null;
   totalPrice: number;
   queueNumber: number;

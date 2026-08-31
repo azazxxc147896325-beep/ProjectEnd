@@ -62,6 +62,30 @@ export class OrdersController {
     return this.ordersService.cancelOrderByStudent(orderId, userId, reason);
   }
 
+  @Post(':id/verify-payment')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Student verifies PromptPay QR payment' })
+  async verifyPayment(
+    @Param('id') orderId: string,
+    @CurrentUser('sub') userId: string,
+    @Body('transactionId') transactionId?: string,
+  ) {
+    return this.ordersService.verifyPayment(orderId, userId, transactionId);
+  }
+
+  @Patch(':id/mark-paid')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.VENDOR, Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Vendor marks cash order as paid at counter' })
+  async markCashPaid(
+    @Param('id') orderId: string,
+    @CurrentUser('sub') userId: string,
+  ) {
+    return this.ordersService.markCashPaid(orderId, userId);
+  }
+
 
 
   @Get('vendor/:vendorId')

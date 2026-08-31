@@ -1,4 +1,4 @@
-import { OrderStatus, OrderType } from './enums';
+import { OrderStatus, OrderType, PaymentMethod, PaymentStatus } from './enums';
 export type { Order, OrderItem, OrderItemOption } from './models';
 
 export interface CreateOrderItemDto {
@@ -10,8 +10,13 @@ export interface CreateOrderItemDto {
 export interface CreateOrderDto {
   vendorId: string;
   orderType: OrderType;
+  paymentMethod?: PaymentMethod;
   note?: string;
   items: CreateOrderItemDto[];
+}
+
+export interface VerifyPaymentDto {
+  transactionId?: string;
 }
 
 export interface UpdateOrderStatusDto {

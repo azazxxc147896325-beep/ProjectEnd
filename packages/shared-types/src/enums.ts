@@ -23,3 +23,14 @@ export enum CancelledBy {
   VENDOR = 'vendor',
   SYSTEM = 'system',
 }
+
+export enum PaymentMethod {
+  PROMPTPAY = 'promptpay',
+  CASH = 'cash',
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
+  FAILED = 'failed',
+}

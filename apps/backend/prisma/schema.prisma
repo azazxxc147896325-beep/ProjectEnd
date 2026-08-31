@@ -58,22 +58,27 @@ model MenuItem {
 }
 
 model Order {
-  id           String      @id @default(uuid())
-  studentId    String
-  student      User        @relation(fields: [studentId], references: [id])
-  vendorId     String
-  vendor       Vendor      @relation(fields: [vendorId], references: [id])
-  orderType    OrderType
-  status       OrderStatus @default(pending)
-  note         String?
-  totalPrice   Decimal
-  queueNumber  Int
-  items        OrderItem[]
-  createdAt    DateTime    @default(now())
-  readyAt      DateTime?
-  completedAt  DateTime?
-  cancelledBy  CancelledBy?
-  cancelReason String?
+  id                 String         @id @default(uuid())
+  studentId          String
+  student            User           @relation(fields: [studentId], references: [id])
+  vendorId           String
+  vendor             Vendor         @relation(fields: [vendorId], references: [id])
+  orderType          OrderType
+  status             OrderStatus    @default(pending)
+  paymentMethod      PaymentMethod  @default(cash)
+  paymentStatus      PaymentStatus  @default(pending)
+  paidAt             DateTime?
+  transactionId      String?
+  promptpayQrPayload String?
+  note               String?
+  totalPrice         Decimal
+  queueNumber        Int
+  items              OrderItem[]
+  createdAt          DateTime       @default(now())
+  readyAt            DateTime?
+  completedAt        DateTime?
+  cancelledBy        CancelledBy?
+  cancelReason       String?
 
   @@index([vendorId, queueNumber])  // ดึง/เรียงลำดับเลขคิวตามร้านค้า
   @@index([vendorId])                // ดึงออเดอร์ตามร้านค้า
@@ -123,4 +128,16 @@ enum CancelledBy {
   vendor
   system
 }
+
+enum PaymentMethod {
+  promptpay
+  cash
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
 

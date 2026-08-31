@@ -1,7 +1,7 @@
 import { IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { OrderType, CreateOrderDto as ICreateOrderDto, CreateOrderItemDto as ICreateOrderItemDto } from '@campus-food/shared-types';
+import { OrderType, PaymentMethod, CreateOrderDto as ICreateOrderDto, CreateOrderItemDto as ICreateOrderItemDto } from '@campus-food/shared-types';
 
 export class CreateOrderItemDto implements ICreateOrderItemDto {
   @ApiProperty({ example: 'uuid-menu-item-id' })
@@ -29,6 +29,11 @@ export class CreateOrderDto implements ICreateOrderDto {
   @IsEnum(OrderType)
   orderType: OrderType;
 
+  @ApiPropertyOptional({ enum: PaymentMethod, default: PaymentMethod.CASH })
+  @IsOptional()
+  @IsEnum(PaymentMethod)
+  paymentMethod?: PaymentMethod;
+
   @ApiPropertyOptional({ example: 'No coriander please' })
   @IsOptional()
   @IsString()
@@ -40,3 +45,4 @@ export class CreateOrderDto implements ICreateOrderDto {
   @Type(() => CreateOrderItemDto)
   items: CreateOrderItemDto[];
 }
+
