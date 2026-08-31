@@ -46,7 +46,7 @@ export default function OrderTrackingScreen() {
   const handleCancelOrder = () => {
     mobileToast.confirm({
       title: 'ยกเลิกคำสั่งซื้อ',
-      message: 'คุณต้องการยกเลิกคำสั่งซื้อนี้ใช่หรือไม่? (สามารถยกเลิกได้ก่อนร้านเริ่มปรุงอาหาร)',
+      message: 'คุณต้องการยกเลิกคำสั่งซื้อนี้ใช่หรือไม่? (สามารถยกเลิกได้ก่อนร้านค้ารับออเดอร์)',
       confirmText: 'ยืนยันยกเลิก',
       cancelText: 'ไม่ยกเลิก',
       isDestructive: true,
@@ -60,7 +60,7 @@ export default function OrderTrackingScreen() {
           setOrder(updated);
           mobileToast.success('ยกเลิกสำเร็จ', 'คำสั่งซื้อของคุณถูกยกเลิกและบันทึกในประวัติแล้ว');
         } catch (err: any) {
-          mobileToast.error('ไม่สามารถยกเลิกได้', err?.message || 'ร้านค้าอาจเริ่มปรุงอาหารแล้ว กรุณาติดต่อหน้าร้าน');
+          mobileToast.error('ไม่สามารถยกเลิกได้', err?.message || 'ร้านค้าได้รับออเดอร์แล้ว กรุณาติดต่อหน้าร้าน');
         } finally {
           setIsCancelling(false);
         }

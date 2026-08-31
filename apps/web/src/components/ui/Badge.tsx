@@ -41,8 +41,8 @@ export function Badge({ children, variant = 'default', size = 'md', className }:
 export function OrderStatusBadge({ status }: { status: OrderStatus }) {
   const map: Record<OrderStatus, { label: string; variant: BadgeProps['variant'] }> = {
     [OrderStatus.PENDING]: { label: 'รอรับออเดอร์', variant: 'warning' },
-    [OrderStatus.ACCEPTED]: { label: 'รับแล้ว (รอทำ)', variant: 'info' },
-    [OrderStatus.COOKING]: { label: 'กำลังปรุงอาหาร', variant: 'warning' },
+    [OrderStatus.ACCEPTED]: { label: 'รับแล้ว (กำลังเตรียม)', variant: 'info' },
+    [OrderStatus.COOKING]: { label: 'กำลังเตรียมอาหาร', variant: 'warning' },
     [OrderStatus.READY]: { label: 'พร้อมรับอาหาร 🎉', variant: 'success' },
     [OrderStatus.COMPLETED]: { label: 'เสร็จสิ้น', variant: 'default' },
     [OrderStatus.CANCELLED]: { label: 'ยกเลิก', variant: 'danger' },

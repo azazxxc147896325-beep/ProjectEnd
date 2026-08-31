@@ -3,7 +3,7 @@
 import React from 'react';
 import { Order, OrderStatus, OrderType } from '@campus-food/shared-types';
 import { OrderTypeBadge } from '../ui/Badge';
-import { Clock, CheckCircle2, Flame, BellRing, User, MessageSquare, XCircle } from 'lucide-react';
+import { Clock, Check, CheckCircle2, BellRing, User, MessageSquare, XCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 
 interface OrderKanbanCardProps {
@@ -115,24 +115,24 @@ export function OrderKanbanCard({ order, onUpdateStatus, isLoading }: OrderKanba
               </button>
 
               <button
-                onClick={() => handleAction(OrderStatus.COOKING)}
+                onClick={() => handleAction(OrderStatus.ACCEPTED)}
                 disabled={isActionPending || isLoading}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold transition-all shadow-md shadow-brand-500/25 active:scale-95"
+                className="flex items-center gap-1 px-3.5 py-1.5 text-xs rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold transition-all shadow-md shadow-brand-500/25 active:scale-95"
               >
-                <Flame className="w-3.5 h-3.5" />
-                <span>รับและเริ่มปรุง</span>
+                <Check className="w-3.5 h-3.5" />
+                <span>รับออเดอร์</span>
               </button>
             </>
           )}
 
-          {order.status === OrderStatus.COOKING && (
+          {(order.status === OrderStatus.ACCEPTED || order.status === OrderStatus.COOKING) && (
             <button
               onClick={() => handleAction(OrderStatus.READY)}
               disabled={isActionPending || isLoading}
               className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md shadow-emerald-600/30 active:scale-95 animate-pulse-subtle"
             >
               <BellRing className="w-3.5 h-3.5" />
-              <span>อาหารพร้อมรับ (แจ้งเตือน)</span>
+              <span>เสร็จแล้ว (แจ้งเตือน)</span>
             </button>
           )}
 
@@ -140,7 +140,7 @@ export function OrderKanbanCard({ order, onUpdateStatus, isLoading }: OrderKanba
             <button
               onClick={() => handleAction(OrderStatus.COMPLETED)}
               disabled={isActionPending || isLoading}
-              className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold transition-all border border-slate-600"
+              className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold transition-all border border-slate-600 active:scale-95"
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>ลูกค้ารับแล้ว</span>

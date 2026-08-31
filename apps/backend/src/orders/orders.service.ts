@@ -232,8 +232,12 @@ export class OrdersService {
       throw new BadRequestException('This order is already cancelled');
     }
 
-    if (order.status === OrderStatus.COOKING || order.status === OrderStatus.READY) {
-      throw new BadRequestException('อาหารกำลังปรุงหรือทำเสร็จแล้ว ไม่สามารถยกเลิกได้ กรุณาติดต่อทางร้านโดยตรง');
+    if (
+      order.status === OrderStatus.ACCEPTED ||
+      order.status === OrderStatus.COOKING ||
+      order.status === OrderStatus.READY
+    ) {
+      throw new BadRequestException('ร้านค้ารับออเดอร์แล้ว ไม่สามารถยกเลิกได้ กรุณาติดต่อทางร้านโดยตรง');
     }
 
     const previousStatus = order.status as OrderStatus;

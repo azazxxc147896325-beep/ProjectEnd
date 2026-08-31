@@ -136,7 +136,7 @@ enum OrderStatus { pending accepted cooking ready completed cancelled }
 - ใช้ App Router, เชื่อม Backend ผ่าน REST API + Socket.io client สำหรับ real-time
 - หน้า /login สำหรับแม่ค้า
 - หน้า /dashboard/menu จัดการเมนู (CRUD, toggle เมนูประจำวัน/พร้อมขาย)
-- หน้า /dashboard/orders คิวออเดอร์แบบ Kanban 3 คอลัมน์ (รอรับ/กำลังทำ/พร้อมรับ)
+- หน้า /dashboard/orders คิวออเดอร์แบบ Kanban 3 คอลัมน์ (รอรับออเดอร์ / กำลังเตรียมอาหาร / พร้อมรับอาหาร) โดยมีปุ่มกด "รับออเดอร์" สำหรับออเดอร์ใหม่ และปุ่ม "เสร็จแล้ว (แจ้งเตือน)" เมื่อปรุงเสร็จ
   subscribe WebSocket เพื่ออัปเดต real-time ไม่ต้อง refresh หน้า
 - หน้า /dashboard/analytics กราฟยอดขาย (ใช้ recharts) + เมนูขายดี + คำนวณรายได้
 - Component AI Chat widget มุมขวาล่าง เรียก /ai endpoint ของ backend

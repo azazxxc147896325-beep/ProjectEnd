@@ -36,7 +36,7 @@ export function OrderActionButtons({
           }}
         >
           <Text style={{ color: '#88A096', fontSize: 12, marginBottom: 12, textAlign: 'center' }}>
-            สามารถยกเลิกคำสั่งซื้อได้ก่อนที่ร้านค้าจะเริ่มปรุงอาหาร
+            สามารถยกเลิกคำสั่งซื้อได้ก่อนที่ร้านค้าจะกดรับออเดอร์
           </Text>
 
           <TouchableOpacity

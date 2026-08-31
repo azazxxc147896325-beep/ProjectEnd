@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, Animated } from 'react-native';
 import { Order, OrderStatus } from '@campus-food/shared-types';
-import { Bell, Flame, Clock, CheckCircle2 } from 'lucide-react-native';
+import { Bell, Clock, CheckCircle2 } from 'lucide-react-native';
 
 interface OrderReadyCardProps {
   order: Order;
@@ -9,13 +9,17 @@ interface OrderReadyCardProps {
 
 export function OrderReadyCard({ order }: OrderReadyCardProps) {
   const isReady = order.status === OrderStatus.READY;
-  const isCooking = order.status === OrderStatus.COOKING;
+  const isAccepted = order.status === OrderStatus.ACCEPTED || order.status === OrderStatus.COOKING;
+  const isActive =
+    order.status === OrderStatus.PENDING ||
+    isAccepted ||
+    isReady;
 
   // Pulse animation for active queue
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    if (isReady || isCooking) {
+    if (isActive) {
       const loop = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
@@ -33,7 +37,7 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
       loop.start();
       return () => loop.stop();
     }
-  }, [isReady, isCooking]);
+  }, [isActive]);
 
   return (
     <View
@@ -43,7 +47,7 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
         padding: 20,
         alignItems: 'center',
         borderWidth: 1.5,
-        borderColor: isReady ? '#10B981' : '#8FBC7A',
+        borderColor: isReady ? '#10B981' : isAccepted ? '#10B981' : '#8FBC7A',
         marginBottom: 20,
         shadowColor: isReady ? '#10B981' : '#8FBC7A',
         shadowOpacity: 0.25,
@@ -60,16 +64,20 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
           width: 88,
           height: 88,
           borderRadius: 26,
-          backgroundColor: isReady ? 'rgba(16, 185, 129, 0.2)' : 'rgba(143, 188, 122, 0.18)',
+          backgroundColor: isReady
+            ? 'rgba(16, 185, 129, 0.2)'
+            : isAccepted
+            ? 'rgba(16, 185, 129, 0.15)'
+            : 'rgba(143, 188, 122, 0.18)',
           borderWidth: 2.5,
-          borderColor: isReady ? '#10B981' : '#8FBC7A',
+          borderColor: isReady ? '#10B981' : isAccepted ? '#10B981' : '#8FBC7A',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
         <Text
           style={{
-            color: isReady ? '#10B981' : '#8FBC7A',
+            color: isReady ? '#10B981' : isAccepted ? '#10B981' : '#8FBC7A',
             fontSize: 34,
             fontWeight: '900',
           }}
@@ -93,23 +101,23 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
       >
         {isReady ? (
           <Bell size={14} color="#6EE7B7" />
-        ) : isCooking ? (
-          <Flame size={14} color="#8FBC7A" />
+        ) : isAccepted ? (
+          <CheckCircle2 size={14} color="#6EE7B7" />
         ) : (
           <Clock size={14} color="#88A096" />
         )}
         <Text
           style={{
-            color: isReady ? '#6EE7B7' : '#F8FAFC',
+            color: isReady ? '#6EE7B7' : isAccepted ? '#6EE7B7' : '#F8FAFC',
             fontSize: 12,
             fontWeight: 'bold',
           }}
         >
           {isReady
-            ? 'อาหารพร้อมรับแล้ว'
-            : isCooking
-            ? 'กำลังปรุงอาหารตามคิว'
-            : 'กำลังรอร้านรับออเดอร์'}
+            ? 'อาหารพร้อมรับแล้ว (รับที่หน้าร้าน)'
+            : isAccepted
+            ? 'ร้านรับออเดอร์แล้ว • กำลังเตรียม'
+            : 'รอร้านค้ายืนยันรับออเดอร์'}
         </Text>
       </View>
     </View>

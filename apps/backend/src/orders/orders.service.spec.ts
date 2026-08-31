@@ -141,11 +141,11 @@ describe('OrdersService', () => {
       );
     });
 
-    it('should throw BadRequestException if order is already COOKING or READY', async () => {
+    it('should throw BadRequestException if order is already ACCEPTED, COOKING or READY', async () => {
       mockPrismaService.order.findUnique.mockResolvedValue({
         id: 'order-1',
         studentId: 'student-1',
-        status: OrderStatus.COOKING,
+        status: OrderStatus.ACCEPTED,
         vendor: { id: 'vendor-1' },
       });
 

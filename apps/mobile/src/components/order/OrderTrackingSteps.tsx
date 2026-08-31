@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { OrderStatus } from '@campus-food/shared-types';
-import { Clock, Flame, BellRing, CheckCircle2 } from 'lucide-react-native';
+import { Clock, BellRing, CheckCircle2 } from 'lucide-react-native';
 
 interface OrderTrackingStepsProps {
   status: OrderStatus;
@@ -12,24 +12,24 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
     {
       status: OrderStatus.PENDING,
       title: 'รอร้านรับออเดอร์',
-      desc: 'คำสั่งซื้อถูกส่งไปยังร้านค้าแล้ว',
+      desc: 'คำสั่งซื้อถูกส่งไปยังร้านค้าแล้ว รอร้านค้ายืนยันรับออเดอร์',
       icon: Clock,
     },
     {
-      status: OrderStatus.COOKING,
-      title: 'กำลังปรุงอาหาร',
-      desc: 'พ่อครัว/แม่ค้ากำลังปรุงอาหารตามคิวของคุณ',
-      icon: Flame,
+      status: OrderStatus.ACCEPTED,
+      title: 'ร้านรับออเดอร์แล้ว',
+      desc: 'ร้านค้ารับออเดอร์แล้ว และกำลังจัดเตรียมอาหารตามคิว',
+      icon: CheckCircle2,
     },
     {
       status: OrderStatus.READY,
-      title: 'อาหารพร้อมรับแล้ว',
-      desc: 'อาหารทำเสร็จแล้ว กรุณาไปรับที่เคาน์เตอร์หน้าร้าน',
+      title: 'อาหารพร้อมรับแล้ว 🎉',
+      desc: 'อาหารปรุงเสร็จแล้ว กรุณาไปรับที่เคาน์เตอร์หน้าร้าน',
       icon: BellRing,
     },
     {
       status: OrderStatus.COMPLETED,
-      title: 'รับประทานให้อร่อย',
+      title: 'รับประทานให้อร่อย 🍽️',
       desc: 'ออเดอร์เสร็จสมบูรณ์เรียบร้อย',
       icon: CheckCircle2,
     },
@@ -38,8 +38,8 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
   const getStepIndex = (currentStatus: OrderStatus) => {
     switch (currentStatus) {
       case OrderStatus.PENDING:
-      case OrderStatus.ACCEPTED:
         return 0;
+      case OrderStatus.ACCEPTED:
       case OrderStatus.COOKING:
         return 1;
       case OrderStatus.READY:

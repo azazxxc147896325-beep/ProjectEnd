@@ -8,7 +8,7 @@ import { getSocket } from '@/lib/socket';
 import { Navbar } from '@/components/dashboard/Navbar';
 import { KanbanColumn, KanbanToolbar } from '@/components/orders';
 import { Order, OrderStatus, OrderType, WsEvents } from '@campus-food/shared-types';
-import { Clock, Flame, CheckCircle, Bell } from 'lucide-react';
+import { Clock, Utensils, CheckCircle, Bell } from 'lucide-react';
 
 export default function OrdersKanbanPage() {
   const { vendor } = useAuth();
@@ -122,11 +122,15 @@ export default function OrdersKanbanPage() {
     return true;
   });
 
-  // Categorize into 3 Kanban Columns
+  // Categorize into 3 Kanban Columns (รอรับออเดอร์ -> กำลังเตรียม -> พร้อมรับอาหาร)
   const pendingOrders = filteredOrders.filter(
-    (o) => o && (o.status === OrderStatus.PENDING || o.status === OrderStatus.ACCEPTED),
+    (o) => o && o.status === OrderStatus.PENDING,
   );
-  const cookingOrders = filteredOrders.filter((o) => o && o.status === OrderStatus.COOKING);
+  const preparingOrders = filteredOrders.filter(
+    (o) =>
+      o &&
+      (o.status === OrderStatus.ACCEPTED || o.status === OrderStatus.COOKING),
+  );
   const readyOrders = filteredOrders.filter((o) => o && o.status === OrderStatus.READY);
   const activeOrderCount = safeOrders.filter(
     (o) => o && o.status !== OrderStatus.COMPLETED && o.status !== OrderStatus.CANCELLED,
@@ -172,7 +176,7 @@ export default function OrdersKanbanPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 items-start">
           {/* Column 1: รอรับออเดอร์ */}
           <KanbanColumn
-            title="รอรับออเดอร์ / คิวใหม่"
+            title="รอรับออเดอร์ (คิวใหม่)"
             count={pendingOrders.length}
             icon={Clock}
             iconBgClass="bg-amber-500/20"
@@ -186,25 +190,25 @@ export default function OrdersKanbanPage() {
             onUpdateStatus={handleUpdateStatus}
           />
 
-          {/* Column 2: กำลังปรุงอาหาร */}
+          {/* Column 2: กำลังเตรียมอาหาร (รับแล้ว) */}
           <KanbanColumn
-            title="กำลังปรุงอาหาร"
-            count={cookingOrders.length}
-            icon={Flame}
+            title="กำลังเตรียมอาหาร (รับแล้ว)"
+            count={preparingOrders.length}
+            icon={Utensils}
             iconBgClass="bg-brand-500/20"
             iconTextClass="text-brand-400"
             badgeClass="bg-brand-950 text-brand-300 border-brand-500/30"
             borderClass="border-brand-500/20"
-            orders={cookingOrders}
+            orders={preparingOrders}
             isLoading={isLoading}
             isStatusPending={updateStatusMutation.isPending}
-            emptyText="ไม่มีออเดอร์ที่กำลังปรุงอยู่"
+            emptyText="ไม่มีออเดอร์ที่กำลังเตรียม"
             onUpdateStatus={handleUpdateStatus}
           />
 
-          {/* Column 3: พร้อมรับอาหาร */}
+          {/* Column 3: พร้อมรับอาหาร / เสร็จแล้ว */}
           <KanbanColumn
-            title="พร้อมรับอาหาร (แจ้งเตือนแล้ว)"
+            title="พร้อมรับอาหาร (เสร็จแล้ว)"
             count={readyOrders.length}
             icon={CheckCircle}
             iconBgClass="bg-emerald-500/20"
