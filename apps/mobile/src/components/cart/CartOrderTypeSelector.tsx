@@ -17,7 +17,7 @@ export function CartOrderTypeSelector({
 
   return (
     <View style={{ marginBottom: 18 }}>
-      <Text style={{ color: '#88A096', fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
+      <Text style={{ color: '#64748B', fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
         เลือกรูปแบบการรับประทาน *
       </Text>
 
@@ -32,15 +32,15 @@ export function CartOrderTypeSelector({
             gap: 8,
             paddingVertical: 12,
             borderRadius: 16,
-            backgroundColor: isDineIn ? '#10B981' : '#111E18',
+            backgroundColor: isDineIn ? '#0284C7' : '#F8FAFC',
             borderWidth: 1,
-            borderColor: isDineIn ? '#10B981' : '#1E352B',
+            borderColor: isDineIn ? '#0284C7' : '#E2E8F0',
           }}
         >
-          <Utensils size={16} color={isDineIn ? '#FFFFFF' : '#88A096'} />
+          <Utensils size={16} color={isDineIn ? '#FFFFFF' : '#64748B'} />
           <Text
             style={{
-              color: isDineIn ? '#FFFFFF' : '#88A096',
+              color: isDineIn ? '#FFFFFF' : '#64748B',
               fontSize: 13,
               fontWeight: 'bold',
             }}
@@ -59,15 +59,15 @@ export function CartOrderTypeSelector({
             gap: 8,
             paddingVertical: 12,
             borderRadius: 16,
-            backgroundColor: isTakeaway ? '#10B981' : '#111E18',
+            backgroundColor: isTakeaway ? '#0284C7' : '#F8FAFC',
             borderWidth: 1,
-            borderColor: isTakeaway ? '#10B981' : '#1E352B',
+            borderColor: isTakeaway ? '#0284C7' : '#E2E8F0',
           }}
         >
-          <Package size={16} color={isTakeaway ? '#FFFFFF' : '#88A096'} />
+          <Package size={16} color={isTakeaway ? '#FFFFFF' : '#64748B'} />
           <Text
             style={{
-              color: isTakeaway ? '#FFFFFF' : '#88A096',
+              color: isTakeaway ? '#FFFFFF' : '#64748B',
               fontSize: 13,
               fontWeight: 'bold',
             }}

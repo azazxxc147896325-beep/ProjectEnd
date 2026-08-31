@@ -12,15 +12,15 @@ interface PeriodFilterToolbarProps {
 
 export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterToolbarProps) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+    <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs">
         <button
           onClick={() => onPeriodChange('today')}
           className={clsx(
-            'px-4 py-1.5 rounded-xl text-xs font-semibold transition-all',
+            'px-4 py-1.5 rounded-xl text-xs font-bold transition-all',
             period === 'today'
-              ? 'bg-brand-500 text-white shadow-sm'
-              : 'text-slate-400 hover:text-slate-200',
+              ? 'bg-brand-600 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
           )}
         >
           📅 วันนี้
@@ -28,10 +28,10 @@ export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterTool
         <button
           onClick={() => onPeriodChange('week')}
           className={clsx(
-            'px-4 py-1.5 rounded-xl text-xs font-semibold transition-all',
+            'px-4 py-1.5 rounded-xl text-xs font-bold transition-all',
             period === 'week'
-              ? 'bg-brand-500 text-white shadow-sm'
-              : 'text-slate-400 hover:text-slate-200',
+              ? 'bg-brand-600 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
           )}
         >
           📊 7 วันล่าสุด
@@ -39,10 +39,10 @@ export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterTool
         <button
           onClick={() => onPeriodChange('month')}
           className={clsx(
-            'px-4 py-1.5 rounded-xl text-xs font-semibold transition-all',
+            'px-4 py-1.5 rounded-xl text-xs font-bold transition-all',
             period === 'month'
-              ? 'bg-brand-500 text-white shadow-sm'
-              : 'text-slate-400 hover:text-slate-200',
+              ? 'bg-brand-600 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
           )}
         >
           📈 30 วันล่าสุด
@@ -50,7 +50,7 @@ export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterTool
       </div>
 
       <span className="text-xs text-slate-500 flex items-center gap-1">
-        <Calendar className="w-3.5 h-3.5" />
+        <Calendar className="w-3.5 h-3.5 text-brand-600" />
         <span>คำนวณจากฐานข้อมูล PostgreSQL จริง</span>
       </span>
     </div>

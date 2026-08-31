@@ -22,10 +22,10 @@ export function OrderHistoryTabs({
     <View
       style={{
         flexDirection: 'row',
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         padding: 8,
         borderBottomWidth: 1,
-        borderColor: '#1E352B',
+        borderColor: '#E2E8F0',
         gap: 8,
       }}
     >
@@ -39,13 +39,13 @@ export function OrderHistoryTabs({
           gap: 6,
           paddingVertical: 10,
           borderRadius: 14,
-          backgroundColor: isActive ? '#10B981' : 'transparent',
+          backgroundColor: isActive ? '#0284C7' : 'transparent',
         }}
       >
-        <Clock size={15} color={isActive ? '#FFFFFF' : '#88A096'} />
+        <Clock size={15} color={isActive ? '#FFFFFF' : '#64748B'} />
         <Text
           style={{
-            color: isActive ? '#FFFFFF' : '#88A096',
+            color: isActive ? '#FFFFFF' : '#64748B',
             fontSize: 13,
             fontWeight: 'bold',
           }}
@@ -64,13 +64,13 @@ export function OrderHistoryTabs({
           gap: 6,
           paddingVertical: 10,
           borderRadius: 14,
-          backgroundColor: isHistory ? '#10B981' : 'transparent',
+          backgroundColor: isHistory ? '#0284C7' : 'transparent',
         }}
       >
-        <History size={15} color={isHistory ? '#FFFFFF' : '#88A096'} />
+        <History size={15} color={isHistory ? '#FFFFFF' : '#64748B'} />
         <Text
           style={{
-            color: isHistory ? '#FFFFFF' : '#88A096',
+            color: isHistory ? '#FFFFFF' : '#64748B',
             fontSize: 13,
             fontWeight: 'bold',
           }}

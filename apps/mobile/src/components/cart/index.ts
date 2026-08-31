@@ -4,6 +4,8 @@ export { CartVendorCard } from './CartVendorCard';
 export { CartVendorDetailView } from './CartVendorDetailView';
 export { CartVendorGroup } from './CartVendorGroup';
 export { CartOrderTypeSelector } from './CartOrderTypeSelector';
+export { CartPaymentMethodSelector } from './CartPaymentMethodSelector';
+export { PromptPayQrModal } from './PromptPayQrModal';
 export { CartItemRow } from './CartItemRow';
 export { CartNoteInput } from './CartNoteInput';
 export { CartSummaryCard } from './CartSummaryCard';

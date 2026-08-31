@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Order, OrderStatus, OrderType } from '@campus-food/shared-types';
-import { ChevronRight, RotateCcw, Star, AlertCircle, Utensils, Package } from 'lucide-react-native';
+import { Order, OrderStatus, OrderType, PaymentMethod, PaymentStatus } from '@campus-food/shared-types';
+import { ChevronRight, RotateCcw, Star, AlertCircle, Utensils, Package, QrCode, Banknote } from 'lucide-react-native';
 
 interface OrderHistoryCardProps {
   order: Order;
@@ -20,6 +20,8 @@ export function OrderHistoryCard({
 }: OrderHistoryCardProps) {
   const isCancelled = order.status === OrderStatus.CANCELLED;
   const isCompleted = order.status === OrderStatus.COMPLETED;
+  const isPromptPay = order.paymentMethod === PaymentMethod.PROMPTPAY;
+  const isPaid = order.paymentStatus === PaymentStatus.PAID;
 
   const formatDateTime = (dateStr: string | Date) => {
     const d = new Date(dateStr);
@@ -29,11 +31,16 @@ export function OrderHistoryCard({
   return (
     <View
       style={{
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 20,
         padding: 16,
         borderWidth: 1,
-        borderColor: '#1E352B',
+        borderColor: '#E2E8F0',
+        shadowColor: '#0F172A',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
       }}
     >
       {/* Header: Queue + Vendor + Status Badge */}
@@ -45,7 +52,7 @@ export function OrderHistoryCard({
           justifyContent: 'space-between',
           alignItems: 'center',
           borderBottomWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#F1F5F9',
           paddingBottom: 10,
         }}
       >
@@ -56,15 +63,15 @@ export function OrderHistoryCard({
               paddingVertical: 3,
               borderRadius: 10,
               backgroundColor: isCancelled
-                ? 'rgba(239, 68, 68, 0.2)'
+                ? '#FEF2F2'
                 : isCompleted
-                ? 'rgba(16, 185, 129, 0.2)'
-                : 'rgba(143, 188, 122, 0.2)',
+                ? '#F0FDF4'
+                : '#E0F2FE',
             }}
           >
             <Text
               style={{
-                color: isCancelled ? '#EF4444' : isCompleted ? '#10B981' : '#8FBC7A',
+                color: isCancelled ? '#DC2626' : isCompleted ? '#16A34A' : '#0284C7',
                 fontSize: 13,
                 fontWeight: '900',
               }}
@@ -72,7 +79,7 @@ export function OrderHistoryCard({
               คิว #{order.queueNumber}
             </Text>
           </View>
-          <Text numberOfLines={1} style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold', flex: 1 }}>
+          <Text numberOfLines={1} style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold', flex: 1 }}>
             {order.vendor?.name || 'ร้านค้า'}
           </Text>
         </View>
@@ -83,10 +90,12 @@ export function OrderHistoryCard({
               paddingHorizontal: 8,
               paddingVertical: 2,
               borderRadius: 8,
-              backgroundColor: 'rgba(239, 68, 68, 0.15)',
+              backgroundColor: '#FEF2F2',
+              borderWidth: 1,
+              borderColor: '#FECACA',
             }}
           >
-            <Text style={{ color: '#EF4444', fontSize: 11, fontWeight: 'bold' }}>
+            <Text style={{ color: '#DC2626', fontSize: 11, fontWeight: 'bold' }}>
               {order.cancelledBy === 'vendor' ? 'ร้านยกเลิก' : 'ยกเลิกแล้ว'}
             </Text>
           </View>
@@ -96,13 +105,15 @@ export function OrderHistoryCard({
               paddingHorizontal: 8,
               paddingVertical: 2,
               borderRadius: 8,
-              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              backgroundColor: '#F0FDF4',
+              borderWidth: 1,
+              borderColor: '#BBF7D0',
             }}
           >
-            <Text style={{ color: '#10B981', fontSize: 11, fontWeight: 'bold' }}>เสร็จสมบูรณ์</Text>
+            <Text style={{ color: '#16A34A', fontSize: 11, fontWeight: 'bold' }}>เสร็จสมบูรณ์</Text>
           </View>
         ) : (
-          <ChevronRight size={18} color="#6E8B7E" />
+          <ChevronRight size={18} color="#94A3B8" />
         )}
       </TouchableOpacity>
 
@@ -112,23 +123,23 @@ export function OrderHistoryCard({
         activeOpacity={0.8}
         style={{ marginVertical: 10 }}
       >
-        <Text style={{ color: '#CBD5E1', fontSize: 12, lineHeight: 18 }}>
+        <Text style={{ color: '#334155', fontSize: 12, lineHeight: 18 }}>
           {order.items?.map((i) => `${i.quantity}x ${i.menuItem?.name || 'รายการ'}`).join(', ') ||
             'รายการอาหาร'}
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 }}>
-          <Text style={{ color: '#88A096', fontSize: 11 }}>
+          <Text style={{ color: '#64748B', fontSize: 11 }}>
             {formatDateTime(order.createdAt)} •
           </Text>
           {order.orderType === OrderType.DINE_IN ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-              <Utensils size={11} color="#88A096" />
-              <Text style={{ color: '#88A096', fontSize: 11 }}>ทานที่ร้าน</Text>
+              <Utensils size={11} color="#64748B" />
+              <Text style={{ color: '#64748B', fontSize: 11 }}>ทานที่ร้าน</Text>
             </View>
           ) : (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-              <Package size={11} color="#88A096" />
-              <Text style={{ color: '#88A096', fontSize: 11 }}>รับกลับบ้าน</Text>
+              <Package size={11} color="#64748B" />
+              <Text style={{ color: '#64748B', fontSize: 11 }}>รับกลับบ้าน</Text>
             </View>
           )}
         </View>
@@ -137,18 +148,18 @@ export function OrderHistoryCard({
           <View
             style={{
               marginTop: 8,
-              backgroundColor: 'rgba(239, 68, 68, 0.08)',
+              backgroundColor: '#FEF2F2',
               borderRadius: 8,
               padding: 8,
               borderWidth: 1,
-              borderColor: 'rgba(239, 68, 68, 0.2)',
+              borderColor: '#FECACA',
               flexDirection: 'row',
               alignItems: 'center',
               gap: 6,
             }}
           >
-            <AlertCircle size={14} color="#F87171" />
-            <Text style={{ color: '#FCA5A5', fontSize: 11, flex: 1 }}>
+            <AlertCircle size={14} color="#DC2626" />
+            <Text style={{ color: '#DC2626', fontSize: 11, flex: 1 }}>
               {order.cancelledBy === 'vendor' ? 'ร้านค้ายกเลิก: ' : 'คุณยกเลิก: '}
               {order.cancelReason || 'ไม่มีระบุสาเหตุ'}
             </Text>
@@ -164,12 +175,48 @@ export function OrderHistoryCard({
           alignItems: 'center',
           paddingTop: 10,
           borderTopWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#F1F5F9',
         }}
       >
-        <Text style={{ color: '#8FBC7A', fontSize: 15, fontWeight: 'bold' }}>
-          ฿{Number(order.totalPrice).toLocaleString()}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Text style={{ color: '#0284C7', fontSize: 15, fontWeight: 'bold' }}>
+            ฿{Number(order.totalPrice).toLocaleString()}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 3,
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              borderRadius: 6,
+              backgroundColor: isPaid ? '#F0FDF4' : '#FFFBEB',
+              borderWidth: 1,
+              borderColor: isPaid ? '#BBF7D0' : '#FDE68A',
+            }}
+          >
+            {isPromptPay ? (
+              <QrCode size={10} color={isPaid ? '#16A34A' : '#D97706'} />
+            ) : (
+              <Banknote size={10} color={isPaid ? '#16A34A' : '#D97706'} />
+            )}
+            <Text
+              style={{
+                fontSize: 10,
+                fontWeight: 'bold',
+                color: isPaid ? '#16A34A' : '#D97706',
+              }}
+            >
+              {isPaid
+                ? isPromptPay
+                  ? 'พร้อมเพย์'
+                  : 'เงินสด'
+                : isPromptPay
+                ? 'รอโอน'
+                : 'รอจ่ายสด'}
+            </Text>
+          </View>
+        </View>
 
         <View style={{ flexDirection: 'row', gap: 8 }}>
           {activeTab === 'history' && (
@@ -183,13 +230,13 @@ export function OrderHistoryCard({
                   paddingHorizontal: 10,
                   paddingVertical: 6,
                   borderRadius: 10,
-                  backgroundColor: '#162720',
+                  backgroundColor: '#FFFBEB',
                   borderWidth: 1,
-                  borderColor: '#244034',
+                  borderColor: '#FDE68A',
                 }}
               >
-                <Star size={12} color="#FBBF24" fill="#FBBF24" />
-                <Text style={{ color: '#FBBF24', fontSize: 11, fontWeight: 'bold' }}>รีวิว</Text>
+                <Star size={12} color="#D97706" fill="#D97706" />
+                <Text style={{ color: '#D97706', fontSize: 11, fontWeight: 'bold' }}>รีวิว</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -201,7 +248,7 @@ export function OrderHistoryCard({
                   paddingHorizontal: 12,
                   paddingVertical: 6,
                   borderRadius: 10,
-                  backgroundColor: '#10B981',
+                  backgroundColor: '#0284C7',
                 }}
               >
                 <RotateCcw size={12} color="#FFFFFF" />
@@ -217,7 +264,7 @@ export function OrderHistoryCard({
                 paddingHorizontal: 14,
                 paddingVertical: 6,
                 borderRadius: 10,
-                backgroundColor: '#10B981',
+                backgroundColor: '#0284C7',
               }}
             >
               <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>

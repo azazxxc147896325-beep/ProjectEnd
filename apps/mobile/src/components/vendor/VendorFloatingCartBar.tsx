@@ -22,16 +22,16 @@ export function VendorFloatingCartBar({
         bottom: 16,
         left: 16,
         right: 16,
-        backgroundColor: '#10B981',
+        backgroundColor: '#0284C7',
         borderRadius: 20,
         paddingVertical: 14,
         paddingHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        shadowColor: '#10B981',
+        shadowColor: '#0284C7',
         shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.4,
+        shadowOpacity: 0.35,
         shadowRadius: 10,
         elevation: 8,
       }}
@@ -47,7 +47,7 @@ export function VendorFloatingCartBar({
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#10B981', fontSize: 12, fontWeight: 'bold' }}>{totalCount}</Text>
+          <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: 'bold' }}>{totalCount}</Text>
         </View>
         <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' }}>
           ฿{totalPrice.toLocaleString()}

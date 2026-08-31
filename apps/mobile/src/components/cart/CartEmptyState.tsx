@@ -11,7 +11,7 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
     <View
       style={{
         flex: 1,
-        backgroundColor: '#0A110E',
+        backgroundColor: '#F0F7FF',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
@@ -22,22 +22,26 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
           width: 80,
           height: 80,
           borderRadius: 40,
-          backgroundColor: '#111E18',
+          backgroundColor: '#FFFFFF',
           borderWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#E2E8F0',
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 16,
+          shadowColor: '#0F172A',
+          shadowOpacity: 0.06,
+          shadowRadius: 8,
+          elevation: 2,
         }}
       >
-        <ShoppingBag size={36} color="#6E8B7E" />
+        <ShoppingBag size={36} color="#0284C7" />
       </View>
-      <Text style={{ color: '#F8FAFC', fontSize: 18, fontWeight: 'bold' }}>
+      <Text style={{ color: '#0F172A', fontSize: 18, fontWeight: 'bold' }}>
         ไม่มีสินค้าในตะกร้า
       </Text>
       <Text
         style={{
-          color: '#88A096',
+          color: '#64748B',
           fontSize: 13,
           textAlign: 'center',
           marginTop: 6,
@@ -54,10 +58,14 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
           paddingHorizontal: 24,
           paddingVertical: 12,
           borderRadius: 14,
-          backgroundColor: '#10B981',
+          backgroundColor: '#0284C7',
           flexDirection: 'row',
           alignItems: 'center',
           gap: 6,
+          shadowColor: '#0284C7',
+          shadowOpacity: 0.25,
+          shadowRadius: 6,
+          elevation: 3,
         }}
       >
         <Text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: 'bold' }}>

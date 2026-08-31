@@ -56,15 +56,19 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
   return (
     <View
       style={{
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 24,
         padding: 20,
         borderWidth: 1,
-        borderColor: '#1E352B',
+        borderColor: '#E2E8F0',
         marginBottom: 20,
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
       }}
     >
-      <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold', marginBottom: 16 }}>
+      <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold', marginBottom: 16 }}>
         สถานะการเตรียมอาหาร (Real-time)
       </Text>
 
@@ -84,24 +88,24 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
                     height: 36,
                     borderRadius: 12,
                     backgroundColor: isCurrent
-                      ? '#10B981'
+                      ? '#0284C7'
                       : isPast
-                      ? '#059669'
-                      : '#162720',
+                      ? '#E0F2FE'
+                      : '#F8FAFC',
                     borderWidth: 1,
-                    borderColor: isCurrent ? '#10B981' : isPast ? '#059669' : '#244034',
+                    borderColor: isCurrent ? '#0284C7' : isPast ? '#BAE6FD' : '#E2E8F0',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
                 >
-                  <Icon size={18} color={isCurrent || isPast ? '#FFFFFF' : '#6E8B7E'} />
+                  <Icon size={18} color={isCurrent ? '#FFFFFF' : isPast ? '#0284C7' : '#94A3B8'} />
                 </View>
                 {idx < steps.length - 1 && (
                   <View
                     style={{
                       width: 2,
                       height: 24,
-                      backgroundColor: isPast ? '#10B981' : '#1E352B',
+                      backgroundColor: isPast ? '#0284C7' : '#E2E8F0',
                       marginTop: 4,
                     }}
                   />
@@ -111,14 +115,14 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
               <View style={{ flex: 1, paddingTop: 4 }}>
                 <Text
                   style={{
-                    color: isCurrent ? '#8FBC7A' : isPast ? '#F8FAFC' : '#6E8B7E',
+                    color: isCurrent ? '#0284C7' : isPast ? '#0F172A' : '#94A3B8',
                     fontSize: 14,
                     fontWeight: 'bold',
                   }}
                 >
                   {step.title}
                 </Text>
-                <Text style={{ color: isFuture ? '#526A5E' : '#88A096', fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: isFuture ? '#94A3B8' : '#64748B', fontSize: 12, marginTop: 2 }}>
                   {step.desc}
                 </Text>
               </View>

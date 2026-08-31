@@ -9,13 +9,14 @@ import { useRouter } from 'expo-router';
 import { useCartStore, VendorCartGroup } from '../../stores/cart-store';
 import { useAuthStore } from '../../stores/auth-store';
 import { mobileApi } from '../../lib/api';
-import { Order } from '@campus-food/shared-types';
+import { Order, PaymentMethod } from '@campus-food/shared-types';
 import { Lock, ChevronRight, Store } from 'lucide-react-native';
 import {
   CartEmptyState,
   CartVendorCard,
   CartVendorDetailView,
   CartSummaryCard,
+  PromptPayQrModal,
 } from '../../components/cart';
 import { mobileToast } from '../../stores/toast-store';
 
@@ -26,6 +27,7 @@ export default function CartScreen() {
     getVendorGroups,
     updateQuantity,
     setVendorOrderType,
+    setVendorPaymentMethod,
     setVendorNote,
     clearVendor,
     clearCart,
@@ -37,6 +39,7 @@ export default function CartScreen() {
   const [selectedVendorId, setSelectedVendorId] = useState<string | null>(null);
   const [submittingVendorId, setSubmittingVendorId] = useState<string | null>(null);
   const [isSubmittingAll, setIsSubmittingAll] = useState(false);
+  const [activePromptPayOrder, setActivePromptPayOrder] = useState<Order | null>(null);
 
   const vendorGroups = getVendorGroups();
   const totalPrice = getTotalPrice();
@@ -65,6 +68,7 @@ export default function CartScreen() {
       const payload = {
         vendorId: group.vendorId,
         orderType: group.orderType,
+        paymentMethod: group.paymentMethod || PaymentMethod.PROMPTPAY,
         note: group.note?.trim() || undefined,
         items: group.items.map((i) => ({
           menuItemId: i.menuItem.id,
@@ -82,11 +86,16 @@ export default function CartScreen() {
       clearVendor(group.vendorId);
       setSelectedVendorId(null);
 
-      mobileToast.success(
-        `สั่งร้าน "${group.vendorName}" สำเร็จ! คิว #${createdOrder.queueNumber}`,
-        'ระบบส่งออเดอร์ถึงห้องครัวเรียบร้อยแล้ว'
-      );
-      router.push(`/order/${createdOrder.id}`);
+      // หากเลือกพร้อมเพย์ QR ให้เปิด QR Modal สแกนจ่าย
+      if (group.paymentMethod === PaymentMethod.PROMPTPAY) {
+        setActivePromptPayOrder(createdOrder);
+      } else {
+        mobileToast.success(
+          `สั่งร้าน "${group.vendorName}" สำเร็จ! คิว #${createdOrder.queueNumber}`,
+          'ชำระเงินสดที่เคาน์เตอร์ตอนไปรับอาหารครับ'
+        );
+        router.push(`/order/${createdOrder.id}`);
+      }
     } catch (err: any) {
       if (err?.message?.includes('Unauthorized') || err?.message?.includes('401')) {
         mobileToast.confirm({
@@ -186,26 +195,48 @@ export default function CartScreen() {
     const selectedGroup = vendorGroups.find((g) => g.vendorId === selectedVendorId);
     if (selectedGroup) {
       return (
-        <CartVendorDetailView
-          group={selectedGroup}
-          isSubmitting={submittingVendorId === selectedGroup.vendorId}
-          onBack={() => setSelectedVendorId(null)}
-          onUpdateQuantity={updateQuantity}
-          onSelectOrderType={setVendorOrderType}
-          onNoteChange={setVendorNote}
-          onClearVendor={(vId) => {
-            clearVendor(vId);
-            setSelectedVendorId(null);
-          }}
-          onCheckout={handleCheckoutSingleVendor}
-        />
+        <>
+          <CartVendorDetailView
+            group={selectedGroup}
+            isSubmitting={submittingVendorId === selectedGroup.vendorId}
+            onBack={() => setSelectedVendorId(null)}
+            onUpdateQuantity={updateQuantity}
+            onSelectOrderType={setVendorOrderType}
+            onSelectPaymentMethod={setVendorPaymentMethod}
+            onNoteChange={setVendorNote}
+            onClearVendor={(vId) => {
+              clearVendor(vId);
+              setSelectedVendorId(null);
+            }}
+            onCheckout={handleCheckoutSingleVendor}
+          />
+
+          <PromptPayQrModal
+            order={activePromptPayOrder}
+            visible={!!activePromptPayOrder}
+            onSuccess={(updatedOrder) => {
+              const orderId = activePromptPayOrder?.id;
+              setActivePromptPayOrder(null);
+              if (orderId) {
+                router.push(`/order/${orderId}`);
+              }
+            }}
+            onClose={() => {
+              const orderId = activePromptPayOrder?.id;
+              setActivePromptPayOrder(null);
+              if (orderId) {
+                router.push(`/order/${orderId}`);
+              }
+            }}
+          />
+        </>
       );
     }
   }
 
   // หน้าหลักของตะกร้า: แสดงรายการการ์ดร้านค้าทั้งหมด + ปุ่มสั่งพร้อมกัน
   return (
-    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 140 }}>
         {/* Auth Notice Banner if not logged in */}
         {!isAuthenticated && (
@@ -216,26 +247,26 @@ export default function CartScreen() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              backgroundColor: 'rgba(143, 188, 122, 0.12)',
+              backgroundColor: '#E0F2FE',
               borderWidth: 1,
-              borderColor: 'rgba(143, 188, 122, 0.35)',
+              borderColor: '#BAE6FD',
               borderRadius: 16,
               padding: 12,
               marginBottom: 16,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
-              <Lock size={18} color="#8FBC7A" />
+              <Lock size={18} color="#0284C7" />
               <View style={{ flex: 1 }}>
-                <Text style={{ color: '#F8FAFC', fontSize: 12, fontWeight: 'bold' }}>
+                <Text style={{ color: '#0F172A', fontSize: 12, fontWeight: 'bold' }}>
                   ยังไม่ได้เข้าสู่ระบบ
                 </Text>
-                <Text style={{ color: '#8FBC7A', fontSize: 11 }}>
+                <Text style={{ color: '#0369A1', fontSize: 11 }}>
                   แตะเพื่อเข้าสู่ระบบนักศึกษาสำหรับสั่งอาหารและรับคิว
                 </Text>
               </View>
             </View>
-            <ChevronRight size={16} color="#8FBC7A" />
+            <ChevronRight size={16} color="#0284C7" />
           </TouchableOpacity>
         )}
 
@@ -244,13 +275,17 @@ export default function CartScreen() {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#111E18',
+            backgroundColor: '#FFFFFF',
             borderRadius: 18,
             padding: 14,
             borderWidth: 1,
-            borderColor: '#1E352B',
+            borderColor: '#E2E8F0',
             marginBottom: 16,
             gap: 12,
+            shadowColor: '#0F172A',
+            shadowOpacity: 0.05,
+            shadowRadius: 6,
+            elevation: 2,
           }}
         >
           <View
@@ -258,20 +293,20 @@ export default function CartScreen() {
               width: 38,
               height: 38,
               borderRadius: 12,
-              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              backgroundColor: '#E0F2FE',
               borderWidth: 1,
-              borderColor: 'rgba(16, 185, 129, 0.3)',
+              borderColor: '#BAE6FD',
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
-            <Store size={20} color="#10B981" />
+            <Store size={20} color="#0284C7" />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold' }}>
+            <Text style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold' }}>
               ร้านค้าในตะกร้า ({vendorGroups.length} ร้าน)
             </Text>
-            <Text style={{ color: '#88A096', fontSize: 12, marginTop: 2 }}>
+            <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
               แตะที่การ์ดร้านค้าเพื่อดูรายการ หรือกดสั่งพร้อมกันทั้งหมดด้านล่าง
             </Text>
           </View>
@@ -296,6 +331,25 @@ export default function CartScreen() {
           onCheckout={handleCheckoutAll}
         />
       </ScrollView>
+
+      <PromptPayQrModal
+        order={activePromptPayOrder}
+        visible={!!activePromptPayOrder}
+        onSuccess={(updatedOrder) => {
+          const orderId = activePromptPayOrder?.id;
+          setActivePromptPayOrder(null);
+          if (orderId) {
+            router.push(`/order/${orderId}`);
+          }
+        }}
+        onClose={() => {
+          const orderId = activePromptPayOrder?.id;
+          setActivePromptPayOrder(null);
+          if (orderId) {
+            router.push(`/order/${orderId}`);
+          }
+        }}
+      />
     </View>
   );
 }

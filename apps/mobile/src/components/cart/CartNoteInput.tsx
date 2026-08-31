@@ -11,36 +11,40 @@ export function CartNoteInput({ note, onNoteChange }: CartNoteInputProps) {
   return (
     <View
       style={{
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 20,
         padding: 14,
         borderWidth: 1,
-        borderColor: '#1E352B',
+        borderColor: '#E2E8F0',
         marginBottom: 16,
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-        <MessageSquare size={14} color="#8FBC7A" />
-        <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: 'bold' }}>
+        <MessageSquare size={14} color="#0284C7" />
+        <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
           ข้อความระบุเพิ่มเติมถึงร้านค้า
         </Text>
       </View>
 
       <TextInput
         placeholder="เช่น เผ็ดน้อย, ไม่ใส่ผักชี, ขอน้ำซุปเพิ่ม..."
-        placeholderTextColor="#6E8B7E"
+        placeholderTextColor="#94A3B8"
         value={note}
         onChangeText={onNoteChange}
         multiline
         numberOfLines={2}
         style={{
-          backgroundColor: '#162720',
+          backgroundColor: '#F8FAFC',
           borderRadius: 12,
           padding: 10,
-          color: '#F8FAFC',
+          color: '#0F172A',
           fontSize: 12,
           borderWidth: 1,
-          borderColor: '#244034',
+          borderColor: '#E2E8F0',
         }}
       />
     </View>

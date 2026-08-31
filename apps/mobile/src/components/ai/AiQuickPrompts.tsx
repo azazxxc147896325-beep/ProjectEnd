@@ -17,7 +17,7 @@ export function AiQuickPrompts({ onSelectPrompt, loading }: AiQuickPromptsProps)
   ];
 
   return (
-    <View style={{ paddingVertical: 8, backgroundColor: '#0A110E' }}>
+    <View style={{ paddingVertical: 8, backgroundColor: '#F0F7FF' }}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -37,13 +37,13 @@ export function AiQuickPrompts({ onSelectPrompt, loading }: AiQuickPromptsProps)
                 paddingHorizontal: 12,
                 paddingVertical: 7,
                 borderRadius: 16,
-                backgroundColor: '#111E18',
+                backgroundColor: '#FFFFFF',
                 borderWidth: 1,
-                borderColor: '#1E352B',
+                borderColor: '#BAE6FD',
               }}
             >
-              <Icon size={14} color="#8FBC7A" />
-              <Text style={{ color: '#E2E8F0', fontSize: 11, fontWeight: '600' }}>
+              <Icon size={14} color="#0284C7" />
+              <Text style={{ color: '#0369A1', fontSize: 11, fontWeight: '600' }}>
                 {item.label}
               </Text>
             </TouchableOpacity>

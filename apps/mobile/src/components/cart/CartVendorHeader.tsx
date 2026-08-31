@@ -12,19 +12,23 @@ export function CartVendorHeader({ vendorName }: CartVendorHeaderProps) {
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 18,
         padding: 14,
         borderWidth: 1,
-        borderColor: '#1E352B',
+        borderColor: '#E2E8F0',
         marginBottom: 16,
         gap: 10,
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
       }}
     >
-      <Store size={20} color="#8FBC7A" />
+      <Store size={20} color="#0284C7" />
       <View style={{ flex: 1 }}>
-        <Text style={{ color: '#88A096', fontSize: 11 }}>สั่งอาหารจากร้าน</Text>
-        <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold' }}>{vendorName}</Text>
+        <Text style={{ color: '#64748B', fontSize: 11 }}>สั่งอาหารจากร้าน</Text>
+        <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>{vendorName}</Text>
       </View>
     </View>
   );

@@ -39,18 +39,18 @@ export function CustomConfirmModal() {
               styles.iconWrapper,
               {
                 backgroundColor: isDestructive
-                  ? 'rgba(239, 68, 68, 0.15)'
-                  : 'rgba(16, 185, 129, 0.15)',
+                  ? '#FEF2F2'
+                  : '#E0F2FE',
                 borderColor: isDestructive
-                  ? 'rgba(239, 68, 68, 0.4)'
-                  : 'rgba(16, 185, 129, 0.4)',
+                  ? '#FECACA'
+                  : '#BAE6FD',
               },
             ]}
           >
             {isDestructive ? (
-              <AlertCircle size={28} color="#EF4444" />
+              <AlertCircle size={28} color="#DC2626" />
             ) : (
-              <HelpCircle size={28} color="#10B981" />
+              <HelpCircle size={28} color="#0284C7" />
             )}
           </View>
 
@@ -78,7 +78,8 @@ export function CustomConfirmModal() {
               style={[
                 styles.confirmButton,
                 {
-                  backgroundColor: isDestructive ? '#EF4444' : '#10B981',
+                  backgroundColor: isDestructive ? '#DC2626' : '#0284C7',
+                  shadowColor: isDestructive ? '#DC2626' : '#0284C7',
                 },
               ]}
             >
@@ -96,7 +97,7 @@ export function CustomConfirmModal() {
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -104,15 +105,15 @@ const styles = StyleSheet.create({
   modalCard: {
     width: '100%',
     maxWidth: 340,
-    backgroundColor: '#111E18',
+    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     borderWidth: 1.2,
-    borderColor: '#1E352B',
+    borderColor: '#E2E8F0',
     padding: 24,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.15,
     shadowRadius: 16,
     elevation: 10,
   },
@@ -126,14 +127,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 17,
     fontWeight: 'bold',
     textAlign: 'center',
     letterSpacing: -0.3,
   },
   message: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 13,
     textAlign: 'center',
     marginTop: 8,
@@ -149,14 +150,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     borderRadius: 14,
-    backgroundColor: '#162720',
+    backgroundColor: '#F8FAFC',
     borderWidth: 1,
-    borderColor: '#244034',
+    borderColor: '#E2E8F0',
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelText: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 13,
     fontWeight: 'bold',
   },
@@ -166,9 +167,8 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#10B981',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
   },

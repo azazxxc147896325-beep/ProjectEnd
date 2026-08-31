@@ -65,9 +65,9 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
       {errorMessage && (
         <View
           style={{
-            backgroundColor: 'rgba(239, 68, 68, 0.15)',
+            backgroundColor: '#FEF2F2',
             borderWidth: 1,
-            borderColor: 'rgba(239, 68, 68, 0.4)',
+            borderColor: '#FECACA',
             borderRadius: 14,
             padding: 12,
             marginBottom: 16,
@@ -76,8 +76,8 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
             gap: 8,
           }}
         >
-          <AlertCircle size={16} color="#FCA5A5" />
-          <Text style={{ color: '#FCA5A5', fontSize: 12, fontWeight: '600', flex: 1 }}>
+          <AlertCircle size={16} color="#DC2626" />
+          <Text style={{ color: '#DC2626', fontSize: 12, fontWeight: '600', flex: 1 }}>
             {errorMessage}
           </Text>
         </View>
@@ -85,62 +85,62 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
 
       {/* Email Field */}
       <View style={{ marginBottom: 14 }}>
-        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#334155', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           อีเมลผู้ใช้งาน
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#162720',
+            backgroundColor: '#F8FAFC',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#244034',
+            borderColor: '#E2E8F0',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <Mail size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
+          <Mail size={18} color="#0284C7" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="your.email@campus.ac.th"
-            placeholderTextColor="#6E8B7E"
+            placeholderTextColor="#94A3B8"
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
-            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
+            style={{ flex: 1, color: '#0F172A', fontSize: 14 }}
           />
         </View>
       </View>
 
       {/* Password Field */}
       <View style={{ marginBottom: 14 }}>
-        <Text style={{ color: '#CBD5E1', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: '#334155', fontSize: 12, fontWeight: '700', marginBottom: 6 }}>
           รหัสผ่าน
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#162720',
+            backgroundColor: '#F8FAFC',
             borderRadius: 14,
             borderWidth: 1,
-            borderColor: '#244034',
+            borderColor: '#E2E8F0',
             paddingHorizontal: 12,
             height: 48,
           }}
         >
-          <Lock size={18} color="#8FBC7A" style={{ marginRight: 10 }} />
+          <Lock size={18} color="#0284C7" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="••••••••"
-            placeholderTextColor="#6E8B7E"
+            placeholderTextColor="#94A3B8"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
-            style={{ flex: 1, color: '#F8FAFC', fontSize: 14 }}
+            style={{ flex: 1, color: '#0F172A', fontSize: 14 }}
           />
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={{ padding: 4 }}>
-            {showPassword ? <EyeOff size={18} color="#88A096" /> : <Eye size={18} color="#88A096" />}
+            {showPassword ? <EyeOff size={18} color="#94A3B8" /> : <Eye size={18} color="#94A3B8" />}
           </TouchableOpacity>
         </View>
       </View>
@@ -162,15 +162,15 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
             height: 20,
             borderRadius: 6,
             borderWidth: 1.5,
-            borderColor: rememberPassword ? '#10B981' : '#2E4C3E',
-            backgroundColor: rememberPassword ? '#10B981' : '#162720',
+            borderColor: rememberPassword ? '#0284C7' : '#CBD5E1',
+            backgroundColor: rememberPassword ? '#0284C7' : '#FFFFFF',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
           {rememberPassword && <Check size={13} color="#FFFFFF" strokeWidth={3} />}
         </View>
-        <Text style={{ color: '#CBD5E1', fontSize: 13, fontWeight: '500' }}>
+        <Text style={{ color: '#475569', fontSize: 13, fontWeight: '500' }}>
           จดจำข้อมูลเข้าสู่ระบบในเครื่องนี้
         </Text>
       </TouchableOpacity>
@@ -181,16 +181,16 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
         disabled={loading}
         activeOpacity={0.85}
         style={{
-          backgroundColor: '#10B981',
+          backgroundColor: '#0284C7',
           borderRadius: 16,
           height: 48,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
-          shadowColor: '#10B981',
+          shadowColor: '#0284C7',
           shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.35,
+          shadowOpacity: 0.3,
           shadowRadius: 10,
           elevation: 4,
           opacity: loading ? 0.7 : 1,
@@ -208,9 +208,9 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
 
       {/* Toggle Helper Footer */}
       <TouchableOpacity onPress={onSwitchToRegister} style={{ marginTop: 16, alignItems: 'center' }}>
-        <Text style={{ color: '#88A096', fontSize: 12 }}>
+        <Text style={{ color: '#64748B', fontSize: 12 }}>
           ยังไม่มีบัญชีผู้ใช้งาน?{' '}
-          <Text style={{ color: '#8FBC7A', fontWeight: 'bold' }}>สมัครสมาชิกใหม่</Text>
+          <Text style={{ color: '#0284C7', fontWeight: 'bold' }}>สมัครสมาชิกใหม่</Text>
         </Text>
       </TouchableOpacity>
     </View>

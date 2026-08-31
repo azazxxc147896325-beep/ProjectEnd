@@ -170,16 +170,16 @@ export default function MenuManagementPage() {
 
         {/* Menu Grid */}
         {isLoading ? (
-          <div className="p-12 text-center text-slate-500 text-xs">กำลังโหลดรายการอาหาร...</div>
+          <div className="p-12 text-center text-slate-400 text-xs">กำลังโหลดรายการอาหาร...</div>
         ) : filteredItems.length === 0 ? (
-          <div className="p-16 text-center text-slate-500 text-sm glass-panel rounded-3xl border-dashed border-slate-800 space-y-3">
+          <div className="p-16 text-center text-slate-500 text-sm bg-white rounded-3xl border border-dashed border-slate-200 shadow-xs space-y-3">
             <p>ไม่พบรายการอาหารในหมวดหมู่นี้</p>
             <button
               onClick={() => {
                 setEditingItem(null);
                 setIsModalOpen(true);
               }}
-              className="px-4 py-2 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/40 text-xs font-bold hover:bg-brand-500/30"
+              className="px-4 py-2 rounded-xl bg-sky-50 text-brand-700 border border-sky-200 text-xs font-bold hover:bg-sky-100 shadow-xs transition-colors"
             >
               + เพิ่มเมนูแรกเลย
             </button>

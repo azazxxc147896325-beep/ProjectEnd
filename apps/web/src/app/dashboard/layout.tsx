@@ -18,8 +18,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">
-        <div className="flex items-center gap-3">
+      <div className="min-h-screen bg-[#F4F8FC] flex items-center justify-center text-slate-600">
+        <div className="flex items-center gap-3 bg-white/80 backdrop-blur-md px-6 py-4 rounded-2xl shadow-sm border border-slate-200/80">
           <div className="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
           <span className="text-sm font-medium">กำลังเตรียมข้อมูลร้านค้า...</span>
         </div>
@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
+    <div className="flex min-h-screen bg-[#F4F8FC] text-slate-800">
       <Sidebar />
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {children}

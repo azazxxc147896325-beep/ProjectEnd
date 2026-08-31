@@ -22,44 +22,48 @@ export function CartSummaryCard({
       {/* Payment Breakdown Card */}
       <View
         style={{
-          backgroundColor: '#111E18',
+          backgroundColor: '#FFFFFF',
           borderRadius: 20,
           padding: 16,
           borderWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#E2E8F0',
           marginBottom: 16,
+          shadowColor: '#0F172A',
+          shadowOpacity: 0.05,
+          shadowRadius: 6,
+          elevation: 2,
         }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-          <Text style={{ color: '#88A096', fontSize: 13 }}>จำนวนร้านค้าในตะกร้า</Text>
-          <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: '600' }}>{vendorCount} ร้าน</Text>
+          <Text style={{ color: '#64748B', fontSize: 13 }}>จำนวนร้านค้าในตะกร้า</Text>
+          <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: '600' }}>{vendorCount} ร้าน</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-          <Text style={{ color: '#88A096', fontSize: 13 }}>จำนวนรายการทั้งหมด</Text>
-          <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: '600' }}>{totalCount} จาน</Text>
+          <Text style={{ color: '#64748B', fontSize: 13 }}>จำนวนรายการทั้งหมด</Text>
+          <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: '600' }}>{totalCount} จาน</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-          <Text style={{ color: '#88A096', fontSize: 13 }}>ยอดรวมค่าอาหารทั้งหมด</Text>
-          <Text style={{ color: '#F8FAFC', fontSize: 13, fontWeight: '600' }}>
+          <Text style={{ color: '#64748B', fontSize: 13 }}>ยอดรวมค่าอาหารทั้งหมด</Text>
+          <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: '600' }}>
             ฿{totalPrice.toLocaleString()}
           </Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
-          <Text style={{ color: '#88A096', fontSize: 13 }}>ค่าบริการระบบ</Text>
-          <Text style={{ color: '#10B981', fontSize: 13, fontWeight: '600' }}>ฟรี (0 บาท)</Text>
+          <Text style={{ color: '#64748B', fontSize: 13 }}>ค่าบริการระบบ</Text>
+          <Text style={{ color: '#16A34A', fontSize: 13, fontWeight: '600' }}>ฟรี (0 บาท)</Text>
         </View>
         <View
           style={{
             borderTopWidth: 1,
-            borderColor: '#1E352B',
+            borderColor: '#F1F5F9',
             paddingTop: 12,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold' }}>ยอดชำระสุทธิรวม</Text>
-          <Text style={{ color: '#8FBC7A', fontSize: 20, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>ยอดชำระสุทธิรวม</Text>
+          <Text style={{ color: '#0284C7', fontSize: 20, fontWeight: 'bold' }}>
             ฿{totalPrice.toLocaleString()}
           </Text>
         </View>
@@ -72,14 +76,14 @@ export function CartSummaryCard({
           bottom: 16,
           left: 16,
           right: 16,
-          backgroundColor: '#111E18',
+          backgroundColor: '#FFFFFF',
           borderRadius: 22,
           padding: 12,
           borderWidth: 1,
-          borderColor: '#1E352B',
-          shadowColor: '#000',
+          borderColor: '#E2E8F0',
+          shadowColor: '#0F172A',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
+          shadowOpacity: 0.1,
           shadowRadius: 10,
           elevation: 8,
         }}
@@ -89,13 +93,17 @@ export function CartSummaryCard({
           disabled={isSubmitting}
           activeOpacity={0.85}
           style={{
-            backgroundColor: '#10B981',
+            backgroundColor: '#0284C7',
             borderRadius: 16,
             paddingVertical: 14,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
             gap: 8,
+            shadowColor: '#0284C7',
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 4,
           }}
         >
           {isSubmitting ? (

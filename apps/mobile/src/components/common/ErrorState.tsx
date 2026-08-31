@@ -22,7 +22,7 @@ export function ErrorState({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
-        backgroundColor: '#0A110E',
+        backgroundColor: '#F0F7FF',
       }}
     >
       <View
@@ -30,20 +30,20 @@ export function ErrorState({
           width: 72,
           height: 72,
           borderRadius: 24,
-          backgroundColor: 'rgba(239, 68, 68, 0.15)',
+          backgroundColor: '#FEF2F2',
           borderWidth: 1.5,
-          borderColor: 'rgba(239, 68, 68, 0.35)',
+          borderColor: '#FECACA',
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 18,
         }}
       >
-        <AlertCircle size={36} color="#EF4444" />
+        <AlertCircle size={36} color="#DC2626" />
       </View>
 
       <Text
         style={{
-          color: '#F8FAFC',
+          color: '#0F172A',
           fontSize: 18,
           fontWeight: 'bold',
           textAlign: 'center',
@@ -55,7 +55,7 @@ export function ErrorState({
 
       <Text
         style={{
-          color: '#88A096',
+          color: '#64748B',
           fontSize: 13,
           textAlign: 'center',
           lineHeight: 20,
@@ -74,13 +74,13 @@ export function ErrorState({
             flexDirection: 'row',
             alignItems: 'center',
             gap: 8,
-            backgroundColor: '#10B981',
+            backgroundColor: '#0284C7',
             paddingVertical: 12,
             paddingHorizontal: 22,
             borderRadius: 14,
-            shadowColor: '#10B981',
+            shadowColor: '#0284C7',
             shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
+            shadowOpacity: 0.25,
             shadowRadius: 8,
             elevation: 4,
           }}

@@ -98,7 +98,7 @@ export default function OrdersHistoryScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
       {/* Top Tabs Bar Subcomponent */}
       <OrderHistoryTabs
         activeTab={activeTab}
@@ -110,14 +110,14 @@ export default function OrdersHistoryScreen() {
       {/* Orders List */}
       {loading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#8FBC7A" />
+          <ActivityIndicator size="large" color="#0284C7" />
         </View>
       ) : (
         <FlatList
           data={displayedOrders}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 80 }}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#8FBC7A" />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#0284C7" />}
           ListEmptyComponent={<OrderHistoryEmptyState activeTab={activeTab} />}
           renderItem={({ item }) => (
             <OrderHistoryCard

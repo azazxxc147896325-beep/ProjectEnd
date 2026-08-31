@@ -21,8 +21,8 @@ export function VendorDailySpecials({
   return (
     <View style={{ marginTop: 20, paddingHorizontal: 16 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-        <Star size={16} color="#FBBF24" fill="#FBBF24" />
-        <Text style={{ color: '#FBBF24', fontSize: 14, fontWeight: 'bold' }}>
+        <Star size={16} color="#D97706" fill="#D97706" />
+        <Text style={{ color: '#D97706', fontSize: 14, fontWeight: 'bold' }}>
           เมนูพิเศษแนะนำประจำวัน (Daily Specials)
         </Text>
       </View>
@@ -36,11 +36,15 @@ export function VendorDailySpecials({
               key={item.id}
               style={{
                 width: 200,
-                backgroundColor: '#111E18',
+                backgroundColor: '#FFFFFF',
                 borderRadius: 18,
                 overflow: 'hidden',
                 borderWidth: 1,
-                borderColor: 'rgba(245, 158, 11, 0.5)',
+                borderColor: '#FDE68A',
+                shadowColor: '#0F172A',
+                shadowOpacity: 0.06,
+                shadowRadius: 6,
+                elevation: 2,
               }}
             >
               {item.imageUrl ? (
@@ -55,7 +59,7 @@ export function VendorDailySpecials({
                   style={{
                     width: '100%',
                     height: 100,
-                    backgroundColor: '#162720',
+                    backgroundColor: '#F0F9FF',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
@@ -70,12 +74,12 @@ export function VendorDailySpecials({
                 </View>
               )}
               <View style={{ padding: 10 }}>
-                <Text numberOfLines={1} style={{ color: '#F8FAFC', fontSize: 13, fontWeight: 'bold' }}>
+                <Text numberOfLines={1} style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
                   {item.name}
                 </Text>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-                  <Text style={{ color: '#8FBC7A', fontSize: 13, fontWeight: 'bold' }}>
+                  <Text style={{ color: '#0284C7', fontSize: 13, fontWeight: 'bold' }}>
                     ฿{Number(item.price)}
                   </Text>
 
@@ -84,10 +88,10 @@ export function VendorDailySpecials({
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        backgroundColor: '#162720',
+                        backgroundColor: '#F8FAFC',
                         borderRadius: 12,
                         borderWidth: 1,
-                        borderColor: '#10B981',
+                        borderColor: '#0284C7',
                         paddingHorizontal: 3,
                         paddingVertical: 2,
                         gap: 6,
@@ -100,17 +104,17 @@ export function VendorDailySpecials({
                           width: 24,
                           height: 24,
                           borderRadius: 8,
-                          backgroundColor: '#244034',
+                          backgroundColor: '#E2E8F0',
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}
                       >
-                        <Minus size={12} color="#F8FAFC" />
+                        <Minus size={12} color="#0F172A" />
                       </TouchableOpacity>
 
                       <Text
                         style={{
-                          color: '#8FBC7A',
+                          color: '#0284C7',
                           fontSize: 12,
                           fontWeight: 'bold',
                           minWidth: 14,
@@ -127,7 +131,7 @@ export function VendorDailySpecials({
                           width: 24,
                           height: 24,
                           borderRadius: 8,
-                          backgroundColor: '#10B981',
+                          backgroundColor: '#0284C7',
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}
@@ -140,7 +144,7 @@ export function VendorDailySpecials({
                       onPress={() => onAddToCart(item)}
                       activeOpacity={0.8}
                       style={{
-                        backgroundColor: '#10B981',
+                        backgroundColor: '#0284C7',
                         borderRadius: 10,
                         paddingHorizontal: 8,
                         paddingVertical: 5,

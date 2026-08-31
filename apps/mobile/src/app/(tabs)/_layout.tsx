@@ -13,8 +13,8 @@ export default function TabLayout() {
   // รอให้ SecureStore โหลดเสร็จ
   if (!isHydrated) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0A110E' }}>
-        <ActivityIndicator size="large" color="#8FBC7A" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F7FF' }}>
+        <ActivityIndicator size="large" color="#0284C7" />
       </View>
     );
   }
@@ -28,20 +28,20 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: '#111E18',
-          borderTopColor: '#1E352B',
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#E2E8F0',
           height: 62,
           paddingBottom: 8,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: '#8FBC7A',
-        tabBarInactiveTintColor: '#6E8B7E',
+        tabBarActiveTintColor: '#0284C7',
+        tabBarInactiveTintColor: '#94A3B8',
         headerStyle: {
-          backgroundColor: '#111E18',
-          borderBottomColor: '#1E352B',
+          backgroundColor: '#FFFFFF',
+          borderBottomColor: '#E2E8F0',
           borderBottomWidth: 1,
         },
-        headerTintColor: '#F8FAFC',
+        headerTintColor: '#0F172A',
         headerTitleStyle: {
           fontWeight: 'bold',
           fontSize: 17,
@@ -66,7 +66,7 @@ export default function TabLayout() {
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: focused ? 'rgba(143, 188, 122, 0.2)' : 'transparent',
+                backgroundColor: focused ? 'rgba(2, 132, 199, 0.12)' : 'transparent',
                 borderRadius: 12,
                 paddingHorizontal: 8,
                 paddingVertical: 2,
@@ -84,7 +84,7 @@ export default function TabLayout() {
           headerTitle: 'ตะกร้าสินค้าของคุณ',
           tabBarBadge: totalCount > 0 ? totalCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: '#10B981',
+            backgroundColor: '#0284C7',
             color: '#FFFFFF',
             fontSize: 10,
             fontWeight: 'bold',

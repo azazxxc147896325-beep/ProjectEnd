@@ -44,17 +44,17 @@ export function CartVendorGroup({
   return (
     <View
       style={{
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 22,
         padding: 16,
-        borderWidth: 1.5,
-        borderColor: '#1E352B',
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
         marginBottom: 18,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.25,
+        shadowColor: '#0F172A',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.06,
         shadowRadius: 8,
-        elevation: 4,
+        elevation: 3,
       }}
     >
       {/* Header: Store Icon, Name, Count & Delete Button */}
@@ -65,7 +65,7 @@ export function CartVendorGroup({
           justifyContent: 'space-between',
           paddingBottom: 14,
           borderBottomWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#F1F5F9',
           marginBottom: 12,
         }}
       >
@@ -75,22 +75,22 @@ export function CartVendorGroup({
               width: 40,
               height: 40,
               borderRadius: 14,
-              backgroundColor: 'rgba(143, 188, 122, 0.15)',
+              backgroundColor: '#E0F2FE',
               borderWidth: 1,
-              borderColor: 'rgba(143, 188, 122, 0.3)',
+              borderColor: '#BAE6FD',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Store size={20} color="#8FBC7A" />
+            <Store size={20} color="#0284C7" />
           </View>
 
           <View style={{ flex: 1 }}>
-            <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: 'bold' }} numberOfLines={1}>
+            <Text style={{ color: '#0F172A', fontSize: 16, fontWeight: 'bold' }} numberOfLines={1}>
               {group.vendorName}
             </Text>
-            <Text style={{ color: '#88A096', fontSize: 12, marginTop: 2 }}>
-              {group.totalCount} รายการ • <Text style={{ color: '#8FBC7A', fontWeight: 'bold' }}>฿{group.subtotal.toLocaleString()}</Text>
+            <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
+              {group.totalCount} รายการ • <Text style={{ color: '#0284C7', fontWeight: 'bold' }}>฿{group.subtotal.toLocaleString()}</Text>
             </Text>
           </View>
         </View>
@@ -102,12 +102,12 @@ export function CartVendorGroup({
           style={{
             padding: 8,
             borderRadius: 10,
-            backgroundColor: 'rgba(239, 68, 68, 0.12)',
+            backgroundColor: '#FEF2F2',
             borderWidth: 1,
-            borderColor: 'rgba(239, 68, 68, 0.25)',
+            borderColor: '#FECACA',
           }}
         >
-          <Trash2 size={16} color="#EF4444" />
+          <Trash2 size={16} color="#DC2626" />
         </TouchableOpacity>
       </View>
 
@@ -141,15 +141,15 @@ export function CartVendorGroup({
           marginTop: 10,
           paddingTop: 14,
           borderTopWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#F1F5F9',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
       >
         <View>
-          <Text style={{ color: '#88A096', fontSize: 11 }}>ยอดรวมร้านนี้ ({group.totalCount} จาน)</Text>
-          <Text style={{ color: '#8FBC7A', fontSize: 18, fontWeight: 'bold' }}>
+          <Text style={{ color: '#64748B', fontSize: 11 }}>ยอดรวมร้านนี้ ({group.totalCount} จาน)</Text>
+          <Text style={{ color: '#0284C7', fontSize: 18, fontWeight: 'bold' }}>
             ฿{group.subtotal.toLocaleString()}
           </Text>
         </View>
@@ -159,16 +159,16 @@ export function CartVendorGroup({
           disabled={isSubmittingThisVendor}
           activeOpacity={0.85}
           style={{
-            backgroundColor: '#10B981',
+            backgroundColor: '#0284C7',
             borderRadius: 14,
             paddingVertical: 11,
             paddingHorizontal: 16,
             flexDirection: 'row',
             alignItems: 'center',
             gap: 6,
-            shadowColor: '#10B981',
+            shadowColor: '#0284C7',
             shadowOffset: { width: 0, height: 3 },
-            shadowOpacity: 0.35,
+            shadowOpacity: 0.3,
             shadowRadius: 6,
             elevation: 3,
             opacity: isSubmittingThisVendor ? 0.7 : 1,

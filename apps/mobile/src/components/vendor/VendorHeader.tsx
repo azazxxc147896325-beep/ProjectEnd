@@ -11,7 +11,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
   return (
     <>
       {/* Banner */}
-      <View style={{ height: 160, backgroundColor: '#162720' }}>
+      <View style={{ height: 160, backgroundColor: '#E0F2FE' }}>
         <Image
           source={{
             uri: vendor.logoUrl || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500',
@@ -23,7 +23,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: 'rgba(10, 17, 14, 0.5)',
+            backgroundColor: 'rgba(15, 23, 42, 0.25)',
           }}
         />
       </View>
@@ -33,19 +33,19 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
         style={{
           marginHorizontal: 16,
           marginTop: -30,
-          backgroundColor: '#111E18',
+          backgroundColor: '#FFFFFF',
           borderRadius: 20,
           padding: 16,
           borderWidth: 1,
-          borderColor: '#1E352B',
-          shadowColor: '#000',
-          shadowOpacity: 0.4,
+          borderColor: '#E2E8F0',
+          shadowColor: '#0F172A',
+          shadowOpacity: 0.1,
           shadowRadius: 8,
-          elevation: 5,
+          elevation: 4,
         }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text style={{ color: '#F8FAFC', fontSize: 18, fontWeight: 'bold', flex: 1 }}>
+          <Text style={{ color: '#0F172A', fontSize: 18, fontWeight: 'bold', flex: 1 }}>
             {vendor.name}
           </Text>
           <View
@@ -53,22 +53,22 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
               paddingHorizontal: 8,
               paddingVertical: 3,
               borderRadius: 10,
-              backgroundColor: vendor.isOpen ? 'rgba(6, 78, 59, 0.85)' : 'rgba(136, 19, 55, 0.85)',
+              backgroundColor: vendor.isOpen ? '#F0FDF4' : '#FEF2F2',
               borderWidth: 1,
-              borderColor: vendor.isOpen ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)',
+              borderColor: vendor.isOpen ? '#BBF7D0' : '#FECACA',
               flexDirection: 'row',
               alignItems: 'center',
               gap: 4,
             }}
           >
             {vendor.isOpen ? (
-              <CheckCircle2 size={11} color="#6EE7B7" />
+              <CheckCircle2 size={11} color="#16A34A" />
             ) : (
-              <XCircle size={11} color="#FDA4AF" />
+              <XCircle size={11} color="#DC2626" />
             )}
             <Text
               style={{
-                color: vendor.isOpen ? '#6EE7B7' : '#FDA4AF',
+                color: vendor.isOpen ? '#16A34A' : '#DC2626',
                 fontSize: 10,
                 fontWeight: 'bold',
               }}
@@ -79,7 +79,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
         </View>
 
         {vendor.description && (
-          <Text style={{ color: '#88A096', fontSize: 12, marginTop: 6, lineHeight: 17 }}>
+          <Text style={{ color: '#64748B', fontSize: 12, marginTop: 6, lineHeight: 17 }}>
             {vendor.description}
           </Text>
         )}

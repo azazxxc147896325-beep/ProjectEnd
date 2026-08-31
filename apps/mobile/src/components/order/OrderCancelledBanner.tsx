@@ -12,13 +12,17 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
   return (
     <View
       style={{
-        backgroundColor: 'rgba(239, 68, 68, 0.12)',
+        backgroundColor: '#FEF2F2',
         borderRadius: 24,
         padding: 20,
         borderWidth: 1.5,
-        borderColor: '#EF4444',
+        borderColor: '#FECACA',
         marginBottom: 20,
         alignItems: 'center',
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
       }}
     >
       <View
@@ -26,20 +30,20 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
           width: 60,
           height: 60,
           borderRadius: 20,
-          backgroundColor: 'rgba(239, 68, 68, 0.2)',
+          backgroundColor: '#FEE2E2',
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 10,
         }}
       >
-        <AlertCircle size={30} color="#EF4444" />
+        <AlertCircle size={30} color="#DC2626" />
       </View>
 
-      <Text style={{ color: '#EF4444', fontSize: 17, fontWeight: 'bold', marginBottom: 4 }}>
+      <Text style={{ color: '#DC2626', fontSize: 17, fontWeight: 'bold', marginBottom: 4 }}>
         {order.cancelledBy === 'vendor' ? 'ร้านค้ายกเลิกคำสั่งซื้อนี้' : 'คุณได้ยกเลิกคำสั่งซื้อนี้แล้ว'}
       </Text>
 
-      <Text style={{ color: '#CBD5E1', fontSize: 13, textAlign: 'center', marginTop: 4 }}>
+      <Text style={{ color: '#475569', fontSize: 13, textAlign: 'center', marginTop: 4 }}>
         สาเหตุ: {order.cancelReason || (order.cancelledBy === 'vendor' ? 'ร้านค้าไม่สะดวกรับออเดอร์ หรือวัตถุดิบหมด' : 'ผู้สั่งขอยกเลิกออเดอร์')}
       </Text>
 
@@ -48,9 +52,9 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
         activeOpacity={0.85}
         style={{
           marginTop: 16,
-          backgroundColor: '#162720',
+          backgroundColor: '#FFFFFF',
           borderWidth: 1,
-          borderColor: '#244034',
+          borderColor: '#E2E8F0',
           paddingVertical: 10,
           paddingHorizontal: 18,
           borderRadius: 12,
@@ -59,8 +63,8 @@ export function OrderCancelledBanner({ order, onViewHistory }: OrderCancelledBan
           gap: 6,
         }}
       >
-        <History size={14} color="#F8FAFC" />
-        <Text style={{ color: '#F8FAFC', fontSize: 12, fontWeight: 'bold' }}>
+        <History size={14} color="#0F172A" />
+        <Text style={{ color: '#0F172A', fontSize: 12, fontWeight: 'bold' }}>
           ดูประวัติคำสั่งซื้อทั้งหมด
         </Text>
       </TouchableOpacity>

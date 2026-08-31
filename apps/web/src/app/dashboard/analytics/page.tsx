@@ -52,9 +52,9 @@ export default function AnalyticsPage() {
             value={`฿${analytics?.totalRevenue?.toLocaleString() || '0'}`}
             subtitle="+ รายได้สุทธิที่คำนวณจริง"
             icon={DollarSign}
-            iconBgClass="bg-emerald-500/20"
-            iconTextClass="text-emerald-400"
-            subtitleTextClass="text-emerald-400"
+            iconBgClass="bg-emerald-50 border-emerald-200"
+            iconTextClass="text-emerald-700"
+            subtitleTextClass="text-emerald-700"
           />
 
           <KpiCard
@@ -63,9 +63,9 @@ export default function AnalyticsPage() {
             unit="รายการ"
             subtitle={`สำเร็จแล้ว ${analytics?.completedOrders || 0}`}
             icon={ShoppingBag}
-            iconBgClass="bg-brand-500/20"
-            iconTextClass="text-brand-400"
-            subtitleTextClass="text-brand-400"
+            iconBgClass="bg-sky-50 border-sky-200"
+            iconTextClass="text-brand-700"
+            subtitleTextClass="text-brand-700"
           />
 
           <KpiCard
@@ -73,9 +73,9 @@ export default function AnalyticsPage() {
             value={`฿${analytics?.averageOrderValue || 0}`}
             subtitle="เฉลี่ยต่อคำสั่งซื้อ"
             icon={TrendingUp}
-            iconBgClass="bg-violet-500/20"
-            iconTextClass="text-violet-400"
-            subtitleTextClass="text-violet-400"
+            iconBgClass="bg-indigo-50 border-indigo-200"
+            iconTextClass="text-indigo-700"
+            subtitleTextClass="text-indigo-700"
           />
 
           <KpiCard
@@ -83,9 +83,9 @@ export default function AnalyticsPage() {
             value={completionRate}
             subtitle={`ยกเลิก ${analytics?.cancelledOrders || 0} รายการ`}
             icon={CheckCircle2}
-            iconBgClass="bg-amber-500/20"
-            iconTextClass="text-amber-400"
-            subtitleTextClass="text-amber-400"
+            iconBgClass="bg-amber-50 border-amber-200"
+            iconTextClass="text-amber-700"
+            subtitleTextClass="text-amber-700"
           />
         </div>
 

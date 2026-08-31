@@ -100,11 +100,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <div
               key={t.id}
               className={clsx(
-                'pointer-events-auto p-4 rounded-2xl border shadow-2xl backdrop-blur-xl transition-all animate-in slide-in-from-top-4 fade-in duration-200 relative overflow-hidden flex items-start gap-3.5',
-                isSuccess && 'bg-slate-950/90 border-emerald-500/50 shadow-emerald-500/15',
-                isError && 'bg-slate-950/90 border-rose-500/50 shadow-rose-500/15',
-                isWarning && 'bg-slate-950/90 border-amber-500/50 shadow-amber-500/15',
-                isInfo && 'bg-slate-950/90 border-cyan-500/50 shadow-cyan-500/15',
+                'pointer-events-auto p-4 rounded-2xl border shadow-xl backdrop-blur-xl transition-all animate-in slide-in-from-top-4 fade-in duration-200 relative overflow-hidden flex items-start gap-3.5 bg-white',
+                isSuccess && 'border-emerald-200 shadow-emerald-500/10',
+                isError && 'border-rose-200 shadow-rose-500/10',
+                isWarning && 'border-amber-200 shadow-amber-500/10',
+                isInfo && 'border-sky-200 shadow-sky-500/10',
               )}
             >
               {/* Subtle top indicator bar */}
@@ -114,18 +114,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                   isSuccess && 'bg-gradient-to-r from-emerald-500 to-teal-400',
                   isError && 'bg-gradient-to-r from-rose-500 to-red-400',
                   isWarning && 'bg-gradient-to-r from-amber-500 to-yellow-400',
-                  isInfo && 'bg-gradient-to-r from-cyan-500 to-blue-400',
+                  isInfo && 'bg-gradient-to-r from-sky-500 to-blue-500',
                 )}
               />
 
               {/* Icon */}
               <div
                 className={clsx(
-                  'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md',
-                  isSuccess && 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
-                  isError && 'bg-rose-500/20 text-rose-400 border border-rose-500/30',
-                  isWarning && 'bg-amber-500/20 text-amber-400 border border-amber-500/30',
-                  isInfo && 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
+                  'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-xs',
+                  isSuccess && 'bg-emerald-50 text-emerald-600 border border-emerald-200',
+                  isError && 'bg-rose-50 text-rose-600 border border-rose-200',
+                  isWarning && 'bg-amber-50 text-amber-600 border border-amber-200',
+                  isInfo && 'bg-sky-50 text-brand-600 border border-sky-200',
                 )}
               >
                 {isSuccess && <CheckCircle2 className="w-5 h-5" />}
@@ -136,11 +136,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
               {/* Content */}
               <div className="flex-1 min-w-0 pr-2">
-                <h4 className="font-bold text-sm text-white tracking-tight leading-snug">
+                <h4 className="font-bold text-sm text-slate-900 tracking-tight leading-snug">
                   {t.title}
                 </h4>
                 {t.message && (
-                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed break-words">
+                  <p className="text-xs text-slate-500 mt-0.5 leading-relaxed break-words">
                     {t.message}
                   </p>
                 )}
@@ -149,7 +149,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               {/* Close Button */}
               <button
                 onClick={() => removeToast(t.id)}
-                className="w-6 h-6 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors shrink-0"
+                className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-colors shrink-0"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

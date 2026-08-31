@@ -51,20 +51,28 @@ function ToastItemView({ item, onDismiss }: { item: MobileToast; onDismiss: () =
   const isInfo = item.type === 'info';
 
   const borderColor = isSuccess
-    ? '#10B981'
+    ? '#BBF7D0'
     : isError
-    ? '#EF4444'
+    ? '#FECACA'
     : isWarning
-    ? '#F59E0B'
-    : '#06B6D4';
+    ? '#FDE68A'
+    : '#BAE6FD';
 
   const iconBg = isSuccess
-    ? 'rgba(16, 185, 129, 0.2)'
+    ? '#F0FDF4'
     : isError
-    ? 'rgba(239, 68, 68, 0.2)'
+    ? '#FEF2F2'
     : isWarning
-    ? 'rgba(245, 158, 11, 0.2)'
-    : 'rgba(6, 182, 212, 0.2)';
+    ? '#FFFBEB'
+    : '#E0F2FE';
+
+  const accentColor = isSuccess
+    ? '#16A34A'
+    : isError
+    ? '#DC2626'
+    : isWarning
+    ? '#D97706'
+    : '#0284C7';
 
   return (
     <Animated.View
@@ -84,10 +92,10 @@ function ToastItemView({ item, onDismiss }: { item: MobileToast; onDismiss: () =
       >
         {/* Icon Badge */}
         <View style={[styles.iconContainer, { backgroundColor: iconBg, borderColor }]}>
-          {isSuccess && <CheckCircle2 size={18} color="#10B981" />}
-          {isError && <AlertCircle size={18} color="#EF4444" />}
-          {isWarning && <Sparkles size={18} color="#F59E0B" />}
-          {isInfo && <Info size={18} color="#06B6D4" />}
+          {isSuccess && <CheckCircle2 size={18} color="#16A34A" />}
+          {isError && <AlertCircle size={18} color="#DC2626" />}
+          {isWarning && <Sparkles size={18} color="#D97706" />}
+          {isInfo && <Info size={18} color="#0284C7" />}
         </View>
 
         {/* Text Details */}
@@ -151,14 +159,14 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   toastCard: {
-    backgroundColor: '#111E18',
+    backgroundColor: '#FFFFFF',
     borderRadius: 18,
     borderWidth: 1.2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.45,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
     shadowRadius: 10,
-    elevation: 8,
+    elevation: 6,
     overflow: 'hidden',
   },
   toastContent: {
@@ -177,13 +185,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 13,
     fontWeight: 'bold',
     letterSpacing: -0.2,
   },
   messageText: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 11,
     marginTop: 2,
     lineHeight: 15,
@@ -192,7 +200,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#162720',
+    backgroundColor: '#F8FAFC',
     justifyContent: 'center',
     alignItems: 'center',
   },

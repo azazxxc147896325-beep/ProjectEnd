@@ -89,30 +89,30 @@ export function AiImageGeneratorModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="glass-panel w-full max-w-xl rounded-3xl p-6 shadow-2xl border-slate-700/80 max-h-[90vh] overflow-y-auto flex flex-col justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-150">
+      <div className="bg-white w-full max-w-xl rounded-3xl p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto flex flex-col justify-between">
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/25">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-brand-500/25">
                 <Wand2 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-white flex items-center gap-2">
+                <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
                   <span>AI Menu Image Studio</span>
-                  <span className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-bold">
                     NanoBanana
                   </span>
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   สร้างและเจนรูปภาพจานอาหารด้วย NanoBanana AI
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -122,7 +122,7 @@ export function AiImageGeneratorModal({
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   ชื่อเมนูอาหารที่ต้องการสร้างรูป *
                 </label>
                 <input
@@ -130,18 +130,18 @@ export function AiImageGeneratorModal({
                   placeholder="เช่น ข้าวกะเพราหมูกรอบไข่ดาว"
                   value={dishName}
                   onChange={(e) => setDishName(e.target.value)}
-                  className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   หมวดหมู่อาหาร
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                 >
                   <option value="อาหารจานเดียว">อาหารจานเดียว</option>
                   <option value="ก๋วยเตี๋ยว">ก๋วยเตี๋ยว</option>
@@ -154,7 +154,7 @@ export function AiImageGeneratorModal({
 
             {/* Additional Custom Details */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 รายละเอียดเพิ่มเติม (ตัวเลือกเสริม)
               </label>
               <input
@@ -162,7 +162,7 @@ export function AiImageGeneratorModal({
                 placeholder="เช่น ไข่ดาวเยิ้มๆ, หมูกรอบหนาฉ่ำ, โรยผักชี..."
                 value={customPrompt}
                 onChange={(e) => setCustomPrompt(e.target.value)}
-                className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
               />
             </div>
 
@@ -171,7 +171,7 @@ export function AiImageGeneratorModal({
               type="button"
               disabled={isGenerating || !dishName.trim()}
               onClick={handleGenerate}
-              className="w-full py-3 rounded-2xl bg-gradient-to-r from-brand-600 via-brand-500 to-amber-500 hover:from-brand-500 hover:to-amber-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25 active:scale-[0.99] disabled:opacity-50 transition-all"
+              className="w-full py-3 rounded-2xl bg-gradient-to-r from-brand-600 via-sky-500 to-blue-600 hover:from-brand-500 hover:to-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-brand-500/25 active:scale-[0.99] disabled:opacity-50 transition-all"
             >
               {isGenerating ? (
                 <>
@@ -200,7 +200,7 @@ export function AiImageGeneratorModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="pt-5 mt-6 border-t border-slate-800 flex items-center justify-between gap-3">
+        <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between gap-3">
           <span className="text-[11px] text-slate-500">
             {selectedUrl ? '✓ เลือกรูปภาพแล้ว พร้อมนำไปใช้' : 'กรุณาแตะเลือกรูปภาพที่ชอบ 1 รูป'}
           </span>
@@ -209,7 +209,7 @@ export function AiImageGeneratorModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors"
+              className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors"
             >
               ปิด
             </button>

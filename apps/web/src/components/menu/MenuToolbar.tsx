@@ -28,13 +28,13 @@ export function MenuToolbar({
       <div className="flex flex-wrap items-center gap-3">
         {/* Search Input */}
         <div className="relative flex-1 sm:w-64">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="ค้นหาชื่อเมนู..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+            className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 shadow-xs"
           />
         </div>
 
@@ -47,8 +47,8 @@ export function MenuToolbar({
               className={clsx(
                 'px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all',
                 selectedCategory === cat
-                  ? 'bg-brand-500 text-white shadow-sm'
-                  : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800',
+                  ? 'bg-brand-600 text-white shadow-xs'
+                  : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs',
               )}
             >
               {cat === 'all' ? 'ทั้งหมด' : cat}
@@ -61,16 +61,16 @@ export function MenuToolbar({
       <div className="flex items-center gap-2">
         <button
           onClick={onOpenAiStudio}
-          className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-amber-500/30 text-amber-300 hover:text-amber-200 font-bold text-xs shadow-sm transition-all"
+          className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-brand-700 font-bold text-xs shadow-xs transition-all"
         >
-          <Wand2 className="w-4 h-4 text-amber-400" />
+          <Wand2 className="w-4 h-4 text-brand-600" />
           <span>AI Image Studio</span>
         </button>
 
         {/* Add Menu Button */}
         <button
           onClick={onAddNewItem}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-amber-500 hover:from-brand-500 hover:to-amber-400 text-white font-bold text-xs shadow-lg shadow-brand-500/25 active:scale-95 transition-all"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-500 hover:to-sky-400 text-white font-bold text-xs shadow-md shadow-brand-500/25 active:scale-95 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>เพิ่มเมนูใหม่</span>

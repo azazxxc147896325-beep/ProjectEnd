@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import * as SecureStore from 'expo-secure-store';
-import { MenuItem, OrderType } from '@campus-food/shared-types';
+import { MenuItem, OrderType, PaymentMethod } from '@campus-food/shared-types';
 
 // ---- Secure Storage Adapter for Zustand persist ----
 const secureStorage = {
@@ -42,6 +42,7 @@ export interface VendorCartGroup {
   vendorName: string;
   items: CartItem[];
   orderType: OrderType;
+  paymentMethod: PaymentMethod;
   note: string;
   subtotal: number;
   totalCount: number;
@@ -49,7 +50,7 @@ export interface VendorCartGroup {
 
 export interface CartState {
   items: CartItem[];
-  vendorPreferences: Record<string, { orderType?: OrderType; note?: string }>;
+  vendorPreferences: Record<string, { orderType?: OrderType; paymentMethod?: PaymentMethod; note?: string }>;
 
   // Actions
   addItem: (
@@ -63,6 +64,7 @@ export interface CartState {
   clearVendor: (vendorId: string) => void;
   clearCart: () => void;
   setVendorOrderType: (vendorId: string, orderType: OrderType) => void;
+  setVendorPaymentMethod: (vendorId: string, paymentMethod: PaymentMethod) => void;
   setVendorNote: (vendorId: string, note: string) => void;
 
   // Selectors / Helpers
@@ -157,6 +159,18 @@ export const useCartStore = create<CartState>()(
         }));
       },
 
+      setVendorPaymentMethod: (vendorId, paymentMethod) => {
+        set((state) => ({
+          vendorPreferences: {
+            ...state.vendorPreferences,
+            [vendorId]: {
+              ...(state.vendorPreferences[vendorId] || {}),
+              paymentMethod,
+            },
+          },
+        }));
+      },
+
       setVendorNote: (vendorId, note) => {
         set((state) => ({
           vendorPreferences: {
@@ -192,6 +206,7 @@ export const useCartStore = create<CartState>()(
             vendorName: val.vendorName,
             items: val.items,
             orderType: pref.orderType || OrderType.DINE_IN,
+            paymentMethod: pref.paymentMethod || PaymentMethod.PROMPTPAY,
             note: pref.note || '',
             subtotal,
             totalCount,

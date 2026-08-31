@@ -9,13 +9,13 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'default',
     title: 'Campus Food',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0f172a',
+  themeColor: '#0284c7',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -28,13 +28,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }): React.JSX.Element {
   return (
-    <html lang="th" className="dark">
+    <html lang="th">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
-      <body className="bg-slate-950 text-slate-100 min-h-screen">
+      <body className="bg-[#F4F8FC] text-slate-800 min-h-screen">
         <Providers>{children}</Providers>
       </body>
     </html>

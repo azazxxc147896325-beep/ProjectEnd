@@ -22,13 +22,17 @@ export function VendorMenuItemCard({
     <View
       style={{
         flexDirection: 'row',
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 18,
         padding: 12,
         borderWidth: 1,
-        borderColor: quantity > 0 ? '#10B981' : '#1E352B',
+        borderColor: quantity > 0 ? '#0284C7' : '#E2E8F0',
         alignItems: 'center',
         gap: 12,
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
       }}
     >
       {item.imageUrl ? (
@@ -36,7 +40,7 @@ export function VendorMenuItemCard({
           source={{
             uri: item.imageUrl,
           }}
-          style={{ width: 75, height: 75, borderRadius: 14, backgroundColor: '#162720' }}
+          style={{ width: 75, height: 75, borderRadius: 14, backgroundColor: '#F1F5F9' }}
         />
       ) : (
         <View
@@ -44,9 +48,9 @@ export function VendorMenuItemCard({
             width: 75,
             height: 75,
             borderRadius: 14,
-            backgroundColor: '#162720',
+            backgroundColor: '#F0F9FF',
             borderWidth: 1,
-            borderColor: '#244034',
+            borderColor: '#BAE6FD',
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -58,7 +62,7 @@ export function VendorMenuItemCard({
              item.category === 'เครื่องดื่ม' ? '🧋' :
              item.category === 'ของหวาน' ? '🍨' : '🍽️'}
           </Text>
-          <Text style={{ color: '#88A096', fontSize: 9, marginTop: 2, fontWeight: '600' }}>
+          <Text style={{ color: '#0369A1', fontSize: 9, marginTop: 2, fontWeight: '600' }}>
             ตามสั่ง
           </Text>
         </View>
@@ -66,25 +70,25 @@ export function VendorMenuItemCard({
 
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Text numberOfLines={1} style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold', flex: 1 }}>
+          <Text numberOfLines={1} style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold', flex: 1 }}>
             {item.name}
           </Text>
           {item.isDailySpecial && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-              <Star size={10} color="#FBBF24" fill="#FBBF24" />
-              <Text style={{ color: '#FBBF24', fontSize: 10, fontWeight: 'bold' }}>แนะนำ</Text>
+              <Star size={10} color="#D97706" fill="#D97706" />
+              <Text style={{ color: '#D97706', fontSize: 10, fontWeight: 'bold' }}>แนะนำ</Text>
             </View>
           )}
         </View>
 
         {item.description && (
-          <Text numberOfLines={1} style={{ color: '#88A096', fontSize: 11, marginTop: 2 }}>
+          <Text numberOfLines={1} style={{ color: '#64748B', fontSize: 11, marginTop: 2 }}>
             {item.description}
           </Text>
         )}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-          <Text style={{ color: '#8FBC7A', fontSize: 14, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0284C7', fontSize: 14, fontWeight: 'bold' }}>
             ฿{Number(item.price)}
           </Text>
 
@@ -93,10 +97,10 @@ export function VendorMenuItemCard({
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                backgroundColor: '#162720',
+                backgroundColor: '#F8FAFC',
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: '#10B981',
+                borderColor: '#0284C7',
                 paddingHorizontal: 4,
                 paddingVertical: 3,
                 gap: 8,
@@ -109,17 +113,17 @@ export function VendorMenuItemCard({
                   width: 26,
                   height: 26,
                   borderRadius: 8,
-                  backgroundColor: '#244034',
+                  backgroundColor: '#E2E8F0',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
-                <Minus size={13} color="#F8FAFC" />
+                <Minus size={13} color="#0F172A" />
               </TouchableOpacity>
 
               <Text
                 style={{
-                  color: '#8FBC7A',
+                  color: '#0284C7',
                   fontSize: 14,
                   fontWeight: 'bold',
                   minWidth: 16,
@@ -136,7 +140,7 @@ export function VendorMenuItemCard({
                   width: 26,
                   height: 26,
                   borderRadius: 8,
-                  backgroundColor: '#10B981',
+                  backgroundColor: '#0284C7',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
@@ -152,7 +156,7 @@ export function VendorMenuItemCard({
                 paddingHorizontal: 12,
                 paddingVertical: 6,
                 borderRadius: 12,
-                backgroundColor: isAddedAnimation ? '#059669' : '#10B981',
+                backgroundColor: isAddedAnimation ? '#16A34A' : '#0284C7',
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 4,

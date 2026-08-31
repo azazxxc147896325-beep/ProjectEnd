@@ -53,7 +53,7 @@ export function LottieSplashScreen({ onFinish }: LottieSplashScreenProps) {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#8FBC7A',
+    backgroundColor: '#F0F7FF',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 99999,

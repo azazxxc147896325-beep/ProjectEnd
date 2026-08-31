@@ -42,20 +42,20 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
   return (
     <View
       style={{
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 24,
         padding: 20,
         alignItems: 'center',
         borderWidth: 1.5,
-        borderColor: isReady ? '#10B981' : isAccepted ? '#10B981' : '#8FBC7A',
+        borderColor: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#BAE6FD',
         marginBottom: 20,
-        shadowColor: isReady ? '#10B981' : '#8FBC7A',
-        shadowOpacity: 0.25,
+        shadowColor: isReady ? '#16A34A' : '#0284C7',
+        shadowOpacity: 0.12,
         shadowRadius: 10,
-        elevation: 6,
+        elevation: 4,
       }}
     >
-      <Text style={{ color: '#88A096', fontSize: 13, fontWeight: '600' }}>หมายเลขคิวของคุณ</Text>
+      <Text style={{ color: '#64748B', fontSize: 13, fontWeight: '600' }}>หมายเลขคิวของคุณ</Text>
 
       <Animated.View
         style={{
@@ -65,19 +65,19 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
           height: 88,
           borderRadius: 26,
           backgroundColor: isReady
-            ? 'rgba(16, 185, 129, 0.2)'
+            ? '#F0FDF4'
             : isAccepted
-            ? 'rgba(16, 185, 129, 0.15)'
-            : 'rgba(143, 188, 122, 0.18)',
+            ? '#E0F2FE'
+            : '#F0F9FF',
           borderWidth: 2.5,
-          borderColor: isReady ? '#10B981' : isAccepted ? '#10B981' : '#8FBC7A',
+          borderColor: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#BAE6FD',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
         <Text
           style={{
-            color: isReady ? '#10B981' : isAccepted ? '#10B981' : '#8FBC7A',
+            color: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#0369A1',
             fontSize: 34,
             fontWeight: '900',
           }}
@@ -94,21 +94,21 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
           paddingHorizontal: 14,
           paddingVertical: 6,
           borderRadius: 14,
-          backgroundColor: isReady ? 'rgba(6, 78, 59, 0.85)' : '#162720',
+          backgroundColor: isReady ? '#F0FDF4' : isAccepted ? '#E0F2FE' : '#F8FAFC',
           borderWidth: 1,
-          borderColor: isReady ? 'rgba(16, 185, 129, 0.4)' : '#244034',
+          borderColor: isReady ? '#BBF7D0' : isAccepted ? '#BAE6FD' : '#E2E8F0',
         }}
       >
         {isReady ? (
-          <Bell size={14} color="#6EE7B7" />
+          <Bell size={14} color="#16A34A" />
         ) : isAccepted ? (
-          <CheckCircle2 size={14} color="#6EE7B7" />
+          <CheckCircle2 size={14} color="#0284C7" />
         ) : (
-          <Clock size={14} color="#88A096" />
+          <Clock size={14} color="#64748B" />
         )}
         <Text
           style={{
-            color: isReady ? '#6EE7B7' : isAccepted ? '#6EE7B7' : '#F8FAFC',
+            color: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#0F172A',
             fontSize: 12,
             fontWeight: 'bold',
           }}

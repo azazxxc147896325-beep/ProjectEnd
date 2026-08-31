@@ -122,16 +122,16 @@ export default function AiRecommendScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={85}
-      style={{ flex: 1, backgroundColor: '#0A110E' }}
+      style={{ flex: 1, backgroundColor: '#F0F7FF' }}
     >
       {/* Header Banner */}
       <View
         style={{
           paddingHorizontal: 16,
           paddingVertical: 12,
-          backgroundColor: '#111E18',
+          backgroundColor: '#FFFFFF',
           borderBottomWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#E2E8F0',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -143,11 +143,11 @@ export default function AiRecommendScreen() {
               width: 38,
               height: 38,
               borderRadius: 12,
-              backgroundColor: '#10B981',
+              backgroundColor: '#0284C7',
               alignItems: 'center',
               justifyContent: 'center',
-              shadowColor: '#10B981',
-              shadowOpacity: 0.4,
+              shadowColor: '#0284C7',
+              shadowOpacity: 0.3,
               shadowRadius: 8,
               elevation: 4,
             }}
@@ -155,10 +155,10 @@ export default function AiRecommendScreen() {
             <Bot size={20} color="#FFFFFF" />
           </View>
           <View>
-            <Text style={{ color: '#F8FAFC', fontSize: 15, fontWeight: 'bold' }}>
+            <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>
               AI น้องหยก
             </Text>
-            <Text style={{ color: '#88A096', fontSize: 11 }}>
+            <Text style={{ color: '#64748B', fontSize: 11 }}>
               ผู้ช่วยค้นหาและแนะนำเมนูอาหารในโรงอาหาร
             </Text>
           </View>
@@ -179,12 +179,12 @@ export default function AiRecommendScreen() {
           style={{
             padding: 8,
             borderRadius: 10,
-            backgroundColor: '#162720',
+            backgroundColor: '#F8FAFC',
             borderWidth: 1,
-            borderColor: '#244034',
+            borderColor: '#E2E8F0',
           }}
         >
-          <RefreshCw size={16} color="#88A096" />
+          <RefreshCw size={16} color="#64748B" />
         </TouchableOpacity>
       </View>
 
@@ -212,14 +212,14 @@ export default function AiRecommendScreen() {
               gap: 8,
               padding: 12,
               borderRadius: 16,
-              backgroundColor: '#111E18',
+              backgroundColor: '#FFFFFF',
               borderWidth: 1,
-              borderColor: '#1E352B',
+              borderColor: '#E2E8F0',
               alignSelf: 'flex-start',
             }}
           >
-            <ActivityIndicator size="small" color="#8FBC7A" />
-            <Text style={{ color: '#88A096', fontSize: 12 }}>น้องหยกกำลังค้นหาเมนูที่เหมาะกับคุณให้ค่ะ...</Text>
+            <ActivityIndicator size="small" color="#0284C7" />
+            <Text style={{ color: '#64748B', fontSize: 12 }}>น้องหยกกำลังค้นหาเมนูที่เหมาะกับคุณให้ค่ะ...</Text>
           </View>
         )}
       </ScrollView>

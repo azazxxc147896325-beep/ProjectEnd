@@ -141,9 +141,9 @@ export default function OrderTrackingScreen() {
 
   if (loading || !order) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0A110E' }}>
-        <ActivityIndicator size="large" color="#8FBC7A" />
-        <Text style={{ color: '#88A096', fontSize: 12, marginTop: 8 }}>กำลังโหลดสถานะออเดอร์...</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F7FF' }}>
+        <ActivityIndicator size="large" color="#0284C7" />
+        <Text style={{ color: '#64748B', fontSize: 12, marginTop: 8 }}>กำลังโหลดสถานะออเดอร์...</Text>
       </View>
     );
   }
@@ -157,7 +157,7 @@ export default function OrderTrackingScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0A110E' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
       <Stack.Screen
         options={{
           title: `คิว #${order.queueNumber} (${order.vendor?.name || 'ร้านค้า'})`,
@@ -172,8 +172,8 @@ export default function OrderTrackingScreen() {
                 paddingRight: 12,
               }}
             >
-              <ChevronLeft size={22} color="#F8FAFC" />
-              <Text style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 'bold' }}>ย้อนกลับ</Text>
+              <ChevronLeft size={22} color="#0F172A" />
+              <Text style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold' }}>ย้อนกลับ</Text>
             </TouchableOpacity>
           ),
           headerRight: () => (
@@ -183,12 +183,12 @@ export default function OrderTrackingScreen() {
                 paddingVertical: 6,
                 paddingHorizontal: 10,
                 borderRadius: 10,
-                backgroundColor: '#162720',
+                backgroundColor: '#F8FAFC',
                 borderWidth: 1,
-                borderColor: '#244034',
+                borderColor: '#E2E8F0',
               }}
             >
-              <Text style={{ color: '#8FBC7A', fontSize: 12, fontWeight: 'bold' }}>ออเดอร์</Text>
+              <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: 'bold' }}>ออเดอร์</Text>
             </TouchableOpacity>
           ),
         }}

@@ -25,7 +25,7 @@ export default function MobileLoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: '#0A110E' }}
+      style={{ flex: 1, backgroundColor: '#F0F7FF' }}
     >
       <ScrollView
         contentContainerStyle={{
@@ -44,25 +44,25 @@ export default function MobileLoginScreen() {
               width: 68,
               height: 68,
               borderRadius: 22,
-              backgroundColor: 'rgba(143, 188, 122, 0.15)',
+              backgroundColor: '#E0F2FE',
               borderWidth: 1.5,
-              borderColor: 'rgba(143, 188, 122, 0.4)',
+              borderColor: '#BAE6FD',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: 14,
-              shadowColor: '#8FBC7A',
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.25,
-              shadowRadius: 16,
-              elevation: 8,
+              shadowColor: '#0284C7',
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.2,
+              shadowRadius: 12,
+              elevation: 6,
             }}
           >
-            <Utensils size={32} color="#8FBC7A" />
+            <Utensils size={32} color="#0284C7" />
           </View>
           <Text
             style={{
-              color: '#F8FAFC',
-              fontSize: 22,
+              color: '#0F172A',
+              fontSize: 24,
               fontWeight: '900',
               letterSpacing: -0.5,
             }}
@@ -71,8 +71,8 @@ export default function MobileLoginScreen() {
           </Text>
           <Text
             style={{
-              color: '#88A096',
-              fontSize: 12,
+              color: '#64748B',
+              fontSize: 13,
               marginTop: 4,
               textAlign: 'center',
             }}
@@ -85,11 +85,9 @@ export default function MobileLoginScreen() {
         <View
           style={{
             flexDirection: 'row',
-            backgroundColor: '#111E18',
+            backgroundColor: '#E2E8F0',
             borderRadius: 16,
             padding: 4,
-            borderWidth: 1,
-            borderColor: '#1E352B',
             marginBottom: 16,
           }}
         >
@@ -100,17 +98,17 @@ export default function MobileLoginScreen() {
               flex: 1,
               paddingVertical: 10,
               borderRadius: 12,
-              backgroundColor: mode === 'login' ? '#10B981' : 'transparent',
+              backgroundColor: mode === 'login' ? '#0284C7' : 'transparent',
               alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'center',
               gap: 6,
             }}
           >
-            <LogIn size={15} color={mode === 'login' ? '#FFFFFF' : '#88A096'} />
+            <LogIn size={15} color={mode === 'login' ? '#FFFFFF' : '#64748B'} />
             <Text
               style={{
-                color: mode === 'login' ? '#FFFFFF' : '#88A096',
+                color: mode === 'login' ? '#FFFFFF' : '#64748B',
                 fontSize: 13,
                 fontWeight: 'bold',
               }}
@@ -126,17 +124,17 @@ export default function MobileLoginScreen() {
               flex: 1,
               paddingVertical: 10,
               borderRadius: 12,
-              backgroundColor: mode === 'register' ? '#10B981' : 'transparent',
+              backgroundColor: mode === 'register' ? '#0284C7' : 'transparent',
               alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'center',
               gap: 6,
             }}
           >
-            <UserPlus size={15} color={mode === 'register' ? '#FFFFFF' : '#88A096'} />
+            <UserPlus size={15} color={mode === 'register' ? '#FFFFFF' : '#64748B'} />
             <Text
               style={{
-                color: mode === 'register' ? '#FFFFFF' : '#88A096',
+                color: mode === 'register' ? '#FFFFFF' : '#64748B',
                 fontSize: 13,
                 fontWeight: 'bold',
               }}
@@ -149,16 +147,16 @@ export default function MobileLoginScreen() {
         {/* Form Card */}
         <View
           style={{
-            backgroundColor: '#111E18',
+            backgroundColor: '#FFFFFF',
             borderRadius: 24,
             padding: 20,
             borderWidth: 1,
-            borderColor: '#1E352B',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 10 },
-            shadowOpacity: 0.4,
-            shadowRadius: 20,
-            elevation: 6,
+            borderColor: '#E2E8F0',
+            shadowColor: '#0F172A',
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.08,
+            shadowRadius: 16,
+            elevation: 4,
           }}
         >
           {mode === 'login' ? (

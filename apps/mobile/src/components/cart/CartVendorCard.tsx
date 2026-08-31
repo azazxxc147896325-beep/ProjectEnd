@@ -35,17 +35,17 @@ export function CartVendorCard({
       onPress={onPress}
       activeOpacity={0.85}
       style={{
-        backgroundColor: '#111E18',
+        backgroundColor: '#FFFFFF',
         borderRadius: 22,
         padding: 16,
-        borderWidth: 1.5,
-        borderColor: '#1E352B',
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
         marginBottom: 14,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.25,
+        shadowColor: '#0F172A',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.06,
         shadowRadius: 8,
-        elevation: 4,
+        elevation: 3,
       }}
     >
       {/* Top row: Store Icon, Name, Item Count & Delete */}
@@ -63,22 +63,22 @@ export function CartVendorCard({
               width: 44,
               height: 44,
               borderRadius: 14,
-              backgroundColor: 'rgba(16, 185, 129, 0.15)',
-              borderWidth: 1.5,
-              borderColor: 'rgba(16, 185, 129, 0.35)',
+              backgroundColor: '#E0F2FE',
+              borderWidth: 1,
+              borderColor: '#BAE6FD',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Store size={22} color="#10B981" />
+            <Store size={22} color="#0284C7" />
           </View>
 
           <View style={{ flex: 1 }}>
-            <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: 'bold' }} numberOfLines={1}>
+            <Text style={{ color: '#0F172A', fontSize: 16, fontWeight: 'bold' }} numberOfLines={1}>
               {group.vendorName}
             </Text>
-            <Text style={{ color: '#88A096', fontSize: 12, marginTop: 2 }}>
-              มีอาหาร <Text style={{ color: '#F8FAFC', fontWeight: 'bold' }}>{group.totalCount}</Text> รายการในร้านนี้
+            <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
+              มีอาหาร <Text style={{ color: '#0F172A', fontWeight: 'bold' }}>{group.totalCount}</Text> รายการในร้านนี้
             </Text>
           </View>
         </View>
@@ -90,12 +90,12 @@ export function CartVendorCard({
           style={{
             padding: 8,
             borderRadius: 10,
-            backgroundColor: 'rgba(239, 68, 68, 0.12)',
+            backgroundColor: '#FEF2F2',
             borderWidth: 1,
-            borderColor: 'rgba(239, 68, 68, 0.25)',
+            borderColor: '#FECACA',
           }}
         >
-          <Trash2 size={16} color="#EF4444" />
+          <Trash2 size={16} color="#DC2626" />
         </TouchableOpacity>
       </View>
 
@@ -105,35 +105,35 @@ export function CartVendorCard({
           <View
             key={item.menuItem.id}
             style={{
-              backgroundColor: '#162720',
+              backgroundColor: '#F8FAFC',
               borderRadius: 8,
               paddingHorizontal: 8,
               paddingVertical: 4,
               borderWidth: 1,
-              borderColor: '#244034',
+              borderColor: '#E2E8F0',
               flexDirection: 'row',
               alignItems: 'center',
               gap: 4,
             }}
           >
-            <UtensilsCrossed size={11} color="#8FBC7A" />
-            <Text style={{ color: '#CBD5E1', fontSize: 12 }}>
-              {item.menuItem.name} <Text style={{ color: '#8FBC7A', fontWeight: 'bold' }}>x{item.quantity}</Text>
+            <UtensilsCrossed size={11} color="#0284C7" />
+            <Text style={{ color: '#334155', fontSize: 12 }}>
+              {item.menuItem.name} <Text style={{ color: '#0284C7', fontWeight: 'bold' }}>x{item.quantity}</Text>
             </Text>
           </View>
         ))}
         {group.items.length > 3 && (
           <View
             style={{
-              backgroundColor: '#162720',
+              backgroundColor: '#F8FAFC',
               borderRadius: 8,
               paddingHorizontal: 8,
               paddingVertical: 4,
               borderWidth: 1,
-              borderColor: '#244034',
+              borderColor: '#E2E8F0',
             }}
           >
-            <Text style={{ color: '#88A096', fontSize: 12 }}>
+            <Text style={{ color: '#64748B', fontSize: 12 }}>
               +{group.items.length - 3} รายการเพิ่มเติม
             </Text>
           </View>
@@ -144,7 +144,7 @@ export function CartVendorCard({
       <View
         style={{
           borderTopWidth: 1,
-          borderColor: '#1E352B',
+          borderColor: '#F1F5F9',
           paddingTop: 12,
           flexDirection: 'row',
           alignItems: 'center',
@@ -152,8 +152,8 @@ export function CartVendorCard({
         }}
       >
         <View>
-          <Text style={{ color: '#88A096', fontSize: 11 }}>ยอดรวมร้านนี้</Text>
-          <Text style={{ color: '#8FBC7A', fontSize: 18, fontWeight: 'bold' }}>
+          <Text style={{ color: '#64748B', fontSize: 11 }}>ยอดรวมร้านนี้</Text>
+          <Text style={{ color: '#0284C7', fontSize: 18, fontWeight: 'bold' }}>
             ฿{group.subtotal.toLocaleString()}
           </Text>
         </View>
@@ -162,19 +162,19 @@ export function CartVendorCard({
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#162720',
+            backgroundColor: '#F0F9FF',
             borderWidth: 1,
-            borderColor: '#244034',
+            borderColor: '#BAE6FD',
             borderRadius: 12,
             paddingVertical: 8,
             paddingHorizontal: 12,
             gap: 4,
           }}
         >
-          <Text style={{ color: '#10B981', fontSize: 12, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: 'bold' }}>
             ดูรายละเอียดร้านนี้
           </Text>
-          <ChevronRight size={16} color="#10B981" />
+          <ChevronRight size={16} color="#0284C7" />
         </View>
       </View>
     </TouchableOpacity>
