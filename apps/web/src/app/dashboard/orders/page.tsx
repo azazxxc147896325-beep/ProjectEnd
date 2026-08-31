@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import { apiClient } from '@/lib/api';
 import { getSocket } from '@/lib/socket';
 import { Navbar } from '@/components/dashboard/Navbar';
-import { KanbanColumn, KanbanToolbar } from '@/components/orders';
+import { KanbanColumn, KanbanToolbar, PrintQueueModal } from '@/components/orders';
 import { Order, OrderStatus, OrderType, WsEvents } from '@campus-food/shared-types';
 import { Clock, Utensils, CheckCircle, Bell } from 'lucide-react';
 
@@ -16,6 +16,7 @@ export default function OrdersKanbanPage() {
   const [filterType, setFilterType] = useState<string>('all');
   const [newOrderAlert, setNewOrderAlert] = useState<string | null>(null);
   const [statusError, setStatusError] = useState<string | null>(null);
+  const [printPromptOrder, setPrintPromptOrder] = useState<Order | null>(null);
 
   // Fetch Vendor Orders
   const {
@@ -55,7 +56,9 @@ export default function OrdersKanbanPage() {
         const list = Array.isArray(old) ? old : [];
         const exists = list.some((o) => o.id === payload.order.id);
         if (exists) return list;
-        return [payload.order, ...list];
+        return [...list, payload.order].sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
       });
     };
 
@@ -64,7 +67,9 @@ export default function OrdersKanbanPage() {
       console.log('⚡ Real-time Order Status Updated:', payload.order.id, payload.order.status);
       queryClient.setQueryData<Order[]>(['vendor-orders', vendor.id], (old) => {
         const list = Array.isArray(old) ? old : [];
-        return list.map((o) => (o.id === payload.order.id ? payload.order : o));
+        return list
+          .map((o) => (o.id === payload.order.id ? payload.order : o))
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
       });
     };
 
@@ -98,7 +103,9 @@ export default function OrdersKanbanPage() {
       setStatusError(null);
       queryClient.setQueryData<Order[]>(['vendor-orders', vendor?.id], (old) => {
         const list = Array.isArray(old) ? old : [];
-        return list.map((o) => (o.id === updatedOrder.id ? updatedOrder : o));
+        return list
+          .map((o) => (o.id === updatedOrder.id ? updatedOrder : o))
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
       });
     },
     onError: (error: any) => {
@@ -112,7 +119,10 @@ export default function OrdersKanbanPage() {
     await updateStatusMutation.mutateAsync({ orderId, status, cancelReason });
   };
 
-  const safeOrders = Array.isArray(orders) ? orders : [];
+  const rawSafeOrders = Array.isArray(orders) ? orders : [];
+  const safeOrders = [...rawSafeOrders].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
 
   // Filter orders
   const filteredOrders = safeOrders.filter((o) => {
@@ -146,18 +156,18 @@ export default function OrdersKanbanPage() {
       <div className="p-6 space-y-6 flex-1 flex flex-col">
         {/* Realtime Alert Banner */}
         {newOrderAlert && (
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-brand-600 to-amber-500 text-white font-bold text-sm shadow-xl flex items-center justify-between animate-bounce">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-brand-600 to-sky-500 text-white font-bold text-sm shadow-lg flex items-center justify-between animate-bounce">
             <div className="flex items-center gap-2.5">
               <Bell className="w-5 h-5 animate-spin" />
               <span>🔔 {newOrderAlert}</span>
             </div>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-black/20">ใหม่ล่าสุด</span>
+            <span className="text-xs px-2.5 py-1 rounded-full bg-white/20">ใหม่ล่าสุด</span>
           </div>
         )}
 
         {/* Error Banner */}
         {statusError && (
-          <div className="p-3.5 rounded-2xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-sm font-medium flex items-center gap-2.5 shadow-lg">
+          <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium flex items-center gap-2.5 shadow-xs">
             <span className="text-base">⚠️</span>
             <span>{statusError}</span>
           </div>
@@ -179,15 +189,16 @@ export default function OrdersKanbanPage() {
             title="รอรับออเดอร์ (คิวใหม่)"
             count={pendingOrders.length}
             icon={Clock}
-            iconBgClass="bg-amber-500/20"
-            iconTextClass="text-amber-400"
-            badgeClass="bg-amber-950 text-amber-300 border-amber-500/30"
-            borderClass="border-amber-500/20"
+            iconBgClass="bg-amber-100"
+            iconTextClass="text-amber-700"
+            badgeClass="bg-amber-100 text-amber-800 border-amber-200"
+            borderClass="border-amber-200/80"
             orders={pendingOrders}
             isLoading={isLoading}
             isStatusPending={updateStatusMutation.isPending}
             emptyText="ยังไม่มีออเดอร์ใหม่ในขณะนี้"
             onUpdateStatus={handleUpdateStatus}
+            onPromptPrint={setPrintPromptOrder}
           />
 
           {/* Column 2: กำลังเตรียมอาหาร (รับแล้ว) */}
@@ -195,15 +206,16 @@ export default function OrdersKanbanPage() {
             title="กำลังเตรียมอาหาร (รับแล้ว)"
             count={preparingOrders.length}
             icon={Utensils}
-            iconBgClass="bg-brand-500/20"
-            iconTextClass="text-brand-400"
-            badgeClass="bg-brand-950 text-brand-300 border-brand-500/30"
-            borderClass="border-brand-500/20"
+            iconBgClass="bg-sky-100"
+            iconTextClass="text-brand-700"
+            badgeClass="bg-sky-100 text-brand-800 border-sky-200"
+            borderClass="border-sky-200/80"
             orders={preparingOrders}
             isLoading={isLoading}
             isStatusPending={updateStatusMutation.isPending}
             emptyText="ไม่มีออเดอร์ที่กำลังเตรียม"
             onUpdateStatus={handleUpdateStatus}
+            onPromptPrint={setPrintPromptOrder}
           />
 
           {/* Column 3: พร้อมรับอาหาร / เสร็จแล้ว */}
@@ -211,18 +223,27 @@ export default function OrdersKanbanPage() {
             title="พร้อมรับอาหาร (เสร็จแล้ว)"
             count={readyOrders.length}
             icon={CheckCircle}
-            iconBgClass="bg-emerald-500/20"
-            iconTextClass="text-emerald-400"
-            badgeClass="bg-emerald-950 text-emerald-300 border-emerald-500/30"
-            borderClass="border-emerald-500/20"
+            iconBgClass="bg-emerald-100"
+            iconTextClass="text-emerald-700"
+            badgeClass="bg-emerald-100 text-emerald-800 border-emerald-200"
+            borderClass="border-emerald-200/80"
             orders={readyOrders}
             isLoading={isLoading}
             isStatusPending={updateStatusMutation.isPending}
             emptyText="ไม่มีอาหารที่รอรับในขณะนี้"
             onUpdateStatus={handleUpdateStatus}
+            onPromptPrint={setPrintPromptOrder}
           />
         </div>
       </div>
+
+      {/* Confirmation Modal to Print Queue Slip */}
+      <PrintQueueModal
+        order={printPromptOrder}
+        isOpen={!!printPromptOrder}
+        onClose={() => setPrintPromptOrder(null)}
+        vendorName={vendor?.name}
+      />
     </div>
   );
 }
