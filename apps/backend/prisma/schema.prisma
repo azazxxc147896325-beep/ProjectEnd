@@ -8,7 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -17,6 +16,7 @@ model User {
   role      Role
   phone     String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   vendor    Vendor?
   orders    Order[]
 
@@ -30,7 +30,10 @@ model Vendor {
   name        String
   description String?
   logoUrl     String?
+  promptpayId String?    // PromptPay Mobile (e.g. 0812345678) or National ID (13 digits)
   isOpen      Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
   menuItems   MenuItem[]
   orders      Order[]
 
@@ -49,11 +52,14 @@ model MenuItem {
   isDailySpecial Boolean     @default(false)
   isAvailable    Boolean     @default(true)
   deletedAt      DateTime?   // Soft delete: null = active, set = deleted
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @default(now()) @updatedAt
   orderItems     OrderItem[]
 
-  @@index([vendorId])           // ดึงเมนูตามร้านค้า
-  @@index([vendorId, isAvailable]) // กรองเมนูที่ยังขายอยู่ของแต่ละร้าน
-  @@index([category])           // กรองตามประเภทอาหาร
+  @@index([vendorId])                 // ดึงเมนูตามร้านค้า
+  @@index([vendorId, isAvailable])    // กรองเมนูที่ยังขายอยู่ของแต่ละร้าน
+  @@index([category])                 // กรองตามประเภทอาหาร
+  @@index([deletedAt])                // กรองเมนูที่ไม่ถูกลบ (Soft delete)
   @@map("menu_items")
 }
 
@@ -75,31 +81,37 @@ model Order {
   queueNumber        Int
   items              OrderItem[]
   createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @default(now()) @updatedAt
   readyAt            DateTime?
   completedAt        DateTime?
   cancelledBy        CancelledBy?
   cancelReason       String?
 
-  @@index([vendorId, queueNumber])  // ดึง/เรียงลำดับเลขคิวตามร้านค้า
-  @@index([vendorId])                // ดึงออเดอร์ตามร้านค้า
-  @@index([studentId])               // ดึงประวัติออเดอร์ของนักศึกษา
-  @@index([status])                  // กรองตามสถานะ
-  @@index([vendorId, createdAt])     // คำนวณ Queue Number รายวัน
+  @@index([vendorId, queueNumber])         // ดึง/เรียงลำดับเลขคิวตามร้านค้า
+  @@index([vendorId])                       // ดึงออเดอร์ตามร้านค้า
+  @@index([vendorId, status])               // กรองออเดอร์ตามร้านค้าและสถานะ (KDS / POS)
+  @@index([vendorId, createdAt, status])    // คำนวณยอดขาย/สถิติรายวัน (Analytics)
+  @@index([studentId])                      // ดึงประวัติออเดอร์ของนักศึกษา
+  @@index([status])                         // กรองตามสถานะ
+  @@index([vendorId, createdAt])            // คำนวณ Queue Number รายวัน
   @@map("orders")
 }
 
-
 model OrderItem {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   orderId    String
-  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   menuItemId String
-  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  menuItem   MenuItem  @relation(fields: [menuItemId], references: [id])
   quantity   Int
   unitPrice  Decimal
   options    Json?
   subtotal   Decimal
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
 
+  @@index([orderId])
+  @@index([menuItemId])
   @@map("order_items")
 }
 
@@ -139,5 +151,3 @@ enum PaymentStatus {
   paid
   failed
 }
-
-

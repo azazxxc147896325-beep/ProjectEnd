@@ -460,6 +460,7 @@ async function main() {
           name: v.vendor.name,
           description: v.vendor.description,
           logoUrl: v.vendor.logoUrl,
+          promptpayId: v.phone.replace(/[^0-9]/g, ''),
           isOpen: v.vendor.isOpen,
         },
       });
@@ -470,6 +471,7 @@ async function main() {
           name: v.vendor.name,
           description: v.vendor.description,
           logoUrl: v.vendor.logoUrl,
+          promptpayId: v.phone.replace(/[^0-9]/g, ''),
           isOpen: v.vendor.isOpen,
         },
       });
