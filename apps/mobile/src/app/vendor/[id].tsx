@@ -84,8 +84,8 @@ export default function VendorDetailScreen() {
 
   if (loading || !vendor) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F7FF' }}>
-        <ActivityIndicator size="large" color="#0284C7" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0FDFA' }}>
+        <ActivityIndicator size="large" color="#0D9488" />
         <Text style={{ color: '#64748B', fontSize: 12, marginTop: 8 }}>กำลังโหลดเมนูร้านค้า...</Text>
       </View>
     );
@@ -105,7 +105,7 @@ export default function VendorDetailScreen() {
   const totalPrice = getTotalPrice();
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0FDFA' }}>
       <Stack.Screen
         options={{
           title: vendor.name,
@@ -133,8 +133,8 @@ export default function VendorDetailScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => loadVendorData(true)}
-            tintColor="#0284C7"
-            colors={['#0284C7']}
+            tintColor="#0D9488"
+            colors={['#0D9488']}
           />
         }
       >

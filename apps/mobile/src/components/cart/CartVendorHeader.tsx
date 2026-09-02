@@ -25,7 +25,7 @@ export function CartVendorHeader({ vendorName }: CartVendorHeaderProps) {
         elevation: 2,
       }}
     >
-      <Store size={20} color="#0284C7" />
+      <Store size={20} color="#0D9488" />
       <View style={{ flex: 1 }}>
         <Text style={{ color: '#64748B', fontSize: 11 }}>สั่งอาหารจากร้าน</Text>
         <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>{vendorName}</Text>

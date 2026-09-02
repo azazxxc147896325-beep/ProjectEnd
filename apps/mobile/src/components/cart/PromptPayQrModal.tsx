@@ -139,7 +139,7 @@ export function PromptPayQrModal({
               </Text>
 
               {/* Total Amount */}
-              <Text style={{ color: '#0284C7', fontSize: 28, fontWeight: '900', marginTop: 4 }}>
+              <Text style={{ color: '#0D9488', fontSize: 28, fontWeight: '900', marginTop: 4 }}>
                 ฿{Number(order.totalPrice).toLocaleString()}
               </Text>
 
@@ -162,8 +162,8 @@ export function PromptPayQrModal({
 
               {/* Notice */}
               <View style={styles.securityNotice}>
-                <ShieldCheck size={14} color="#0284C7" />
-                <Text style={{ color: '#0369A1', fontSize: 11, fontWeight: '500' }}>
+                <ShieldCheck size={14} color="#0D9488" />
+                <Text style={{ color: '#0F766E', fontSize: 11, fontWeight: '500' }}>
                   สแกนผ่านแอป Mobile Banking ได้ทุกธนาคาร
                 </Text>
               </View>
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F1F5F9',
   },
   promptpayTag: {
-    backgroundColor: '#0284C7',
+    backgroundColor: '#0D9488',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -263,9 +263,9 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: '#ECFDF5',
     borderWidth: 2,
-    borderColor: '#BBF7D0',
+    borderColor: '#A7F3D0',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -291,9 +291,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     borderWidth: 1.5,
-    borderColor: '#BAE6FD',
+    borderColor: '#99F6E4',
     marginTop: 12,
-    shadowColor: '#0284C7',
+    shadowColor: '#0D9488',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
@@ -303,23 +303,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: '#CCFBF1',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 10,
     marginTop: 12,
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: '#99F6E4',
   },
   verifyBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#0284C7',
+    backgroundColor: '#0D9488',
     paddingVertical: 13,
     borderRadius: 16,
-    shadowColor: '#0284C7',
+    shadowColor: '#0D9488',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,

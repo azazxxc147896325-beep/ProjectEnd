@@ -65,13 +65,13 @@ export function OrderHistoryCard({
               backgroundColor: isCancelled
                 ? '#FEF2F2'
                 : isCompleted
-                ? '#F0FDF4'
-                : '#E0F2FE',
+                ? '#ECFDF5'
+                : '#CCFBF1',
             }}
           >
             <Text
               style={{
-                color: isCancelled ? '#DC2626' : isCompleted ? '#16A34A' : '#0284C7',
+                color: isCancelled ? '#DC2626' : isCompleted ? '#059669' : '#0D9488',
                 fontSize: 13,
                 fontWeight: '900',
               }}
@@ -105,12 +105,12 @@ export function OrderHistoryCard({
               paddingHorizontal: 8,
               paddingVertical: 2,
               borderRadius: 8,
-              backgroundColor: '#F0FDF4',
+              backgroundColor: '#ECFDF5',
               borderWidth: 1,
-              borderColor: '#BBF7D0',
+              borderColor: '#A7F3D0',
             }}
           >
-            <Text style={{ color: '#16A34A', fontSize: 11, fontWeight: 'bold' }}>เสร็จสมบูรณ์</Text>
+            <Text style={{ color: '#059669', fontSize: 11, fontWeight: 'bold' }}>เสร็จสมบูรณ์</Text>
           </View>
         ) : (
           <ChevronRight size={18} color="#94A3B8" />
@@ -179,7 +179,7 @@ export function OrderHistoryCard({
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text style={{ color: '#0284C7', fontSize: 15, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 15, fontWeight: 'bold' }}>
             ฿{Number(order.totalPrice).toLocaleString()}
           </Text>
           <View
@@ -190,21 +190,21 @@ export function OrderHistoryCard({
               paddingHorizontal: 6,
               paddingVertical: 2,
               borderRadius: 6,
-              backgroundColor: isPaid ? '#F0FDF4' : '#FFFBEB',
+              backgroundColor: isPaid ? '#ECFDF5' : '#FFFBEB',
               borderWidth: 1,
-              borderColor: isPaid ? '#BBF7D0' : '#FDE68A',
+              borderColor: isPaid ? '#A7F3D0' : '#FDE68A',
             }}
           >
             {isPromptPay ? (
-              <QrCode size={10} color={isPaid ? '#16A34A' : '#D97706'} />
+              <QrCode size={10} color={isPaid ? '#059669' : '#D97706'} />
             ) : (
-              <Banknote size={10} color={isPaid ? '#16A34A' : '#D97706'} />
+              <Banknote size={10} color={isPaid ? '#059669' : '#D97706'} />
             )}
             <Text
               style={{
                 fontSize: 10,
                 fontWeight: 'bold',
-                color: isPaid ? '#16A34A' : '#D97706',
+                color: isPaid ? '#059669' : '#D97706',
               }}
             >
               {isPaid
@@ -248,7 +248,7 @@ export function OrderHistoryCard({
                   paddingHorizontal: 12,
                   paddingVertical: 6,
                   borderRadius: 10,
-                  backgroundColor: '#0284C7',
+                  backgroundColor: '#0D9488',
                 }}
               >
                 <RotateCcw size={12} color="#FFFFFF" />
@@ -264,7 +264,7 @@ export function OrderHistoryCard({
                 paddingHorizontal: 14,
                 paddingVertical: 6,
                 borderRadius: 10,
-                backgroundColor: '#0284C7',
+                backgroundColor: '#0D9488',
               }}
             >
               <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>

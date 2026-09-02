@@ -75,14 +75,14 @@ export function CartVendorGroup({
               width: 40,
               height: 40,
               borderRadius: 14,
-              backgroundColor: '#E0F2FE',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Store size={20} color="#0284C7" />
+            <Store size={20} color="#0D9488" />
           </View>
 
           <View style={{ flex: 1 }}>
@@ -90,7 +90,7 @@ export function CartVendorGroup({
               {group.vendorName}
             </Text>
             <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
-              {group.totalCount} รายการ • <Text style={{ color: '#0284C7', fontWeight: 'bold' }}>฿{group.subtotal.toLocaleString()}</Text>
+              {group.totalCount} รายการ • <Text style={{ color: '#0D9488', fontWeight: 'bold' }}>฿{group.subtotal.toLocaleString()}</Text>
             </Text>
           </View>
         </View>
@@ -149,7 +149,7 @@ export function CartVendorGroup({
       >
         <View>
           <Text style={{ color: '#64748B', fontSize: 11 }}>ยอดรวมร้านนี้ ({group.totalCount} จาน)</Text>
-          <Text style={{ color: '#0284C7', fontSize: 18, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 18, fontWeight: 'bold' }}>
             ฿{group.subtotal.toLocaleString()}
           </Text>
         </View>
@@ -159,14 +159,14 @@ export function CartVendorGroup({
           disabled={isSubmittingThisVendor}
           activeOpacity={0.85}
           style={{
-            backgroundColor: '#0284C7',
+            backgroundColor: '#0D9488',
             borderRadius: 14,
             paddingVertical: 11,
             paddingHorizontal: 16,
             flexDirection: 'row',
             alignItems: 'center',
             gap: 6,
-            shadowColor: '#0284C7',
+            shadowColor: '#0D9488',
             shadowOffset: { width: 0, height: 3 },
             shadowOpacity: 0.3,
             shadowRadius: 6,

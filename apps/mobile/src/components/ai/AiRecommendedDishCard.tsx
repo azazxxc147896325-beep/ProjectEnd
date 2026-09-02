@@ -46,15 +46,15 @@ export function AiRecommendedDishCard({
               width: 85,
               height: 85,
               borderRadius: 12,
-              backgroundColor: '#F0F9FF',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
             <Text style={{ fontSize: 32 }}>🍛</Text>
-            <Text style={{ color: '#0369A1', fontSize: 9, marginTop: 2, fontWeight: '600' }}>ตามสั่ง</Text>
+            <Text style={{ color: '#0F766E', fontSize: 9, marginTop: 2, fontWeight: '600' }}>ตามสั่ง</Text>
           </View>
         )}
 
@@ -68,11 +68,11 @@ export function AiRecommendedDishCard({
                   paddingHorizontal: 7,
                   paddingVertical: 2,
                   borderRadius: 6,
-                  backgroundColor: '#E0F2FE',
+                  backgroundColor: '#CCFBF1',
                   marginBottom: 4,
                 }}
               >
-                <Text style={{ color: '#0369A1', fontSize: 10, fontWeight: '700' }}>
+                <Text style={{ color: '#0D9488', fontSize: 10, fontWeight: '700' }}>
                   {dish.matchReason}
                 </Text>
               </View>
@@ -82,7 +82,7 @@ export function AiRecommendedDishCard({
             </Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
               <Store size={12} color="#94A3B8" />
-              <Text numberOfLines={1} style={{ color: '#64748B', fontSize: 11, flex: 1 }}>
+              <Text numberOfLines={1} style={{ color: '#475569', fontSize: 11, flex: 1 }}>
                 {dish.vendorName}
               </Text>
             </View>
@@ -96,7 +96,7 @@ export function AiRecommendedDishCard({
               marginTop: 6,
             }}
           >
-            <Text style={{ color: '#0284C7', fontSize: 15, fontWeight: '900' }}>
+            <Text style={{ color: '#0D9488', fontSize: 15, fontWeight: '900' }}>
               ฿{dish.price}
             </Text>
 
@@ -125,7 +125,7 @@ export function AiRecommendedDishCard({
                   paddingHorizontal: 10,
                   paddingVertical: 5,
                   borderRadius: 8,
-                  backgroundColor: isJustAdded ? '#16A34A' : '#0284C7',
+                  backgroundColor: isJustAdded ? '#059669' : '#0D9488',
                 }}
               >
                 {isJustAdded ? (

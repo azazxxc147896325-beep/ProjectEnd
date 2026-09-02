@@ -59,7 +59,7 @@ export function VendorDailySpecials({
                   style={{
                     width: '100%',
                     height: 100,
-                    backgroundColor: '#F0F9FF',
+                    backgroundColor: '#CCFBF1',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
@@ -79,7 +79,7 @@ export function VendorDailySpecials({
                 </Text>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-                  <Text style={{ color: '#0284C7', fontSize: 13, fontWeight: 'bold' }}>
+                  <Text style={{ color: '#0D9488', fontSize: 13, fontWeight: 'bold' }}>
                     ฿{Number(item.price)}
                   </Text>
 
@@ -91,7 +91,7 @@ export function VendorDailySpecials({
                         backgroundColor: '#F8FAFC',
                         borderRadius: 12,
                         borderWidth: 1,
-                        borderColor: '#0284C7',
+                        borderColor: '#0D9488',
                         paddingHorizontal: 3,
                         paddingVertical: 2,
                         gap: 6,
@@ -114,7 +114,7 @@ export function VendorDailySpecials({
 
                       <Text
                         style={{
-                          color: '#0284C7',
+                          color: '#0D9488',
                           fontSize: 12,
                           fontWeight: 'bold',
                           minWidth: 14,
@@ -131,7 +131,7 @@ export function VendorDailySpecials({
                           width: 24,
                           height: 24,
                           borderRadius: 8,
-                          backgroundColor: '#0284C7',
+                          backgroundColor: '#0D9488',
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}
@@ -144,7 +144,7 @@ export function VendorDailySpecials({
                       onPress={() => onAddToCart(item)}
                       activeOpacity={0.8}
                       style={{
-                        backgroundColor: '#0284C7',
+                        backgroundColor: '#0D9488',
                         borderRadius: 10,
                         paddingHorizontal: 8,
                         paddingVertical: 5,

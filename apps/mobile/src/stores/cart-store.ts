@@ -1,32 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import * as SecureStore from 'expo-secure-store';
 import { MenuItem, OrderType, PaymentMethod } from '@campus-food/shared-types';
-
-// ---- Secure Storage Adapter for Zustand persist ----
-const secureStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    try {
-      return await SecureStore.getItemAsync(name);
-    } catch {
-      return null;
-    }
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    try {
-      await SecureStore.setItemAsync(name, value);
-    } catch (err) {
-      console.warn('[SecureStore] Failed to persist cart state:', err);
-    }
-  },
-  removeItem: async (name: string): Promise<void> => {
-    try {
-      await SecureStore.deleteItemAsync(name);
-    } catch (err) {
-      console.warn('[SecureStore] Failed to remove cart state:', err);
-    }
-  },
-};
+import { secureStorageAdapter } from '../lib/secure-storage-adapter';
 
 export interface CartItem {
   vendorId: string;
@@ -238,7 +213,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'campus-food-cart-multi-vendor',
-      storage: createJSONStorage(() => secureStorage),
+      storage: createJSONStorage(() => secureStorageAdapter),
     },
   ),
 );

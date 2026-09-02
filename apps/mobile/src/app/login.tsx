@@ -25,7 +25,7 @@ export default function MobileLoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: '#F0F7FF' }}
+      style={{ flex: 1, backgroundColor: '#F0FDFA' }}
     >
       <ScrollView
         contentContainerStyle={{
@@ -44,20 +44,20 @@ export default function MobileLoginScreen() {
               width: 68,
               height: 68,
               borderRadius: 22,
-              backgroundColor: '#E0F2FE',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1.5,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: 14,
-              shadowColor: '#0284C7',
+              shadowColor: '#0D9488',
               shadowOffset: { width: 0, height: 6 },
               shadowOpacity: 0.2,
               shadowRadius: 12,
               elevation: 6,
             }}
           >
-            <Utensils size={32} color="#0284C7" />
+            <Utensils size={32} color="#0D9488" />
           </View>
           <Text
             style={{
@@ -98,7 +98,7 @@ export default function MobileLoginScreen() {
               flex: 1,
               paddingVertical: 10,
               borderRadius: 12,
-              backgroundColor: mode === 'login' ? '#0284C7' : 'transparent',
+              backgroundColor: mode === 'login' ? '#0D9488' : 'transparent',
               alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'center',
@@ -124,7 +124,7 @@ export default function MobileLoginScreen() {
               flex: 1,
               paddingVertical: 10,
               borderRadius: 12,
-              backgroundColor: mode === 'register' ? '#0284C7' : 'transparent',
+              backgroundColor: mode === 'register' ? '#0D9488' : 'transparent',
               alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'center',

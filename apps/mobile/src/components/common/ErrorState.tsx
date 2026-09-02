@@ -22,7 +22,7 @@ export function ErrorState({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
-        backgroundColor: '#F0F7FF',
+        backgroundColor: '#F0FDFA',
       }}
     >
       <View
@@ -74,11 +74,11 @@ export function ErrorState({
             flexDirection: 'row',
             alignItems: 'center',
             gap: 8,
-            backgroundColor: '#0284C7',
+            backgroundColor: '#0D9488',
             paddingVertical: 12,
             paddingHorizontal: 22,
             borderRadius: 14,
-            shadowColor: '#0284C7',
+            shadowColor: '#0D9488',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.25,
             shadowRadius: 8,

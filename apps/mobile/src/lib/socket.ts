@@ -1,4 +1,5 @@
 import { io, Socket } from 'socket.io-client';
+import { useAuthStore } from '../stores/auth-store';
 
 let mobileSocket: Socket | null = null;
 
@@ -11,6 +12,10 @@ export function getMobileSocket(): Socket {
       reconnection: true,
       reconnectionAttempts: 10,
       reconnectionDelay: 1000,
+      auth: (cb) => {
+        const token = useAuthStore.getState().token;
+        cb({ token });
+      },
     });
 
     mobileSocket.on('connect', () => {

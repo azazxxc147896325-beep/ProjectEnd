@@ -32,9 +32,9 @@ export function CartPaymentMethodSelector({
             justifyContent: 'space-between',
             padding: 12,
             borderRadius: 16,
-            backgroundColor: isPromptPay ? '#F0F9FF' : '#FFFFFF',
+            backgroundColor: isPromptPay ? '#CCFBF1' : '#FFFFFF',
             borderWidth: 1.5,
-            borderColor: isPromptPay ? '#0284C7' : '#E2E8F0',
+            borderColor: isPromptPay ? '#0D9488' : '#E2E8F0',
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -43,14 +43,14 @@ export function CartPaymentMethodSelector({
                 width: 38,
                 height: 38,
                 borderRadius: 12,
-                backgroundColor: isPromptPay ? '#E0F2FE' : '#F8FAFC',
+                backgroundColor: isPromptPay ? '#CCFBF1' : '#F8FAFC',
                 borderWidth: 1,
-                borderColor: isPromptPay ? '#BAE6FD' : '#E2E8F0',
+                borderColor: isPromptPay ? '#99F6E4' : '#E2E8F0',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
             >
-              <QrCode size={20} color={isPromptPay ? '#0284C7' : '#64748B'} />
+              <QrCode size={20} color={isPromptPay ? '#0D9488' : '#64748B'} />
             </View>
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -59,13 +59,13 @@ export function CartPaymentMethodSelector({
                 </Text>
                 <View
                   style={{
-                    backgroundColor: '#E0F2FE',
+                    backgroundColor: '#CCFBF1',
                     paddingHorizontal: 6,
                     paddingVertical: 2,
                     borderRadius: 6,
                   }}
                 >
-                  <Text style={{ color: '#0284C7', fontSize: 10, fontWeight: 'bold' }}>
+                  <Text style={{ color: '#0D9488', fontSize: 10, fontWeight: 'bold' }}>
                     แนะนำ
                   </Text>
                 </View>
@@ -82,8 +82,8 @@ export function CartPaymentMethodSelector({
               height: 20,
               borderRadius: 10,
               borderWidth: 2,
-              borderColor: isPromptPay ? '#0284C7' : '#CBD5E1',
-              backgroundColor: isPromptPay ? '#0284C7' : 'transparent',
+              borderColor: isPromptPay ? '#0D9488' : '#CBD5E1',
+              backgroundColor: isPromptPay ? '#0D9488' : 'transparent',
               justifyContent: 'center',
               alignItems: 'center',
             }}
@@ -102,9 +102,9 @@ export function CartPaymentMethodSelector({
             justifyContent: 'space-between',
             padding: 12,
             borderRadius: 16,
-            backgroundColor: isCash ? '#F0F9FF' : '#FFFFFF',
+            backgroundColor: isCash ? '#CCFBF1' : '#FFFFFF',
             borderWidth: 1.5,
-            borderColor: isCash ? '#0284C7' : '#E2E8F0',
+            borderColor: isCash ? '#0D9488' : '#E2E8F0',
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -113,14 +113,14 @@ export function CartPaymentMethodSelector({
                 width: 38,
                 height: 38,
                 borderRadius: 12,
-                backgroundColor: isCash ? '#E0F2FE' : '#F8FAFC',
+                backgroundColor: isCash ? '#CCFBF1' : '#F8FAFC',
                 borderWidth: 1,
-                borderColor: isCash ? '#BAE6FD' : '#E2E8F0',
+                borderColor: isCash ? '#99F6E4' : '#E2E8F0',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
             >
-              <Banknote size={20} color={isCash ? '#0284C7' : '#64748B'} />
+              <Banknote size={20} color={isCash ? '#0D9488' : '#64748B'} />
             </View>
             <View>
               <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
@@ -138,8 +138,8 @@ export function CartPaymentMethodSelector({
               height: 20,
               borderRadius: 10,
               borderWidth: 2,
-              borderColor: isCash ? '#0284C7' : '#CBD5E1',
-              backgroundColor: isCash ? '#0284C7' : 'transparent',
+              borderColor: isCash ? '#0D9488' : '#CBD5E1',
+              backgroundColor: isCash ? '#0D9488' : 'transparent',
               justifyContent: 'center',
               alignItems: 'center',
             }}

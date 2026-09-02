@@ -122,7 +122,7 @@ export default function AiRecommendScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={85}
-      style={{ flex: 1, backgroundColor: '#F0F7FF' }}
+      style={{ flex: 1, backgroundColor: '#F0FDFA' }}
     >
       {/* Header Banner */}
       <View
@@ -143,10 +143,10 @@ export default function AiRecommendScreen() {
               width: 38,
               height: 38,
               borderRadius: 12,
-              backgroundColor: '#0284C7',
+              backgroundColor: '#0D9488',
               alignItems: 'center',
               justifyContent: 'center',
-              shadowColor: '#0284C7',
+              shadowColor: '#0D9488',
               shadowOpacity: 0.3,
               shadowRadius: 8,
               elevation: 4,
@@ -158,7 +158,7 @@ export default function AiRecommendScreen() {
             <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>
               AI น้องหยก
             </Text>
-            <Text style={{ color: '#64748B', fontSize: 11 }}>
+            <Text style={{ color: '#475569', fontSize: 11 }}>
               ผู้ช่วยค้นหาและแนะนำเมนูอาหารในโรงอาหาร
             </Text>
           </View>
@@ -184,7 +184,7 @@ export default function AiRecommendScreen() {
             borderColor: '#E2E8F0',
           }}
         >
-          <RefreshCw size={16} color="#64748B" />
+          <RefreshCw size={16} color="#475569" />
         </TouchableOpacity>
       </View>
 
@@ -218,8 +218,8 @@ export default function AiRecommendScreen() {
               alignSelf: 'flex-start',
             }}
           >
-            <ActivityIndicator size="small" color="#0284C7" />
-            <Text style={{ color: '#64748B', fontSize: 12 }}>น้องหยกกำลังค้นหาเมนูที่เหมาะกับคุณให้ค่ะ...</Text>
+            <ActivityIndicator size="small" color="#0D9488" />
+            <Text style={{ color: '#475569', fontSize: 12 }}>น้องหยกกำลังค้นหาเมนูที่เหมาะกับคุณให้ค่ะ...</Text>
           </View>
         )}
       </ScrollView>

@@ -11,7 +11,7 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
     <View
       style={{
         flex: 1,
-        backgroundColor: '#F0F7FF',
+        backgroundColor: '#F0FDFA',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
@@ -34,7 +34,7 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
           elevation: 2,
         }}
       >
-        <ShoppingBag size={36} color="#0284C7" />
+        <ShoppingBag size={36} color="#0D9488" />
       </View>
       <Text style={{ color: '#0F172A', fontSize: 18, fontWeight: 'bold' }}>
         ไม่มีสินค้าในตะกร้า
@@ -58,11 +58,11 @@ export function CartEmptyState({ onBrowseVendors }: CartEmptyStateProps) {
           paddingHorizontal: 24,
           paddingVertical: 12,
           borderRadius: 14,
-          backgroundColor: '#0284C7',
+          backgroundColor: '#0D9488',
           flexDirection: 'row',
           alignItems: 'center',
           gap: 6,
-          shadowColor: '#0284C7',
+          shadowColor: '#0D9488',
           shadowOpacity: 0.25,
           shadowRadius: 6,
           elevation: 3,

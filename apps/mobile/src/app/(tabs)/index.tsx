@@ -68,13 +68,13 @@ export default function HomeScreen() {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0FDFA' }}>
       {/* Top Search & Banner */}
       <View style={{ padding: 16, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderColor: '#E2E8F0' }}>
         {/* Campus Location Chip */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
-          <MapPin size={14} color="#0284C7" />
-          <Text style={{ color: '#64748B', fontSize: 12, fontWeight: '600' }}>
+          <MapPin size={14} color="#0D9488" />
+          <Text style={{ color: '#475569', fontSize: 12, fontWeight: '600' }}>
             โรงอาหารกลาง มหาวิทยาลัย (Central Canteen)
           </Text>
         </View>
@@ -110,9 +110,9 @@ export default function HomeScreen() {
             marginTop: 12,
             padding: 12,
             borderRadius: 16,
-            backgroundColor: '#F0F9FF',
+            backgroundColor: '#CCFBF1',
             borderWidth: 1,
-            borderColor: '#BAE6FD',
+            borderColor: '#99F6E4',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -124,23 +124,28 @@ export default function HomeScreen() {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                backgroundColor: '#E0F2FE',
+                backgroundColor: '#FFFFFF',
                 alignItems: 'center',
                 justifyContent: 'center',
+                shadowColor: '#0D9488',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.15,
+                shadowRadius: 4,
+                elevation: 2,
               }}
             >
-              <Bot size={20} color="#0284C7" />
+              <Bot size={20} color="#0D9488" />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
                 ผู้ช่วย AI แนะนำอาหาร
               </Text>
-              <Text style={{ color: '#0369A1', fontSize: 11, fontWeight: '500' }}>
+              <Text style={{ color: '#0F766E', fontSize: 11, fontWeight: '500' }}>
                 ค้นหาเมนูตามงบประมาณ หรือสุ่มเมนูเด็ดประจำวัน
               </Text>
             </View>
           </View>
-          <ChevronRight size={16} color="#0284C7" />
+          <ChevronRight size={16} color="#0D9488" />
         </TouchableOpacity>
 
         {/* Filter Chips */}
@@ -151,14 +156,14 @@ export default function HomeScreen() {
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: 20,
-              backgroundColor: selectedFilter === 'all' ? '#0284C7' : '#F8FAFC',
+              backgroundColor: selectedFilter === 'all' ? '#0D9488' : '#F8FAFC',
               borderWidth: 1,
-              borderColor: selectedFilter === 'all' ? '#0284C7' : '#E2E8F0',
+              borderColor: selectedFilter === 'all' ? '#0D9488' : '#E2E8F0',
             }}
           >
             <Text
               style={{
-                color: selectedFilter === 'all' ? '#FFFFFF' : '#64748B',
+                color: selectedFilter === 'all' ? '#FFFFFF' : '#475569',
                 fontSize: 12,
                 fontWeight: 'bold',
               }}
@@ -176,18 +181,18 @@ export default function HomeScreen() {
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: 20,
-              backgroundColor: selectedFilter === 'open' ? '#0284C7' : '#F8FAFC',
+              backgroundColor: selectedFilter === 'open' ? '#0D9488' : '#F8FAFC',
               borderWidth: 1,
-              borderColor: selectedFilter === 'open' ? '#0284C7' : '#E2E8F0',
+              borderColor: selectedFilter === 'open' ? '#0D9488' : '#E2E8F0',
             }}
           >
             <CheckCircle2
               size={12}
-              color={selectedFilter === 'open' ? '#FFFFFF' : '#16A34A'}
+              color={selectedFilter === 'open' ? '#FFFFFF' : '#059669'}
             />
             <Text
               style={{
-                color: selectedFilter === 'open' ? '#FFFFFF' : '#64748B',
+                color: selectedFilter === 'open' ? '#FFFFFF' : '#475569',
                 fontSize: 12,
                 fontWeight: 'bold',
               }}
@@ -201,8 +206,8 @@ export default function HomeScreen() {
       {/* Vendors List */}
       {loading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#0284C7" />
-          <Text style={{ color: '#64748B', fontSize: 12, marginTop: 8 }}>กำลังโหลดรายชื่อร้านค้า...</Text>
+          <ActivityIndicator size="large" color="#0D9488" />
+          <Text style={{ color: '#475569', fontSize: 12, marginTop: 8 }}>กำลังโหลดรายชื่อร้านค้า...</Text>
         </View>
       ) : (
         <FlatList
@@ -210,12 +215,12 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 16, gap: 14 }}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#0284C7" />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#0D9488" />
           }
           ListEmptyComponent={
             <View style={{ padding: 40, alignItems: 'center' }}>
               <Store size={40} color="#CBD5E1" />
-              <Text style={{ color: '#64748B', fontSize: 13, marginTop: 12 }}>
+              <Text style={{ color: '#475569', fontSize: 13, marginTop: 12 }}>
                 ไม่พบร้านค้าที่ตรงกับคำค้นหา
               </Text>
             </View>
@@ -256,22 +261,22 @@ export default function HomeScreen() {
                     paddingHorizontal: 10,
                     paddingVertical: 4,
                     borderRadius: 12,
-                    backgroundColor: item.isOpen ? '#F0FDF4' : '#FEF2F2',
+                    backgroundColor: item.isOpen ? '#ECFDF5' : '#FEF2F2',
                     borderWidth: 1,
-                    borderColor: item.isOpen ? '#BBF7D0' : '#FECACA',
+                    borderColor: item.isOpen ? '#A7F3D0' : '#FECACA',
                     flexDirection: 'row',
                     alignItems: 'center',
                     gap: 4,
                   }}
                 >
                   {item.isOpen ? (
-                    <CheckCircle2 size={11} color="#16A34A" />
+                    <CheckCircle2 size={11} color="#059669" />
                   ) : (
                     <XCircle size={11} color="#DC2626" />
                   )}
                   <Text
                     style={{
-                      color: item.isOpen ? '#16A34A' : '#DC2626',
+                      color: item.isOpen ? '#059669' : '#DC2626',
                       fontSize: 11,
                       fontWeight: 'bold',
                     }}
@@ -293,7 +298,7 @@ export default function HomeScreen() {
                 {item.description && (
                   <Text
                     numberOfLines={2}
-                    style={{ color: '#64748B', fontSize: 12, marginTop: 4, lineHeight: 17 }}
+                    style={{ color: '#475569', fontSize: 12, marginTop: 4, lineHeight: 17 }}
                   >
                     {item.description}
                   </Text>
@@ -311,7 +316,7 @@ export default function HomeScreen() {
                   }}
                 >
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Clock size={12} color="#0284C7" />
+                    <Clock size={12} color="#0D9488" />
                     <Text style={{ color: '#475569', fontSize: 11 }}>รับออเดอร์ไว</Text>
                   </View>
                   <Text style={{ color: '#CBD5E1', fontSize: 10 }}>•</Text>

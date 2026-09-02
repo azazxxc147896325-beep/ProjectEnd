@@ -51,28 +51,28 @@ function ToastItemView({ item, onDismiss }: { item: MobileToast; onDismiss: () =
   const isInfo = item.type === 'info';
 
   const borderColor = isSuccess
-    ? '#BBF7D0'
+    ? '#A7F3D0'
     : isError
     ? '#FECACA'
     : isWarning
     ? '#FDE68A'
-    : '#BAE6FD';
+    : '#99F6E4';
 
   const iconBg = isSuccess
-    ? '#F0FDF4'
+    ? '#ECFDF5'
     : isError
     ? '#FEF2F2'
     : isWarning
     ? '#FFFBEB'
-    : '#E0F2FE';
+    : '#CCFBF1';
 
   const accentColor = isSuccess
-    ? '#16A34A'
+    ? '#059669'
     : isError
     ? '#DC2626'
     : isWarning
     ? '#D97706'
-    : '#0284C7';
+    : '#0D9488';
 
   return (
     <Animated.View
@@ -92,10 +92,10 @@ function ToastItemView({ item, onDismiss }: { item: MobileToast; onDismiss: () =
       >
         {/* Icon Badge */}
         <View style={[styles.iconContainer, { backgroundColor: iconBg, borderColor }]}>
-          {isSuccess && <CheckCircle2 size={18} color="#16A34A" />}
+          {isSuccess && <CheckCircle2 size={18} color="#059669" />}
           {isError && <AlertCircle size={18} color="#DC2626" />}
           {isWarning && <Sparkles size={18} color="#D97706" />}
-          {isInfo && <Info size={18} color="#0284C7" />}
+          {isInfo && <Info size={18} color="#0D9488" />}
         </View>
 
         {/* Text Details */}

@@ -54,7 +54,7 @@ export function CartVendorDetailView({
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0FDFA' }}>
       {/* Top Navigation Bar with Back Button */}
       <View
         style={{
@@ -83,7 +83,7 @@ export function CartVendorDetailView({
             borderColor: '#E2E8F0',
           }}
         >
-          <ArrowLeft size={16} color="#0284C7" />
+          <ArrowLeft size={16} color="#0D9488" />
           <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
             ร้านค้าทั้งหมด
           </Text>
@@ -133,21 +133,21 @@ export function CartVendorDetailView({
               width: 48,
               height: 48,
               borderRadius: 16,
-              backgroundColor: '#E0F2FE',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1.5,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Store size={24} color="#0284C7" />
+            <Store size={24} color="#0D9488" />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: '#64748B', fontSize: 11 }}>หน้ารายละเอียดร้านค้า</Text>
+            <Text style={{ color: '#475569', fontSize: 11 }}>หน้ารายละเอียดร้านค้า</Text>
             <Text style={{ color: '#0F172A', fontSize: 17, fontWeight: 'bold' }} numberOfLines={1}>
               {group.vendorName}
             </Text>
-            <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: '600', marginTop: 2 }}>
+            <Text style={{ color: '#0D9488', fontSize: 12, fontWeight: '600', marginTop: 2 }}>
               {group.totalCount} รายการในตะกร้า
             </Text>
           </View>
@@ -252,7 +252,7 @@ export function CartVendorDetailView({
             <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>
               ยอดชำระสุทธิร้านนี้
             </Text>
-            <Text style={{ color: '#0284C7', fontSize: 20, fontWeight: 'bold' }}>
+            <Text style={{ color: '#0D9488', fontSize: 20, fontWeight: 'bold' }}>
               ฿{group.subtotal.toLocaleString()}
             </Text>
           </View>
@@ -283,7 +283,7 @@ export function CartVendorDetailView({
           disabled={isSubmitting}
           activeOpacity={0.85}
           style={{
-            backgroundColor: '#0284C7',
+            backgroundColor: '#0D9488',
             borderRadius: 16,
             paddingVertical: 14,
             flexDirection: 'row',
@@ -291,7 +291,7 @@ export function CartVendorDetailView({
             alignItems: 'center',
             gap: 8,
             opacity: isSubmitting ? 0.7 : 1,
-            shadowColor: '#0284C7',
+            shadowColor: '#0D9488',
             shadowOpacity: 0.3,
             shadowRadius: 8,
             elevation: 4,

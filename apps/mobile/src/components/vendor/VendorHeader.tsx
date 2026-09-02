@@ -11,7 +11,7 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
   return (
     <>
       {/* Banner */}
-      <View style={{ height: 160, backgroundColor: '#E0F2FE' }}>
+      <View style={{ height: 160, backgroundColor: '#CCFBF1' }}>
         <Image
           source={{
             uri: vendor.logoUrl || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500',
@@ -53,22 +53,22 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
               paddingHorizontal: 8,
               paddingVertical: 3,
               borderRadius: 10,
-              backgroundColor: vendor.isOpen ? '#F0FDF4' : '#FEF2F2',
+              backgroundColor: vendor.isOpen ? '#ECFDF5' : '#FEF2F2',
               borderWidth: 1,
-              borderColor: vendor.isOpen ? '#BBF7D0' : '#FECACA',
+              borderColor: vendor.isOpen ? '#A7F3D0' : '#FECACA',
               flexDirection: 'row',
               alignItems: 'center',
               gap: 4,
             }}
           >
             {vendor.isOpen ? (
-              <CheckCircle2 size={11} color="#16A34A" />
+              <CheckCircle2 size={11} color="#059669" />
             ) : (
               <XCircle size={11} color="#DC2626" />
             )}
             <Text
               style={{
-                color: vendor.isOpen ? '#16A34A' : '#DC2626',
+                color: vendor.isOpen ? '#059669' : '#DC2626',
                 fontSize: 10,
                 fontWeight: 'bold',
               }}

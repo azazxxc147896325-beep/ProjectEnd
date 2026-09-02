@@ -26,7 +26,7 @@ export function VendorMenuItemCard({
         borderRadius: 18,
         padding: 12,
         borderWidth: 1,
-        borderColor: quantity > 0 ? '#0284C7' : '#E2E8F0',
+        borderColor: quantity > 0 ? '#0D9488' : '#E2E8F0',
         alignItems: 'center',
         gap: 12,
         shadowColor: '#0F172A',
@@ -48,9 +48,9 @@ export function VendorMenuItemCard({
             width: 75,
             height: 75,
             borderRadius: 14,
-            backgroundColor: '#F0F9FF',
+            backgroundColor: '#CCFBF1',
             borderWidth: 1,
-            borderColor: '#BAE6FD',
+            borderColor: '#99F6E4',
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -62,7 +62,7 @@ export function VendorMenuItemCard({
              item.category === 'เครื่องดื่ม' ? '🧋' :
              item.category === 'ของหวาน' ? '🍨' : '🍽️'}
           </Text>
-          <Text style={{ color: '#0369A1', fontSize: 9, marginTop: 2, fontWeight: '600' }}>
+          <Text style={{ color: '#0D9488', fontSize: 9, marginTop: 2, fontWeight: '600' }}>
             ตามสั่ง
           </Text>
         </View>
@@ -88,7 +88,7 @@ export function VendorMenuItemCard({
         )}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-          <Text style={{ color: '#0284C7', fontSize: 14, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 14, fontWeight: 'bold' }}>
             ฿{Number(item.price)}
           </Text>
 
@@ -100,7 +100,7 @@ export function VendorMenuItemCard({
                 backgroundColor: '#F8FAFC',
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: '#0284C7',
+                borderColor: '#0D9488',
                 paddingHorizontal: 4,
                 paddingVertical: 3,
                 gap: 8,
@@ -123,7 +123,7 @@ export function VendorMenuItemCard({
 
               <Text
                 style={{
-                  color: '#0284C7',
+                  color: '#0D9488',
                   fontSize: 14,
                   fontWeight: 'bold',
                   minWidth: 16,
@@ -140,7 +140,7 @@ export function VendorMenuItemCard({
                   width: 26,
                   height: 26,
                   borderRadius: 8,
-                  backgroundColor: '#0284C7',
+                  backgroundColor: '#0D9488',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
@@ -156,7 +156,7 @@ export function VendorMenuItemCard({
                 paddingHorizontal: 12,
                 paddingVertical: 6,
                 borderRadius: 12,
-                backgroundColor: isAddedAnimation ? '#16A34A' : '#0284C7',
+                backgroundColor: isAddedAnimation ? '#059669' : '#0D9488',
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 4,

@@ -39,7 +39,7 @@ export function OrderHistoryTabs({
           gap: 6,
           paddingVertical: 10,
           borderRadius: 14,
-          backgroundColor: isActive ? '#0284C7' : 'transparent',
+          backgroundColor: isActive ? '#0D9488' : 'transparent',
         }}
       >
         <Clock size={15} color={isActive ? '#FFFFFF' : '#64748B'} />
@@ -64,7 +64,7 @@ export function OrderHistoryTabs({
           gap: 6,
           paddingVertical: 10,
           borderRadius: 14,
-          backgroundColor: isHistory ? '#0284C7' : 'transparent',
+          backgroundColor: isHistory ? '#0D9488' : 'transparent',
         }}
       >
         <History size={15} color={isHistory ? '#FFFFFF' : '#64748B'} />

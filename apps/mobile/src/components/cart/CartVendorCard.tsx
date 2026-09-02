@@ -63,14 +63,14 @@ export function CartVendorCard({
               width: 44,
               height: 44,
               borderRadius: 14,
-              backgroundColor: '#E0F2FE',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Store size={22} color="#0284C7" />
+            <Store size={22} color="#0D9488" />
           </View>
 
           <View style={{ flex: 1 }}>
@@ -116,9 +116,9 @@ export function CartVendorCard({
               gap: 4,
             }}
           >
-            <UtensilsCrossed size={11} color="#0284C7" />
+            <UtensilsCrossed size={11} color="#0D9488" />
             <Text style={{ color: '#334155', fontSize: 12 }}>
-              {item.menuItem.name} <Text style={{ color: '#0284C7', fontWeight: 'bold' }}>x{item.quantity}</Text>
+              {item.menuItem.name} <Text style={{ color: '#0D9488', fontWeight: 'bold' }}>x{item.quantity}</Text>
             </Text>
           </View>
         ))}
@@ -153,7 +153,7 @@ export function CartVendorCard({
       >
         <View>
           <Text style={{ color: '#64748B', fontSize: 11 }}>ยอดรวมร้านนี้</Text>
-          <Text style={{ color: '#0284C7', fontSize: 18, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 18, fontWeight: 'bold' }}>
             ฿{group.subtotal.toLocaleString()}
           </Text>
         </View>
@@ -162,19 +162,19 @@ export function CartVendorCard({
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#F0F9FF',
+            backgroundColor: '#CCFBF1',
             borderWidth: 1,
-            borderColor: '#BAE6FD',
+            borderColor: '#99F6E4',
             borderRadius: 12,
             paddingVertical: 8,
             paddingHorizontal: 12,
             gap: 4,
           }}
         >
-          <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 12, fontWeight: 'bold' }}>
             ดูรายละเอียดร้านนี้
           </Text>
-          <ChevronRight size={16} color="#0284C7" />
+          <ChevronRight size={16} color="#0D9488" />
         </View>
       </View>
     </TouchableOpacity>

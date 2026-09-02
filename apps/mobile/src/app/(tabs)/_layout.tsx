@@ -13,8 +13,8 @@ export default function TabLayout() {
   // รอให้ SecureStore โหลดเสร็จ
   if (!isHydrated) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F7FF' }}>
-        <ActivityIndicator size="large" color="#0284C7" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0FDFA' }}>
+        <ActivityIndicator size="large" color="#0D9488" />
       </View>
     );
   }
@@ -34,7 +34,7 @@ export default function TabLayout() {
           paddingBottom: 8,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: '#0284C7',
+        tabBarActiveTintColor: '#0D9488',
         tabBarInactiveTintColor: '#94A3B8',
         headerStyle: {
           backgroundColor: '#FFFFFF',
@@ -66,7 +66,7 @@ export default function TabLayout() {
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: focused ? 'rgba(2, 132, 199, 0.12)' : 'transparent',
+                backgroundColor: focused ? 'rgba(13, 148, 136, 0.12)' : 'transparent',
                 borderRadius: 12,
                 paddingHorizontal: 8,
                 paddingVertical: 2,
@@ -84,7 +84,7 @@ export default function TabLayout() {
           headerTitle: 'ตะกร้าสินค้าของคุณ',
           tabBarBadge: totalCount > 0 ? totalCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: '#0284C7',
+            backgroundColor: '#0D9488',
             color: '#FFFFFF',
             fontSize: 10,
             fontWeight: 'bold',

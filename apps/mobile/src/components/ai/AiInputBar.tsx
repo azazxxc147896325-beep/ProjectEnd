@@ -54,7 +54,7 @@ export function AiInputBar({
           width: 42,
           height: 42,
           borderRadius: 21,
-          backgroundColor: inputQuery.trim() && !loading ? '#0284C7' : '#E2E8F0',
+          backgroundColor: inputQuery.trim() && !loading ? '#0D9488' : '#E2E8F0',
           alignItems: 'center',
           justifyContent: 'center',
         }}

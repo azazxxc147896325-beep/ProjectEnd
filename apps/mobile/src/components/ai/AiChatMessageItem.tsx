@@ -33,14 +33,14 @@ export function AiChatMessageItem({
       {/* Chat Bubble */}
       <View
         style={{
-          backgroundColor: isUser ? '#0284C7' : '#FFFFFF',
+          backgroundColor: isUser ? '#0D9488' : '#FFFFFF',
           paddingHorizontal: 16,
           paddingVertical: 12,
           borderRadius: 20,
           borderTopRightRadius: isUser ? 4 : 20,
           borderTopLeftRadius: !isUser ? 4 : 20,
           borderWidth: isUser ? 0 : 1,
-          borderColor: isUser ? '#0284C7' : '#E2E8F0',
+          borderColor: isUser ? '#0D9488' : '#E2E8F0',
           shadowColor: '#0F172A',
           shadowOpacity: 0.06,
           shadowRadius: 6,
@@ -76,7 +76,7 @@ export function AiChatMessageItem({
       {message.dishes && message.dishes.length > 0 && (
         <View style={{ marginTop: 12, gap: 10 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginLeft: 4 }}>
-            <Utensils size={14} color="#0284C7" />
+            <Utensils size={14} color="#0D9488" />
             <Text style={{ color: '#475569', fontSize: 12, fontWeight: '700' }}>
               เมนูที่แนะนำสำหรับคุณ:
             </Text>

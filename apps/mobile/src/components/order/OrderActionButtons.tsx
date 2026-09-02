@@ -79,22 +79,22 @@ export function OrderActionButtons({
       {order.status === OrderStatus.READY && (
         <View
           style={{
-            backgroundColor: '#F0FDF4',
+            backgroundColor: '#ECFDF5',
             borderRadius: 24,
             padding: 18,
             borderWidth: 1.5,
-            borderColor: '#BBF7D0',
+            borderColor: '#A7F3D0',
             marginBottom: 16,
             alignItems: 'center',
-            shadowColor: '#16A34A',
+            shadowColor: '#059669',
             shadowOpacity: 0.1,
             shadowRadius: 8,
             elevation: 3,
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-            <Bell size={16} color="#16A34A" />
-            <Text style={{ color: '#16A34A', fontSize: 15, fontWeight: 'bold' }}>
+            <Bell size={16} color="#059669" />
+            <Text style={{ color: '#059669', fontSize: 15, fontWeight: 'bold' }}>
               ร้านค้าปรุงอาหารเสร็จแล้ว
             </Text>
           </View>
@@ -107,7 +107,7 @@ export function OrderActionButtons({
             disabled={isConfirming}
             activeOpacity={0.85}
             style={{
-              backgroundColor: '#16A34A',
+              backgroundColor: '#059669',
               borderRadius: 16,
               paddingVertical: 14,
               paddingHorizontal: 24,
@@ -116,7 +116,7 @@ export function OrderActionButtons({
               justifyContent: 'center',
               alignItems: 'center',
               gap: 8,
-              shadowColor: '#16A34A',
+              shadowColor: '#059669',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.25,
               shadowRadius: 8,
@@ -155,8 +155,8 @@ export function OrderActionButtons({
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-            <CheckCircle2 size={16} color="#16A34A" />
-            <Text style={{ color: '#16A34A', fontSize: 15, fontWeight: 'bold' }}>
+            <CheckCircle2 size={16} color="#059669" />
+            <Text style={{ color: '#059669', fontSize: 15, fontWeight: 'bold' }}>
               คำสั่งซื้อนี้เสร็จสมบูรณ์แล้ว
             </Text>
           </View>
@@ -167,7 +167,7 @@ export function OrderActionButtons({
           <TouchableOpacity
             onPress={onViewAllOrders}
             style={{
-              backgroundColor: '#0284C7',
+              backgroundColor: '#0D9488',
               borderRadius: 14,
               paddingVertical: 12,
               paddingHorizontal: 20,
@@ -176,7 +176,7 @@ export function OrderActionButtons({
               justifyContent: 'center',
               alignItems: 'center',
               gap: 6,
-              shadowColor: '#0284C7',
+              shadowColor: '#0D9488',
               shadowOpacity: 0.25,
               shadowRadius: 6,
               elevation: 3,

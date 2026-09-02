@@ -141,8 +141,8 @@ export default function OrderTrackingScreen() {
 
   if (loading || !order) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F7FF' }}>
-        <ActivityIndicator size="large" color="#0284C7" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0FDFA' }}>
+        <ActivityIndicator size="large" color="#0D9488" />
         <Text style={{ color: '#64748B', fontSize: 12, marginTop: 8 }}>กำลังโหลดสถานะออเดอร์...</Text>
       </View>
     );
@@ -157,7 +157,7 @@ export default function OrderTrackingScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0FDFA' }}>
       <Stack.Screen
         options={{
           title: `คิว #${order.queueNumber} (${order.vendor?.name || 'ร้านค้า'})`,
@@ -188,7 +188,7 @@ export default function OrderTrackingScreen() {
                 borderColor: '#E2E8F0',
               }}
             >
-              <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: 'bold' }}>ออเดอร์</Text>
+              <Text style={{ color: '#0D9488', fontSize: 12, fontWeight: 'bold' }}>ออเดอร์</Text>
             </TouchableOpacity>
           ),
         }}

@@ -102,11 +102,11 @@ export function OrderReviewModal({
           <TouchableOpacity
             onPress={onSubmit}
             style={{
-              backgroundColor: '#0284C7',
+              backgroundColor: '#0D9488',
               borderRadius: 14,
               paddingVertical: 12,
               alignItems: 'center',
-              shadowColor: '#0284C7',
+              shadowColor: '#0D9488',
               shadowOpacity: 0.25,
               shadowRadius: 6,
               elevation: 3,

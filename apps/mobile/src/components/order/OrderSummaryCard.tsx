@@ -36,12 +36,12 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           {order.orderType === OrderType.DINE_IN ? (
             <>
-              <Utensils size={13} color="#0284C7" />
+              <Utensils size={13} color="#0D9488" />
               <Text style={{ color: '#0F172A', fontSize: 12, fontWeight: '600' }}>ทานที่ร้าน</Text>
             </>
           ) : (
             <>
-              <Package size={13} color="#0284C7" />
+              <Package size={13} color="#0D9488" />
               <Text style={{ color: '#0F172A', fontSize: 12, fontWeight: '600' }}>สั่งกลับบ้าน</Text>
             </>
           )}
@@ -60,21 +60,21 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
               paddingHorizontal: 8,
               paddingVertical: 2,
               borderRadius: 6,
-              backgroundColor: isPaid ? '#F0FDF4' : '#FFFBEB',
+              backgroundColor: isPaid ? '#ECFDF5' : '#FFFBEB',
               borderWidth: 1,
-              borderColor: isPaid ? '#BBF7D0' : '#FDE68A',
+              borderColor: isPaid ? '#A7F3D0' : '#FDE68A',
             }}
           >
             {isPromptPay ? (
-              <QrCode size={11} color={isPaid ? '#16A34A' : '#D97706'} />
+              <QrCode size={11} color={isPaid ? '#059669' : '#D97706'} />
             ) : (
-              <Banknote size={11} color={isPaid ? '#16A34A' : '#D97706'} />
+              <Banknote size={11} color={isPaid ? '#059669' : '#D97706'} />
             )}
             <Text
               style={{
                 fontSize: 11,
                 fontWeight: 'bold',
-                color: isPaid ? '#16A34A' : '#D97706',
+                color: isPaid ? '#059669' : '#D97706',
               }}
             >
               {isPaid
@@ -135,7 +135,7 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
         }}
       >
         <Text style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold' }}>ยอดรวมทั้งหมด</Text>
-        <Text style={{ color: '#0284C7', fontSize: 16, fontWeight: 'bold' }}>
+        <Text style={{ color: '#0D9488', fontSize: 16, fontWeight: 'bold' }}>
           ฿{Number(order.totalPrice).toLocaleString()}
         </Text>
       </View>

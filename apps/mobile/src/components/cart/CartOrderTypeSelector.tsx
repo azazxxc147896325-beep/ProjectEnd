@@ -32,9 +32,9 @@ export function CartOrderTypeSelector({
             gap: 8,
             paddingVertical: 12,
             borderRadius: 16,
-            backgroundColor: isDineIn ? '#0284C7' : '#F8FAFC',
+            backgroundColor: isDineIn ? '#0D9488' : '#F8FAFC',
             borderWidth: 1,
-            borderColor: isDineIn ? '#0284C7' : '#E2E8F0',
+            borderColor: isDineIn ? '#0D9488' : '#E2E8F0',
           }}
         >
           <Utensils size={16} color={isDineIn ? '#FFFFFF' : '#64748B'} />
@@ -59,9 +59,9 @@ export function CartOrderTypeSelector({
             gap: 8,
             paddingVertical: 12,
             borderRadius: 16,
-            backgroundColor: isTakeaway ? '#0284C7' : '#F8FAFC',
+            backgroundColor: isTakeaway ? '#0D9488' : '#F8FAFC',
             borderWidth: 1,
-            borderColor: isTakeaway ? '#0284C7' : '#E2E8F0',
+            borderColor: isTakeaway ? '#0D9488' : '#E2E8F0',
           }}
         >
           <Package size={16} color={isTakeaway ? '#FFFFFF' : '#64748B'} />

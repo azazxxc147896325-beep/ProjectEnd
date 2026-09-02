@@ -46,7 +46,7 @@ export default function RootLayout() {
           headerTintColor: '#0F172A',
           headerTitleStyle: { fontWeight: 'bold' },
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: '#F0F7FF' },
+          contentStyle: { backgroundColor: '#F0FDFA' },
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />

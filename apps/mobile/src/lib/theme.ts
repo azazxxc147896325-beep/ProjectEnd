@@ -1,21 +1,27 @@
 /**
- * Campus Food Mobile Theme - Bright Light White & Sky Blue Theme
+ * Campus Food Mobile Theme - Teal Light Theme
+ * Design System tokens matching shared-types and web app
  */
 
 export const COLORS = {
   // Main backgrounds & surfaces
-  background: '#F0F7FF',       // Soft icy sky-blue tint background
-  backgroundSecondary: '#F8FAFC',
+  background: '#F0FDFA',       // Teal-50
+  backgroundSecondary: '#F8FAFC', // Slate-50
   card: '#FFFFFF',             // Clean crisp white card surface
   cardElevated: '#FFFFFF',
-  cardSubtle: '#F1F5F9',
+  cardSubtle: '#F8FAFC',
+  surfaceHover: '#CCFBF1',     // Teal-100
 
-  // Primary Brand Sky Blue
-  primary: '#0284C7',          // Sky-600
-  primaryDark: '#0369A1',      // Sky-700
-  primaryLight: '#E0F2FE',     // Sky-100
-  primarySubtle: '#F0F9FF',    // Sky-50
-  primaryBorder: '#BAE6FD',    // Sky-200
+  // Primary Brand Teal
+  primary: '#0D9488',          // Teal-600
+  primaryHover: '#0F766E',     // Teal-700
+  primaryDark: '#0F766E',      // Teal-700
+  secondary: '#14B8A6',        // Teal-500
+  accent: '#2DD4BF',           // Teal-400
+  primaryLight: '#CCFBF1',     // Teal-100
+  primarySubtle: '#F0FDFA',    // Teal-50
+  primaryBorder: '#99F6E4',    // Teal-200
+  borderAccent: '#99F6E4',     // Teal-200
 
   // Text Colors
   textPrimary: '#0F172A',      // Slate-900 high contrast
@@ -26,24 +32,24 @@ export const COLORS = {
   // Borders & Dividers
   border: '#E2E8F0',          // Slate-200
   borderLight: '#F1F5F9',     // Slate-100
-  borderFocus: '#0284C7',
+  borderFocus: '#0D9488',
 
   // Status & Feedback Colors
-  success: '#16A34A',         // Emerald-600
-  successBg: '#F0FDF4',       // Emerald-50
-  successBorder: '#BBF7D0',   // Emerald-200
+  success: '#059669',         // Emerald-600
+  successBg: '#ECFDF5',       // Emerald-50
+  successBorder: '#A7F3D0',   // Emerald-200
 
   warning: '#D97706',         // Amber-600
   warningBg: '#FFFBEB',       // Amber-50
   warningBorder: '#FDE68A',   // Amber-200
 
-  danger: '#DC2626',          // Rose-600
-  dangerBg: '#FEF2F2',        // Rose-50
-  dangerBorder: '#FECACA',    // Rose-200
+  danger: '#DC2626',          // Red-600
+  dangerBg: '#FEF2F2',        // Red-50
+  dangerBorder: '#FECACA',    // Red-200
 
-  info: '#0284C7',            // Sky-600
-  infoBg: '#F0F9FF',          // Sky-50
-  infoBorder: '#BAE6FD',      // Sky-200
+  info: '#0D9488',            // Teal-600
+  infoBg: '#CCFBF1',          // Teal-100
+  infoBorder: '#99F6E4',      // Teal-200
 
   purple: '#7C3AED',          // Violet-600
   purpleBg: '#F5F3FF',        // Violet-50
@@ -66,7 +72,7 @@ export const SHADOWS = {
     elevation: 3,
   },
   lg: {
-    shadowColor: '#0284C7',
+    shadowColor: '#0D9488',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 10,

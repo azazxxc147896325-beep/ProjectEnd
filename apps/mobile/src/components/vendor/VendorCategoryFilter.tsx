@@ -27,9 +27,9 @@ export function VendorCategoryFilter({
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: 16,
-              backgroundColor: selectedCategory === cat ? '#0284C7' : '#FFFFFF',
+              backgroundColor: selectedCategory === cat ? '#0D9488' : '#FFFFFF',
               borderWidth: 1,
-              borderColor: selectedCategory === cat ? '#0284C7' : '#E2E8F0',
+              borderColor: selectedCategory === cat ? '#0D9488' : '#E2E8F0',
             }}
           >
             <Text

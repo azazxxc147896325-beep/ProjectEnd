@@ -29,7 +29,7 @@ export function CartItemRow({ item, isFirst, onUpdateQuantity }: CartItemRowProp
         <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
           {item.menuItem.name}
         </Text>
-        <Text style={{ color: '#0284C7', fontSize: 12, fontWeight: '600', marginTop: 2 }}>
+        <Text style={{ color: '#0D9488', fontSize: 12, fontWeight: '600', marginTop: 2 }}>
           ฿{Number(item.menuItem.price)} / จาน
         </Text>
       </View>
@@ -62,7 +62,7 @@ export function CartItemRow({ item, isFirst, onUpdateQuantity }: CartItemRowProp
             width: 28,
             height: 28,
             borderRadius: 8,
-            backgroundColor: '#0284C7',
+            backgroundColor: '#0D9488',
             justifyContent: 'center',
             alignItems: 'center',
           }}

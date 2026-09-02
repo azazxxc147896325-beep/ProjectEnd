@@ -24,7 +24,7 @@ export function CartNoteInput({ note, onNoteChange }: CartNoteInputProps) {
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-        <MessageSquare size={14} color="#0284C7" />
+        <MessageSquare size={14} color="#0D9488" />
         <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: 'bold' }}>
           ข้อความระบุเพิ่มเติมถึงร้านค้า
         </Text>

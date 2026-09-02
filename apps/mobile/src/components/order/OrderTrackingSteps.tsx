@@ -88,24 +88,24 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
                     height: 36,
                     borderRadius: 12,
                     backgroundColor: isCurrent
-                      ? '#0284C7'
+                      ? '#0D9488'
                       : isPast
-                      ? '#E0F2FE'
+                      ? '#CCFBF1'
                       : '#F8FAFC',
                     borderWidth: 1,
-                    borderColor: isCurrent ? '#0284C7' : isPast ? '#BAE6FD' : '#E2E8F0',
+                    borderColor: isCurrent ? '#0D9488' : isPast ? '#99F6E4' : '#E2E8F0',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
                 >
-                  <Icon size={18} color={isCurrent ? '#FFFFFF' : isPast ? '#0284C7' : '#94A3B8'} />
+                  <Icon size={18} color={isCurrent ? '#FFFFFF' : isPast ? '#0D9488' : '#94A3B8'} />
                 </View>
                 {idx < steps.length - 1 && (
                   <View
                     style={{
                       width: 2,
                       height: 24,
-                      backgroundColor: isPast ? '#0284C7' : '#E2E8F0',
+                      backgroundColor: isPast ? '#0D9488' : '#E2E8F0',
                       marginTop: 4,
                     }}
                   />
@@ -115,7 +115,7 @@ export function OrderTrackingSteps({ status }: OrderTrackingStepsProps) {
               <View style={{ flex: 1, paddingTop: 4 }}>
                 <Text
                   style={{
-                    color: isCurrent ? '#0284C7' : isPast ? '#0F172A' : '#94A3B8',
+                    color: isCurrent ? '#0D9488' : isPast ? '#0F172A' : '#94A3B8',
                     fontSize: 14,
                     fontWeight: 'bold',
                   }}

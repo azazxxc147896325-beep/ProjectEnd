@@ -9,7 +9,7 @@ interface OrderHistoryEmptyStateProps {
 export function OrderHistoryEmptyState({ activeTab }: OrderHistoryEmptyStateProps) {
   return (
     <View style={{ padding: 40, alignItems: 'center' }}>
-      <Receipt size={40} color="#BAE6FD" />
+      <Receipt size={40} color="#99F6E4" />
       <Text style={{ color: '#64748B', fontSize: 13, marginTop: 12 }}>
         {activeTab === 'active' ? 'ไม่มีออเดอร์ที่กำลังดำเนินการ' : 'ยังไม่มีประวัติคำสั่งซื้อ'}
       </Text>

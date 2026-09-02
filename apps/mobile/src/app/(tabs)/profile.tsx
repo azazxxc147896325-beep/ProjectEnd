@@ -25,7 +25,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#F0F7FF' }} contentContainerStyle={{ padding: 16 }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#F0FDFA' }} contentContainerStyle={{ padding: 16 }}>
       {/* Profile Card */}
       <View
         style={{
@@ -47,15 +47,15 @@ export default function ProfileScreen() {
             width: 72,
             height: 72,
             borderRadius: 36,
-            backgroundColor: '#E0F2FE',
+            backgroundColor: '#CCFBF1',
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: 12,
             borderWidth: 2,
-            borderColor: '#BAE6FD',
+            borderColor: '#99F6E4',
           }}
         >
-          <Text style={{ color: '#0284C7', fontSize: 28, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 28, fontWeight: 'bold' }}>
             {user?.fullName?.slice(0, 1)?.toUpperCase() || 'U'}
           </Text>
         </View>
@@ -77,9 +77,9 @@ export default function ProfileScreen() {
               marginTop: 14,
               paddingHorizontal: 20,
               paddingVertical: 10,
-              backgroundColor: '#0284C7',
+              backgroundColor: '#0D9488',
               borderRadius: 14,
-              shadowColor: '#0284C7',
+              shadowColor: '#0D9488',
               shadowOpacity: 0.25,
               shadowRadius: 6,
               elevation: 3,
@@ -115,7 +115,7 @@ export default function ProfileScreen() {
 
           <View style={{ gap: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <User size={16} color="#0284C7" />
+              <User size={16} color="#0D9488" />
               <View style={{ flex: 1 }}>
                 <Text style={{ color: '#64748B', fontSize: 11 }}>ชื่อ-นามสกุล</Text>
                 <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: '600' }}>
@@ -125,7 +125,7 @@ export default function ProfileScreen() {
             </View>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Mail size={16} color="#0284C7" />
+              <Mail size={16} color="#0D9488" />
               <View style={{ flex: 1 }}>
                 <Text style={{ color: '#64748B', fontSize: 11 }}>อีเมล</Text>
                 <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: '600' }}>
@@ -136,7 +136,7 @@ export default function ProfileScreen() {
 
             {user.phone ? (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                <Phone size={16} color="#0284C7" />
+                <Phone size={16} color="#0D9488" />
                 <View style={{ flex: 1 }}>
                   <Text style={{ color: '#64748B', fontSize: 11 }}>เบอร์โทรศัพท์</Text>
                   <Text style={{ color: '#0F172A', fontSize: 13, fontWeight: '600' }}>
@@ -147,10 +147,10 @@ export default function ProfileScreen() {
             ) : null}
 
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <ShieldCheck size={16} color="#16A34A" />
+              <ShieldCheck size={16} color="#059669" />
               <View style={{ flex: 1 }}>
                 <Text style={{ color: '#64748B', fontSize: 11 }}>สถานะบัญชี</Text>
-                <Text style={{ color: '#16A34A', fontSize: 13, fontWeight: '600' }}>
+                <Text style={{ color: '#059669', fontSize: 13, fontWeight: '600' }}>
                   นักศึกษา / ผู้ใช้งานทั่วไป (Student)
                 </Text>
               </View>
@@ -175,7 +175,7 @@ export default function ProfileScreen() {
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-          <Server size={16} color="#0284C7" />
+          <Server size={16} color="#0D9488" />
           <Text style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold' }}>
             การเชื่อมต่อระบบ
           </Text>

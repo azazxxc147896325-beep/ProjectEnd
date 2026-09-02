@@ -40,17 +40,17 @@ export function CustomConfirmModal() {
               {
                 backgroundColor: isDestructive
                   ? '#FEF2F2'
-                  : '#E0F2FE',
+                  : '#CCFBF1',
                 borderColor: isDestructive
                   ? '#FECACA'
-                  : '#BAE6FD',
+                  : '#99F6E4',
               },
             ]}
           >
             {isDestructive ? (
               <AlertCircle size={28} color="#DC2626" />
             ) : (
-              <HelpCircle size={28} color="#0284C7" />
+              <HelpCircle size={28} color="#0D9488" />
             )}
           </View>
 
@@ -78,8 +78,8 @@ export function CustomConfirmModal() {
               style={[
                 styles.confirmButton,
                 {
-                  backgroundColor: isDestructive ? '#DC2626' : '#0284C7',
-                  shadowColor: isDestructive ? '#DC2626' : '#0284C7',
+                  backgroundColor: isDestructive ? '#DC2626' : '#0D9488',
+                  shadowColor: isDestructive ? '#DC2626' : '#0D9488',
                 },
               ]}
             >

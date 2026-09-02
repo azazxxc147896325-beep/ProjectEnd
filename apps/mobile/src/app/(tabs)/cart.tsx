@@ -236,7 +236,7 @@ export default function CartScreen() {
 
   // หน้าหลักของตะกร้า: แสดงรายการการ์ดร้านค้าทั้งหมด + ปุ่มสั่งพร้อมกัน
   return (
-    <View style={{ flex: 1, backgroundColor: '#F0F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: '#F0FDFA' }}>
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 140 }}>
         {/* Auth Notice Banner if not logged in */}
         {!isAuthenticated && (
@@ -247,26 +247,26 @@ export default function CartScreen() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              backgroundColor: '#E0F2FE',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               borderRadius: 16,
               padding: 12,
               marginBottom: 16,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
-              <Lock size={18} color="#0284C7" />
+              <Lock size={18} color="#0D9488" />
               <View style={{ flex: 1 }}>
                 <Text style={{ color: '#0F172A', fontSize: 12, fontWeight: 'bold' }}>
                   ยังไม่ได้เข้าสู่ระบบ
                 </Text>
-                <Text style={{ color: '#0369A1', fontSize: 11 }}>
+                <Text style={{ color: '#0F766E', fontSize: 11 }}>
                   แตะเพื่อเข้าสู่ระบบนักศึกษาสำหรับสั่งอาหารและรับคิว
                 </Text>
               </View>
             </View>
-            <ChevronRight size={16} color="#0284C7" />
+            <ChevronRight size={16} color="#0D9488" />
           </TouchableOpacity>
         )}
 
@@ -293,20 +293,20 @@ export default function CartScreen() {
               width: 38,
               height: 38,
               borderRadius: 12,
-              backgroundColor: '#E0F2FE',
+              backgroundColor: '#CCFBF1',
               borderWidth: 1,
-              borderColor: '#BAE6FD',
+              borderColor: '#99F6E4',
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
-            <Store size={20} color="#0284C7" />
+            <Store size={20} color="#0D9488" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{ color: '#0F172A', fontSize: 14, fontWeight: 'bold' }}>
               ร้านค้าในตะกร้า ({vendorGroups.length} ร้าน)
             </Text>
-            <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
+            <Text style={{ color: '#475569', fontSize: 12, marginTop: 2 }}>
               แตะที่การ์ดร้านค้าเพื่อดูรายการ หรือกดสั่งพร้อมกันทั้งหมดด้านล่าง
             </Text>
           </View>

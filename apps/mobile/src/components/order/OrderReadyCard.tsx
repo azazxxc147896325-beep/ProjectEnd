@@ -47,9 +47,9 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
         padding: 20,
         alignItems: 'center',
         borderWidth: 1.5,
-        borderColor: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#BAE6FD',
+        borderColor: isReady ? '#059669' : isAccepted ? '#0D9488' : '#99F6E4',
         marginBottom: 20,
-        shadowColor: isReady ? '#16A34A' : '#0284C7',
+        shadowColor: isReady ? '#059669' : '#0D9488',
         shadowOpacity: 0.12,
         shadowRadius: 10,
         elevation: 4,
@@ -65,19 +65,19 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
           height: 88,
           borderRadius: 26,
           backgroundColor: isReady
-            ? '#F0FDF4'
+            ? '#ECFDF5'
             : isAccepted
-            ? '#E0F2FE'
-            : '#F0F9FF',
+            ? '#CCFBF1'
+            : '#F0FDFA',
           borderWidth: 2.5,
-          borderColor: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#BAE6FD',
+          borderColor: isReady ? '#059669' : isAccepted ? '#0D9488' : '#99F6E4',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
         <Text
           style={{
-            color: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#0369A1',
+            color: isReady ? '#059669' : isAccepted ? '#0D9488' : '#0F766E',
             fontSize: 34,
             fontWeight: '900',
           }}
@@ -94,21 +94,21 @@ export function OrderReadyCard({ order }: OrderReadyCardProps) {
           paddingHorizontal: 14,
           paddingVertical: 6,
           borderRadius: 14,
-          backgroundColor: isReady ? '#F0FDF4' : isAccepted ? '#E0F2FE' : '#F8FAFC',
+          backgroundColor: isReady ? '#ECFDF5' : isAccepted ? '#CCFBF1' : '#F8FAFC',
           borderWidth: 1,
-          borderColor: isReady ? '#BBF7D0' : isAccepted ? '#BAE6FD' : '#E2E8F0',
+          borderColor: isReady ? '#A7F3D0' : isAccepted ? '#99F6E4' : '#E2E8F0',
         }}
       >
         {isReady ? (
-          <Bell size={14} color="#16A34A" />
+          <Bell size={14} color="#059669" />
         ) : isAccepted ? (
-          <CheckCircle2 size={14} color="#0284C7" />
+          <CheckCircle2 size={14} color="#0D9488" />
         ) : (
           <Clock size={14} color="#64748B" />
         )}
         <Text
           style={{
-            color: isReady ? '#16A34A' : isAccepted ? '#0284C7' : '#0F172A',
+            color: isReady ? '#059669' : isAccepted ? '#0D9488' : '#0F172A',
             fontSize: 12,
             fontWeight: 'bold',
           }}

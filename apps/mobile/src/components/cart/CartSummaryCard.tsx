@@ -63,7 +63,7 @@ export function CartSummaryCard({
           }}
         >
           <Text style={{ color: '#0F172A', fontSize: 15, fontWeight: 'bold' }}>ยอดชำระสุทธิรวม</Text>
-          <Text style={{ color: '#0284C7', fontSize: 20, fontWeight: 'bold' }}>
+          <Text style={{ color: '#0D9488', fontSize: 20, fontWeight: 'bold' }}>
             ฿{totalPrice.toLocaleString()}
           </Text>
         </View>
@@ -93,14 +93,14 @@ export function CartSummaryCard({
           disabled={isSubmitting}
           activeOpacity={0.85}
           style={{
-            backgroundColor: '#0284C7',
+            backgroundColor: '#0D9488',
             borderRadius: 16,
             paddingVertical: 14,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
             gap: 8,
-            shadowColor: '#0284C7',
+            shadowColor: '#0D9488',
             shadowOpacity: 0.3,
             shadowRadius: 8,
             elevation: 4,

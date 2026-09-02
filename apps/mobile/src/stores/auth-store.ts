@@ -1,34 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import * as SecureStore from 'expo-secure-store';
 import { User, Role } from '@campus-food/shared-types';
-
-// ---- Secure Storage Adapter for Zustand persist ----
-// expo-secure-store encrypts data using device-level keystore (Keychain / Android Keystore).
-// This ensures the JWT token survives app restarts without being exposed as plain text.
-const secureStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    try {
-      return await SecureStore.getItemAsync(name);
-    } catch {
-      return null;
-    }
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    try {
-      await SecureStore.setItemAsync(name, value);
-    } catch (err) {
-      console.warn('[SecureStore] Failed to persist auth state:', err);
-    }
-  },
-  removeItem: async (name: string): Promise<void> => {
-    try {
-      await SecureStore.deleteItemAsync(name);
-    } catch (err) {
-      console.warn('[SecureStore] Failed to remove auth state:', err);
-    }
-  },
-};
+import { secureStorageAdapter } from '../lib/secure-storage-adapter';
 
 // ---- Types ----
 interface RegisterData {
@@ -165,7 +138,7 @@ export const useAuthStore = create<AuthState>()(
 
     {
       name: 'campus-food-auth', // Key ใน SecureStore
-      storage: createJSONStorage(() => secureStorage),
+      storage: createJSONStorage(() => secureStorageAdapter),
       // เลือกเก็บเฉพาะ field ที่ต้องการ persist (ไม่เก็บ isHydrated)
       partialize: (state) => ({
         user: state.user,

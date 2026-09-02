@@ -97,7 +97,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             height: 48,
           }}
         >
-          <UserIcon size={18} color="#0284C7" style={{ marginRight: 10 }} />
+          <UserIcon size={18} color="#0D9488" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="เช่น สมชาย ใจดี"
             placeholderTextColor="#94A3B8"
@@ -125,7 +125,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             height: 48,
           }}
         >
-          <Mail size={18} color="#0284C7" style={{ marginRight: 10 }} />
+          <Mail size={18} color="#0D9488" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="your.email@campus.ac.th"
             placeholderTextColor="#94A3B8"
@@ -155,7 +155,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             height: 48,
           }}
         >
-          <Phone size={18} color="#0284C7" style={{ marginRight: 10 }} />
+          <Phone size={18} color="#0D9488" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="0812345678"
             placeholderTextColor="#94A3B8"
@@ -184,7 +184,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             height: 48,
           }}
         >
-          <Lock size={18} color="#0284C7" style={{ marginRight: 10 }} />
+          <Lock size={18} color="#0D9488" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="••••••••"
             placeholderTextColor="#94A3B8"
@@ -216,7 +216,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             height: 48,
           }}
         >
-          <Lock size={18} color="#0284C7" style={{ marginRight: 10 }} />
+          <Lock size={18} color="#0D9488" style={{ marginRight: 10 }} />
           <TextInput
             placeholder="••••••••"
             placeholderTextColor="#94A3B8"
@@ -234,14 +234,14 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         disabled={loading}
         activeOpacity={0.85}
         style={{
-          backgroundColor: '#0284C7',
+          backgroundColor: '#0D9488',
           borderRadius: 16,
           height: 48,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
-          shadowColor: '#0284C7',
+          shadowColor: '#0D9488',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.3,
           shadowRadius: 10,
@@ -265,7 +265,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
       <TouchableOpacity onPress={onSwitchToLogin} style={{ marginTop: 16, alignItems: 'center' }}>
         <Text style={{ color: '#64748B', fontSize: 12 }}>
           มีบัญชีอยู่แล้ว?{' '}
-          <Text style={{ color: '#0284C7', fontWeight: 'bold' }}>เข้าสู่ระบบที่นี่</Text>
+          <Text style={{ color: '#0D9488', fontWeight: 'bold' }}>เข้าสู่ระบบที่นี่</Text>
         </Text>
       </TouchableOpacity>
     </View>
