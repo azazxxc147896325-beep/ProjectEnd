@@ -10,6 +10,12 @@ jobs:
   test-and-build:
     name: Test and Build Monorepo
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db?schema=public"
+      DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/test_db?schema=public"
+      JWT_SECRET: "ci_pipeline_dummy_jwt_secret_key_2026"
+      JWT_REFRESH_SECRET: "ci_pipeline_dummy_jwt_refresh_secret_key_2026"
 
     steps:
       - name: Checkout Code
@@ -22,19 +28,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
+
+      - name: Build Shared Types
+        run: pnpm --filter @campus-food/shared-types build
 
       - name: Generate Prisma Client
         run: pnpm --filter @campus-food/backend prisma:generate
 
       - name: Run Backend Unit Tests
         run: pnpm --filter @campus-food/backend test
-
-      - name: Build Shared Types
-        run: pnpm --filter @campus-food/shared-types build
 
       - name: Build Backend & Web Application
         run: |
