@@ -1,0 +1,44 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  test-and-build:
+    name: Test and Build Monorepo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm --filter @campus-food/backend prisma:generate
+
+      - name: Run Backend Unit Tests
+        run: pnpm --filter @campus-food/backend test
+
+      - name: Build Shared Types
+        run: pnpm --filter @campus-food/shared-types build
+
+      - name: Build Backend & Web Application
+        run: |
+          pnpm --filter @campus-food/backend build
+          pnpm --filter @campus-food/web build

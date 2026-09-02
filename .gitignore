@@ -1,42 +1,87 @@
-# Dependencies
+# ==============================================================================
+# Campus Food Ordering Monorepo - Git Ignore Rules
+# ==============================================================================
+
+# ---- Package Managers & Dependencies ----
 node_modules/
 .pnpm-store/
+.npm/
+.yarn/
 
-# Build outputs
+# ---- Build & Output Artifacts ----
 dist/
 build/
-.next/
 out/
-.expo/
+.next/
+.turbo/
 web-build/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
 
-# Environment files
+# ---- Environment Variables & Secrets ----
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+.env*.local
+*.pem
+*.key
+*.cert
+*.crt
 
-# Logs
+# Always keep template files
+!.env.example
+!.env.local.example
+!.env.*.example
+
+# ---- Mobile & Expo Framework ----
+.expo/
+.expo-shared/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+*.apk
+*.aab
+*.ipa
+
+# ---- Testing & Coverage ----
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+blob-report/
+
+# ---- Logs & Debugging ----
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-*.log
+lerna-debug.log*
 
-# OS
+# ---- Operating System Specific ----
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# IDEs
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+# ---- IDE & Editor Configs ----
 .idea/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 
-# Temporary folders
+# ---- Temporary & Scratch Files ----
 tmp/
 temp/
-coverage/
+.cache/
+postgres_data/
