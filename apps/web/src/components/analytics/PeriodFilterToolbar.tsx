@@ -13,14 +13,14 @@ interface PeriodFilterToolbarProps {
 export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterToolbarProps) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
-      <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-[#E2E8F0] shadow-xs">
         <button
           onClick={() => onPeriodChange('today')}
           className={clsx(
             'px-4 py-1.5 rounded-xl text-xs font-bold transition-all',
             period === 'today'
-              ? 'bg-brand-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
+              ? 'bg-[#0D9488] text-white shadow-xs'
+              : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F0FDFA]',
           )}
         >
           📅 วันนี้
@@ -30,8 +30,8 @@ export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterTool
           className={clsx(
             'px-4 py-1.5 rounded-xl text-xs font-bold transition-all',
             period === 'week'
-              ? 'bg-brand-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
+              ? 'bg-[#0D9488] text-white shadow-xs'
+              : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F0FDFA]',
           )}
         >
           📊 7 วันล่าสุด
@@ -41,16 +41,16 @@ export function PeriodFilterToolbar({ period, onPeriodChange }: PeriodFilterTool
           className={clsx(
             'px-4 py-1.5 rounded-xl text-xs font-bold transition-all',
             period === 'month'
-              ? 'bg-brand-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
+              ? 'bg-[#0D9488] text-white shadow-xs'
+              : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F0FDFA]',
           )}
         >
           📈 30 วันล่าสุด
         </button>
       </div>
 
-      <span className="text-xs text-slate-500 flex items-center gap-1">
-        <Calendar className="w-3.5 h-3.5 text-brand-600" />
+      <span className="text-xs text-[#475569] flex items-center gap-1">
+        <Calendar className="w-3.5 h-3.5 text-[#0D9488]" />
         <span>คำนวณจากฐานข้อมูล PostgreSQL จริง</span>
       </span>
     </div>

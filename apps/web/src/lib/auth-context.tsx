@@ -26,10 +26,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const loadProfile = async (authToken: string) => {
+  const loadProfile = async (authToken?: string | null) => {
     try {
       const userData = await apiClient('/auth/me', {
-        headers: { Authorization: `Bearer ${authToken}` },
+        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
       });
       setUser(userData);
       if (userData.vendor) {
@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Fetch my vendor
         try {
           const vendorData = await apiClient('/vendors/my-vendor', {
-            headers: { Authorization: `Bearer ${authToken}` },
+            headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
           });
           setVendor(vendorData);
         } catch {
@@ -59,7 +59,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(savedToken);
       loadProfile(savedToken);
     } else {
-      setIsLoading(false);
+      // Try to hydrate from HTTP-Only cookie
+      loadProfile(null);
     }
   }, []);
 
@@ -69,8 +70,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       body: JSON.stringify({ email, password }),
     });
 
-    localStorage.setItem('token', data.accessToken);
-    setToken(data.accessToken);
+    if (data.accessToken) {
+      localStorage.setItem('token', data.accessToken);
+      setToken(data.accessToken);
+    }
+    if (data.refreshToken) {
+      localStorage.setItem('refreshToken', data.refreshToken);
+    }
     setUser(data.user);
 
     if (data.user.vendor) {
@@ -82,8 +88,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push('/dashboard/orders');
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await apiClient('/auth/logout', { method: 'POST' }).catch(() => {});
+    } catch {
+      // Ignore network errors on logout
+    }
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setToken(null);
     setUser(null);
     setVendor(null);

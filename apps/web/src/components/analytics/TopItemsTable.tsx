@@ -12,15 +12,15 @@ interface TopItemsTableProps {
 
 export function TopItemsTable({ popularItems = [], isLoading }: TopItemsTableProps) {
   return (
-    <div className="bg-white rounded-3xl p-6 border border-slate-200/90 space-y-4 shadow-xs">
+    <div className="bg-white rounded-3xl p-6 border border-[#E2E8F0] space-y-4 shadow-xs">
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200">
+          <div className="w-8 h-8 rounded-xl bg-[#FFFBEB] text-[#D97706] flex items-center justify-center border border-[#FDE68A]">
             <Award className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="font-bold text-sm text-slate-900">อันดับเมนูอาหารขายดี (Top Popular Items)</h4>
-            <p className="text-xs text-slate-500">คำนวณจากจำนวนจานที่สั่งและรายได้รวมจริง</p>
+            <h4 className="font-bold text-sm text-[#0F172A]">อันดับเมนูอาหารขายดี (Top Popular Items)</h4>
+            <p className="text-xs text-[#475569]">คำนวณจากจำนวนจานที่สั่งและรายได้รวมจริง</p>
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@ export function TopItemsTable({ popularItems = [], isLoading }: TopItemsTablePro
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="text-slate-500 border-b border-slate-100">
+            <tr className="text-[#475569] border-b border-[#E2E8F0]">
               <th className="pb-3 font-semibold">อันดับ</th>
               <th className="pb-3 font-semibold">ชื่อเมนู</th>
               <th className="pb-3 font-semibold">หมวดหมู่</th>
@@ -39,13 +39,13 @@ export function TopItemsTable({ popularItems = [], isLoading }: TopItemsTablePro
           <tbody className="divide-y divide-slate-100">
             {isLoading || !popularItems || popularItems.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-slate-400">
+                <td colSpan={5} className="py-8 text-center text-[#94A3B8]">
                   ยังไม่พบประวัติเมนูขายดีในช่วงเวลานี้
                 </td>
               </tr>
             ) : (
               popularItems.map((item, idx) => (
-                <tr key={item.menuItemId} className="hover:bg-sky-50/50 transition-colors">
+                <tr key={item.menuItemId} className="hover:bg-[#F0FDFA] transition-colors">
                   <td className="py-3.5 font-bold">
                     <span
                       className={clsx(
@@ -62,14 +62,14 @@ export function TopItemsTable({ popularItems = [], isLoading }: TopItemsTablePro
                       {idx + 1}
                     </span>
                   </td>
-                  <td className="py-3.5 font-semibold text-slate-900">{item.name}</td>
-                  <td className="py-3.5 text-slate-600">
-                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[11px] border border-slate-200">
+                  <td className="py-3.5 font-semibold text-[#0F172A]">{item.name}</td>
+                  <td className="py-3.5 text-[#475569]">
+                    <span className="px-2 py-0.5 rounded-full bg-[#F8FAFC] text-[#475569] text-[11px] border border-[#E2E8F0]">
                       {item.category}
                     </span>
                   </td>
-                  <td className="py-3.5 text-right font-bold text-slate-800">{item.totalQuantity} จาน</td>
-                  <td className="py-3.5 text-right font-black text-brand-700">
+                  <td className="py-3.5 text-right font-bold text-[#0F172A]">{item.totalQuantity} จาน</td>
+                  <td className="py-3.5 text-right font-black text-[#0D9488]">
                     ฿{item.totalRevenue.toLocaleString()}
                   </td>
                 </tr>

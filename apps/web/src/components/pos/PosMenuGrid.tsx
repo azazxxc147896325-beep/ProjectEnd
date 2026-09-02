@@ -48,23 +48,23 @@ export function PosMenuGrid({
   }, [items, selectedCategory, searchQuery]);
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-[#F0F7FF]/60 p-3 lg:p-5 overflow-hidden">
+    <div className="flex-1 flex flex-col min-w-0 bg-[#F0FDFA] p-3 lg:p-5 overflow-hidden">
       {/* Category Bar & Quick Search */}
       <div className="space-y-3 mb-3 shrink-0">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="ค้นหาชื่ออาหาร..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-10 py-2 rounded-2xl bg-white border border-slate-200 text-sm font-medium text-slate-900 focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 shadow-2xs"
+            className="w-full pl-10 pr-10 py-2 rounded-2xl bg-white border border-[#E2E8F0] text-sm font-medium text-[#0F172A] focus:outline-hidden focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20 shadow-2xs"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="p-1 rounded-full text-slate-400 hover:text-slate-600 absolute right-3 top-1/2 -translate-y-1/2"
+              className="p-1 rounded-full text-[#94A3B8] hover:text-[#0F172A] absolute right-3 top-1/2 -translate-y-1/2"
             >
               <X className="w-4 h-4" />
             </button>
@@ -78,8 +78,8 @@ export function PosMenuGrid({
             className={clsx(
               'px-4 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-2xs',
               selectedCategory === 'all'
-                ? 'bg-brand-600 text-white shadow-brand-500/20'
-                : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200',
+                ? 'bg-[#0D9488] text-white shadow-teal-500/20'
+                : 'bg-white text-[#475569] hover:bg-[#F0FDFA] border border-[#E2E8F0]',
             )}
           >
             ทั้งหมด ({items.length})
@@ -93,8 +93,8 @@ export function PosMenuGrid({
                 className={clsx(
                   'px-4 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-2xs',
                   selectedCategory === cat
-                    ? 'bg-brand-600 text-white shadow-brand-500/20'
-                    : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200',
+                    ? 'bg-[#0D9488] text-white shadow-teal-500/20'
+                    : 'bg-white text-[#475569] hover:bg-[#F0FDFA] border border-[#E2E8F0]',
                 )}
               >
                 {cat} ({count})
@@ -107,8 +107,8 @@ export function PosMenuGrid({
       {/* Food Items Grid */}
       <div className="flex-1 overflow-y-auto pr-1">
         {isLoading ? (
-          <div className="h-64 flex flex-col items-center justify-center text-slate-400 gap-2">
-            <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          <div className="h-64 flex flex-col items-center justify-center text-[#94A3B8] gap-2">
+            <div className="w-6 h-6 border-2 border-[#0D9488] border-t-transparent rounded-full animate-spin" />
             <span className="text-xs font-bold">กำลังโหลดรายการอาหาร...</span>
           </div>
         ) : filteredItems.length === 0 ? (

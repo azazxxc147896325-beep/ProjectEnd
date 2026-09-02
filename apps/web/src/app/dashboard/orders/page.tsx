@@ -156,7 +156,7 @@ export default function OrdersKanbanPage() {
       <div className="p-6 space-y-6 flex-1 flex flex-col">
         {/* Realtime Alert Banner */}
         {newOrderAlert && (
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-brand-600 to-sky-500 text-white font-bold text-sm shadow-lg flex items-center justify-between animate-bounce">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#0D9488] to-[#14B8A6] text-white font-bold text-sm shadow-lg flex items-center justify-between animate-bounce">
             <div className="flex items-center gap-2.5">
               <Bell className="w-5 h-5 animate-spin" />
               <span>🔔 {newOrderAlert}</span>
@@ -167,7 +167,7 @@ export default function OrdersKanbanPage() {
 
         {/* Error Banner */}
         {statusError && (
-          <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium flex items-center gap-2.5 shadow-xs">
+          <div className="p-3.5 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] text-[#DC2626] text-sm font-medium flex items-center gap-2.5 shadow-xs">
             <span className="text-base">⚠️</span>
             <span>{statusError}</span>
           </div>
@@ -189,10 +189,10 @@ export default function OrdersKanbanPage() {
             title="รอรับออเดอร์ (คิวใหม่)"
             count={pendingOrders.length}
             icon={Clock}
-            iconBgClass="bg-amber-100"
-            iconTextClass="text-amber-700"
-            badgeClass="bg-amber-100 text-amber-800 border-amber-200"
-            borderClass="border-amber-200/80"
+            iconBgClass="bg-[#FFFBEB]"
+            iconTextClass="text-[#D97706]"
+            badgeClass="bg-[#FFFBEB] text-[#D97706] border-[#FDE68A]"
+            borderClass="border-[#FDE68A]/80"
             orders={pendingOrders}
             isLoading={isLoading}
             isStatusPending={updateStatusMutation.isPending}
@@ -206,10 +206,10 @@ export default function OrdersKanbanPage() {
             title="กำลังเตรียมอาหาร (รับแล้ว)"
             count={preparingOrders.length}
             icon={Utensils}
-            iconBgClass="bg-sky-100"
-            iconTextClass="text-brand-700"
-            badgeClass="bg-sky-100 text-brand-800 border-sky-200"
-            borderClass="border-sky-200/80"
+            iconBgClass="bg-[#CCFBF1]"
+            iconTextClass="text-[#0D9488]"
+            badgeClass="bg-[#CCFBF1] text-[#0D9488] border-[#99F6E4]"
+            borderClass="border-[#99F6E4]/80"
             orders={preparingOrders}
             isLoading={isLoading}
             isStatusPending={updateStatusMutation.isPending}

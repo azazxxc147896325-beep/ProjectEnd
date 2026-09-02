@@ -26,13 +26,13 @@ export function KpiCard({
   subtitleTextClass,
 }: KpiCardProps) {
   return (
-    <div className="bg-white rounded-3xl p-5 border border-slate-200/90 space-y-2 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-3xl p-5 border border-[#E2E8F0] space-y-2 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow">
       <div className={clsx('w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xs', iconBgClass, iconTextClass)}>
         <Icon className="w-5 h-5" />
       </div>
-      <p className="text-xs text-slate-500 font-medium">{title}</p>
-      <h3 className="text-2xl font-black text-slate-900">
-        {value} {unit && <span className="text-sm font-normal text-slate-500">{unit}</span>}
+      <p className="text-xs text-[#475569] font-medium">{title}</p>
+      <h3 className="text-2xl font-black text-[#0F172A]">
+        {value} {unit && <span className="text-sm font-normal text-[#94A3B8]">{unit}</span>}
       </h3>
       <span className={clsx('text-[11px] font-bold', subtitleTextClass)}>{subtitle}</span>
     </div>

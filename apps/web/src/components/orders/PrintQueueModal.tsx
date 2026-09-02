@@ -49,61 +49,61 @@ export function PrintQueueModal({
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200 text-brand-600 flex items-center justify-center shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-[#CCFBF1] border border-[#99F6E4] text-[#0D9488] flex items-center justify-center shadow-xs">
               <Printer className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-slate-900">ยืนยันพิมพ์ใบเลขคิว</h3>
-              <p className="text-xs text-slate-500 font-medium">
+              <h3 className="text-lg font-black text-[#0F172A]">ยืนยันพิมพ์ใบเลขคิว</h3>
+              <p className="text-xs text-[#475569] font-medium">
                 ทำอาหารเสร็จแล้ว ต้องการพิมพ์สลิปติดกล่องอาหารเลยหรือไม่?
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-xl text-[#94A3B8] hover:text-[#0F172A] hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Order Preview Card */}
-        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-3">
+        <div className="bg-[#F8FAFC] rounded-2xl p-4 border border-[#E2E8F0] space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-xl bg-brand-600 text-white font-black text-base shadow-sm">
+              <span className="px-3 py-1 rounded-xl bg-[#0D9488] text-white font-black text-base shadow-sm">
                 คิว #{order.queueNumber}
               </span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center gap-1">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-xl bg-white border border-[#E2E8F0] text-[#0F172A] flex items-center gap-1">
                 {order.orderType === OrderType.DINE_IN ? (
                   <>
-                    <Utensils className="w-3.5 h-3.5 text-brand-600" />
+                    <Utensils className="w-3.5 h-3.5 text-[#0D9488]" />
                     <span>ทานที่ร้าน</span>
                   </>
                 ) : (
                   <>
-                    <Package className="w-3.5 h-3.5 text-brand-600" />
+                    <Package className="w-3.5 h-3.5 text-[#0D9488]" />
                     <span>สั่งกลับบ้าน</span>
                   </>
                 )}
               </span>
             </div>
-            <span className="text-sm font-black text-brand-700">
+            <span className="text-sm font-black text-[#0D9488]">
               ฿{Number(order.totalPrice).toLocaleString()}
             </span>
           </div>
 
           {/* Customer & Items preview */}
-          <div className="text-xs text-slate-600 border-t border-slate-200/70 pt-2.5 space-y-1">
-            <div className="font-semibold text-slate-800">
+          <div className="text-xs text-[#475569] border-t border-[#E2E8F0] pt-2.5 space-y-1">
+            <div className="font-semibold text-[#0F172A]">
               ลูกค้า: {order.student?.fullName || 'นักศึกษา'}{' '}
               {order.student?.phone ? `(${order.student.phone})` : ''}
             </div>
-            <div className="text-slate-500 truncate">
+            <div className="text-[#94A3B8] truncate">
               {order.items.map((i) => `${i.quantity}x ${i.menuItem?.name}`).join(', ')}
             </div>
             {order.note && (
-              <div className="text-amber-800 bg-amber-50 px-2 py-1 rounded-lg text-[11px] font-medium border border-amber-200">
+              <div className="text-[#D97706] bg-[#FFFBEB] px-2 py-1 rounded-lg text-[11px] font-medium border border-[#FDE68A]">
                 โน้ต: {order.note}
               </div>
             )}
@@ -115,7 +115,7 @@ export function PrintQueueModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-sm font-bold transition-all shadow-xs"
+            className="flex-1 py-3 px-4 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[#475569] text-sm font-bold transition-all shadow-xs"
           >
             ไม่พิมพ์ / ข้าม
           </button>
@@ -124,7 +124,7 @@ export function PrintQueueModal({
             type="button"
             onClick={handlePrint}
             autoFocus
-            className="flex-1 py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold transition-all shadow-md shadow-brand-500/25 flex items-center justify-center gap-2 active:scale-95"
+            className="flex-1 py-3 px-4 rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-bold transition-all shadow-md shadow-teal-500/25 flex items-center justify-center gap-2 active:scale-95"
           >
             <Printer className="w-4 h-4" />
             <span>พิมพ์ใบเลขคิว 🖨️</span>

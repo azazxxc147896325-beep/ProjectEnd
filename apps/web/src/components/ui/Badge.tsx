@@ -11,12 +11,12 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'default', size = 'md', className }: BadgeProps) {
   const variantStyles = {
-    default: 'bg-slate-100 text-slate-700 border-slate-200',
-    success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    warning: 'bg-amber-50 text-amber-800 border-amber-200',
-    info: 'bg-sky-50 text-sky-700 border-sky-200',
-    danger: 'bg-rose-50 text-rose-700 border-rose-200',
-    purple: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    default: 'bg-[#F8FAFC] text-[#475569] border-[#E2E8F0]',
+    success: 'bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]',
+    warning: 'bg-[#FFFBEB] text-[#D97706] border-[#FDE68A]',
+    info: 'bg-[#CCFBF1] text-[#0D9488] border-[#99F6E4]',
+    danger: 'bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]',
+    purple: 'bg-[#F5F3FF] text-[#7C3AED] border-[#DDD6FE]',
   };
 
   const sizeStyles = {
@@ -103,4 +103,24 @@ export function PaymentBadge({
     </Badge>
   );
 }
+
+export function OrderSourceBadge({
+  isWalkIn,
+  size = 'sm',
+}: {
+  isWalkIn?: boolean;
+  size?: 'sm' | 'md';
+}) {
+  return isWalkIn ? (
+    <Badge variant="purple" size={size} className="gap-1 font-bold">
+      <span>🏪 หน้าร้าน (POS)</span>
+    </Badge>
+  ) : (
+    <Badge variant="info" size={size} className="gap-1 font-bold">
+      <span>📱 สั่งออนไลน์</span>
+    </Badge>
+  );
+}
+
+
 

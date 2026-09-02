@@ -63,9 +63,9 @@ export default function AnalyticsPage() {
             unit="รายการ"
             subtitle={`สำเร็จแล้ว ${analytics?.completedOrders || 0}`}
             icon={ShoppingBag}
-            iconBgClass="bg-sky-50 border-sky-200"
-            iconTextClass="text-brand-700"
-            subtitleTextClass="text-brand-700"
+            iconBgClass="bg-[#CCFBF1] border-[#99F6E4]"
+            iconTextClass="text-[#0D9488]"
+            subtitleTextClass="text-[#0D9488]"
           />
 
           <KpiCard

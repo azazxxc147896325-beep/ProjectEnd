@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/auth-context';
@@ -12,7 +12,7 @@ import { Order, OrderStatus, WsEvents } from '@campus-food/shared-types';
 import { Utensils, Bell } from 'lucide-react';
 import Link from 'next/link';
 
-export default function CustomerQueueDisplayPage() {
+function CustomerQueueDisplayContent() {
   const searchParams = useSearchParams();
   const { vendor, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
@@ -87,10 +87,10 @@ export default function CustomerQueueDisplayPage() {
 
   if (isAuthLoading && !queryVendorId) {
     return (
-      <div className="min-h-screen bg-[#F4F8FC] flex items-center justify-center">
-        <div className="flex items-center gap-3 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-          <div className="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-bold text-slate-700">กำลังเชื่อมต่อจอเรียกคิวลูกค้า...</span>
+      <div className="min-h-screen bg-[#F0FDFA] flex items-center justify-center">
+        <div className="flex items-center gap-3 bg-white p-6 rounded-2xl shadow-sm border border-[#E2E8F0]">
+          <div className="w-5 h-5 border-2 border-[#0D9488] border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm font-bold text-[#475569]">กำลังเชื่อมต่อจอเรียกคิวลูกค้า...</span>
         </div>
       </div>
     );
@@ -98,18 +98,18 @@ export default function CustomerQueueDisplayPage() {
 
   if (!queryVendorId && !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#F0F7FF] flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md w-full bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+      <div className="min-h-screen bg-[#F0FDFA] flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full bg-white p-8 rounded-3xl border border-[#E2E8F0] shadow-sm space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mx-auto border border-[#A7F3D0]">
             <Utensils className="w-7 h-7" />
           </div>
-          <h2 className="text-xl font-black text-slate-900">จอเรียกคิวอาหารหน้าร้าน</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-black text-[#0F172A]">จอเรียกคิวอาหารหน้าร้าน</h2>
+          <p className="text-sm text-[#475569]">
             กรุณาเข้าสู่ระบบร้านค้า หรือเปิดผ่าน URL ที่ระบุร้านค้าเพื่อแสดงผลคิว
           </p>
           <Link
             href="/login?redirect=/queue-display"
-            className="block w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-md transition-all text-center"
+            className="block w-full py-3 px-4 rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white font-bold text-sm shadow-md shadow-teal-500/25 transition-all text-center"
           >
             เข้าสู่ระบบร้านค้า
           </Link>
@@ -119,7 +119,7 @@ export default function CustomerQueueDisplayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F7FF] flex flex-col selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-[#F0FDFA] flex flex-col selection:bg-brand-500 selection:text-white">
       {/* Customer Display Header */}
       <CustomerHeader
         vendorName={vendor?.name || 'ร้านอาหาร'}
@@ -131,7 +131,7 @@ export default function CustomerQueueDisplayPage() {
 
       {/* Ready Alert Chime Toast */}
       {readyChimeAlert && (
-        <div className="mx-4 lg:mx-8 mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 text-white font-black text-base shadow-xl flex items-center justify-between animate-bounce">
+        <div className="mx-4 lg:mx-8 mt-4 p-4 rounded-2xl bg-gradient-to-r from-[#059669] via-[#0D9488] to-[#059669] text-white font-black text-base shadow-xl flex items-center justify-between animate-bounce">
           <div className="flex items-center gap-3">
             <Bell className="w-6 h-6 animate-spin" />
             <span>{readyChimeAlert}</span>
@@ -148,5 +148,19 @@ export default function CustomerQueueDisplayPage() {
       {/* Customer Queue Board Component */}
       <CustomerQueueBoard orders={orders} vendorName={vendor?.name} />
     </div>
+  );
+}
+
+export default function CustomerQueueDisplayPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F0FDFA] flex items-center justify-center">
+          <div className="w-6 h-6 border-2 border-[#0D9488] border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <CustomerQueueDisplayContent />
+    </Suspense>
   );
 }

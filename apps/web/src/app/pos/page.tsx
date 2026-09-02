@@ -14,6 +14,7 @@ import {
   PosPromptPayModal,
 } from '@/components/pos';
 import { PrintQueueModal } from '@/components/orders/PrintQueueModal';
+import { getSocket } from '@/lib/socket';
 import {
   MenuItem,
   Order,
@@ -21,6 +22,7 @@ import {
   OrderType,
   PaymentMethod,
   PaymentStatus,
+  WsEvents,
 } from '@campus-food/shared-types';
 import { Utensils, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
@@ -86,7 +88,6 @@ export default function PosPage() {
 
   const handleConfirmModifier = (cartItem: PosCartItem) => {
     setCartItems((prev) => {
-      // Check if identical item already exists with exact same options and note
       const existingIdx = prev.findIndex(
         (i) =>
           i.menuItem.id === cartItem.menuItem.id &&
@@ -147,12 +148,16 @@ export default function PosPage() {
     }) => {
       if (!vendor?.id) throw new Error('ไม่พบข้อมูลร้านค้า');
 
+      const fullNote = orderNote.trim()
+        ? `[หน้าร้าน/POS] ${orderNote.trim()}`
+        : '[หน้าร้าน/POS]';
+
       // 1. Create order in backend
       const payload = {
         vendorId: vendor.id,
         orderType,
         paymentMethod,
-        note: orderNote.trim() || undefined,
+        note: fullNote,
         items: cartItems.map((ci) => ({
           menuItemId: ci.menuItem.id,
           quantity: ci.quantity,
@@ -165,21 +170,29 @@ export default function PosPage() {
         body: JSON.stringify(payload),
       });
 
-      // 2. Mark as PAID and ACCEPTED for instant POS flow
+      // 2. Mark as PAID (keeps status PENDING so kitchen cook accepts it in order)
+      let paidOrder: Order = newOrder;
       try {
-        await apiClient(`/orders/${newOrder.id}/mark-paid`, {
+        paidOrder = await apiClient<Order>(`/orders/${newOrder.id}/mark-paid`, {
           method: 'PATCH',
           body: JSON.stringify({ paymentStatus: PaymentStatus.PAID }),
         });
-        await apiClient(`/orders/${newOrder.id}/status`, {
-          method: 'PATCH',
-          body: JSON.stringify({ status: OrderStatus.ACCEPTED }),
-        });
       } catch (e) {
-        console.warn('Auto accept failed, order was created:', e);
+        console.warn('Mark paid failed, order was created:', e);
       }
 
-      return newOrder;
+      // 3. Emit PRINT_QUEUE_TICKET to Sunmi V2
+      try {
+        const socket = getSocket();
+        socket.emit(WsEvents.PRINT_QUEUE_TICKET, {
+          vendorId: vendor.id,
+          order: paidOrder || newOrder,
+        });
+      } catch (err) {
+        console.warn('Sunmi print emit failed:', err);
+      }
+
+      return paidOrder || newOrder;
     },
     onSuccess: (newOrder) => {
       setOrderError(null);
@@ -199,6 +212,35 @@ export default function PosPage() {
     },
   });
 
+  const handleOpenPromptPayModal = () => {
+    setIsPromptPayModalOpen(true);
+    // Push QR to Sunmi V2
+    if (vendor?.id) {
+      const socket = getSocket();
+      const qrPayload = `00020101021229370016A000000677010111011300668123456785303764540${totalPrice.toFixed(
+        2,
+      )}5802TH6304`;
+
+      socket.emit(WsEvents.SHOW_PAYMENT_QR, {
+        vendorId: vendor.id,
+        orderId: `POS-${Date.now().toString().slice(-4)}`,
+        queueNumber: todayOrderCount + 1,
+        totalPrice,
+        promptpayQrPayload: qrPayload,
+        orderType,
+        itemsSummary: cartItems.map((ci) => `${ci.quantity}x ${ci.menuItem.name}`),
+      });
+    }
+  };
+
+  const handleClosePromptPayModal = () => {
+    setIsPromptPayModalOpen(false);
+    if (vendor?.id) {
+      const socket = getSocket();
+      socket.emit(WsEvents.CLEAR_PAYMENT_QR, { vendorId: vendor.id });
+    }
+  };
+
   const handleConfirmCashPayment = async () => {
     await createOrderMutation.mutateAsync({ paymentMethod: PaymentMethod.CASH });
   };
@@ -207,12 +249,13 @@ export default function PosPage() {
     await createOrderMutation.mutateAsync({ paymentMethod: PaymentMethod.PROMPTPAY });
   };
 
+
   if (isAuthLoading) {
     return (
-      <div className="min-h-screen bg-[#F0F7FF] flex items-center justify-center">
-        <div className="flex items-center gap-3 bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-          <div className="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-bold text-slate-700">กำลังเข้าสู่ระบบคิดเงินหน้าร้าน POS...</span>
+      <div className="min-h-screen bg-[#F0FDFA] flex items-center justify-center">
+        <div className="flex items-center gap-3 bg-white p-6 rounded-3xl shadow-sm border border-[#E2E8F0]">
+          <div className="w-5 h-5 border-2 border-[#0D9488] border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm font-bold text-[#475569]">กำลังเข้าสู่ระบบคิดเงินหน้าร้าน POS...</span>
         </div>
       </div>
     );
@@ -220,18 +263,18 @@ export default function PosPage() {
 
   if (!isAuthenticated || !vendor) {
     return (
-      <div className="min-h-screen bg-[#F0F7FF] flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md w-full bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto">
+      <div className="min-h-screen bg-[#F0FDFA] flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full bg-white p-8 rounded-3xl border border-[#E2E8F0] shadow-sm space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#CCFBF1] text-[#0D9488] border border-[#99F6E4] flex items-center justify-center mx-auto">
             <Utensils className="w-7 h-7" />
           </div>
-          <h2 className="text-xl font-black text-slate-900">ระบบคิดเงินหน้าร้าน POS</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-black text-[#0F172A]">ระบบคิดเงินหน้าร้าน POS</h2>
+          <p className="text-sm text-[#475569]">
             จำเป็นต้องเข้าสู่ระบบบัญชีร้านค้าก่อนเริ่มรับออเดอร์หน้าร้าน
           </p>
           <Link
             href="/login?redirect=/pos"
-            className="block w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-md transition-all text-center"
+            className="block w-full py-3 px-4 rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white font-bold text-sm shadow-md shadow-teal-500/25 transition-all text-center"
           >
             เข้าสู่ระบบร้านค้า
           </Link>
@@ -241,7 +284,7 @@ export default function PosPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-[#F0F7FF] select-none overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#F0FDFA] select-none overflow-hidden">
       {/* Top POS Header */}
       <PosHeader
         vendorName={vendor.name}
@@ -280,7 +323,7 @@ export default function PosPage() {
           onRemoveItem={handleRemoveItem}
           onClearCart={handleClearCart}
           onOpenCashModal={() => setIsCashModalOpen(true)}
-          onOpenPromptPayModal={() => setIsPromptPayModalOpen(true)}
+          onOpenPromptPayModal={handleOpenPromptPayModal}
           isSubmitting={createOrderMutation.isPending}
         />
       </div>
@@ -307,7 +350,7 @@ export default function PosPage() {
         isOpen={isPromptPayModalOpen}
         totalPrice={totalPrice}
         vendorName={vendor.name}
-        onClose={() => setIsPromptPayModalOpen(false)}
+        onClose={handleClosePromptPayModal}
         onConfirm={handleConfirmPromptPayPayment}
         isSubmitting={createOrderMutation.isPending}
       />

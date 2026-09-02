@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Order, OrderStatus, OrderType } from '@campus-food/shared-types';
-import { OrderTypeBadge, PaymentBadge } from '../ui/Badge';
-import { Clock, Check, CheckCircle2, BellRing, User, MessageSquare, XCircle, AlertTriangle, Printer } from 'lucide-react';
+import { OrderTypeBadge, PaymentBadge, OrderSourceBadge } from '../ui/Badge';
+import { Clock, Check, CheckCircle2, BellRing, User, MessageSquare, XCircle, AlertTriangle, Printer, CheckCircle } from 'lucide-react';
 import { printQueueSlip } from '@/lib/print-slip';
 import { clsx } from 'clsx';
 
@@ -15,6 +15,14 @@ interface KdsCardProps {
 export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: KdsCardProps) {
   const [isActionPending, setIsActionPending] = useState(false);
   const [elapsedMinutes, setElapsedMinutes] = useState<number>(0);
+
+  // Determine if this order was placed at counter (Walk-in / POS)
+  const isWalkIn =
+    order.note?.includes('[POS]') ||
+    order.note?.includes('[หน้าร้าน]') ||
+    order.studentId === 'walk-in' ||
+    order.studentId === order.vendorId ||
+    order.studentId === order.vendor?.ownerId;
 
   // Calculate elapsed time from order creation
   useEffect(() => {
@@ -41,8 +49,8 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
         setIsActionPending(true);
         await onUpdateStatus(order.id, status);
 
-        // Open print confirmation modal when order is READY (ทำอาหารเสร็จแล้ว)
-        if (status === OrderStatus.READY) {
+        // For Online orders: Open print confirmation modal when order is READY (ทำอาหารเสร็จแล้ว)
+        if (status === OrderStatus.READY && !isWalkIn) {
           if (onPromptPrint) {
             onPromptPrint(order);
           } else {
@@ -72,19 +80,20 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
       )}
     >
       <div className="space-y-3.5">
-        {/* Top Header: Queue Number + Order Type + Payment Badge + Elapsed Time Badge + Print Button */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        {/* Top Header: Queue Number + Order Type + Source Badge + Payment Badge */}
+        <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span
               className={clsx(
                 'w-11 h-11 rounded-2xl flex items-center justify-center font-black text-lg shadow-xs tracking-tight',
                 order.status === OrderStatus.READY
-                  ? 'bg-emerald-50 text-emerald-700 border-2 border-emerald-300'
-                  : 'bg-sky-50 text-brand-700 border-2 border-sky-300',
+                  ? 'bg-[#ECFDF5] text-[#059669] border-2 border-[#A7F3D0]'
+                  : 'bg-[#CCFBF1] text-[#0D9488] border-2 border-[#99F6E4]',
               )}
             >
               #{order.queueNumber}
             </span>
+            <OrderSourceBadge isWalkIn={isWalkIn} />
             <OrderTypeBadge type={order.orderType} />
             <PaymentBadge method={order.paymentMethod} status={order.paymentStatus} />
           </div>
@@ -94,63 +103,72 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
               className={clsx(
                 'flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold border',
                 isUrgent
-                  ? 'bg-rose-50 border-rose-200 text-rose-700 animate-pulse'
+                  ? 'bg-[#FEF2F2] border-[#FECACA] text-[#DC2626] animate-pulse'
                   : isWarning
-                  ? 'bg-amber-50 border-amber-200 text-amber-700'
-                  : 'bg-slate-50 border-slate-200 text-slate-600',
+                  ? 'bg-[#FFFBEB] border-[#FDE68A] text-[#D97706]'
+                  : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#475569]',
               )}
             >
               {isUrgent ? (
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+                <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
               ) : (
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                <Clock className="w-3.5 h-3.5 text-[#94A3B8]" />
               )}
               <span>{elapsedMinutes === 0 ? 'เพิ่งสั่ง' : `${elapsedMinutes} นาทีที่แล้ว`}</span>
             </div>
 
             <button
-              onClick={() => printQueueSlip(order)}
-              className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors shadow-2xs active:scale-95"
-              title="พิมพ์ใบเลขคิว / สลิปแปะกล่องอาหาร"
+              onClick={() => printQueueSlip(order, { isWalkIn })}
+              className="p-2 rounded-xl bg-[#F8FAFC] hover:bg-[#CCFBF1] border border-[#E2E8F0] text-[#475569] hover:text-[#0D9488] transition-colors shadow-2xs active:scale-95"
+              title="พิมพ์ใบเลขคิวซ้ำ / สลิปแปะกล่องอาหาร"
             >
               <Printer className="w-4 h-4" />
             </button>
           </div>
         </div>
 
+        {/* Walk-in Printed Indicator */}
+        {isWalkIn && (
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#ECFDF5] text-[#059669] text-[11px] font-bold border border-[#A7F3D0]">
+            <CheckCircle className="w-3.5 h-3.5 text-[#059669]" />
+            <span>พิมพ์บัตรคิวให้ลูกค้าหน้าร้านแล้ว (Sunmi V2)</span>
+          </div>
+        )}
+
+
         {/* Customer Info */}
-        <div className="flex items-center justify-between text-xs text-slate-700 px-1">
+        <div className="flex items-center justify-between text-xs text-[#475569] px-1">
           <div className="flex items-center gap-1.5 font-semibold truncate">
-            <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="truncate text-slate-800">{order.student?.fullName || 'นักศึกษา'}</span>
+            <User className="w-3.5 h-3.5 text-[#94A3B8] shrink-0" />
+            <span className="truncate text-[#0F172A]">{order.student?.fullName || 'นักศึกษา'}</span>
           </div>
           {order.student?.phone && (
-            <span className="text-slate-400 text-xs font-mono">{order.student.phone}</span>
+            <span className="text-[#94A3B8] text-xs font-mono">{order.student.phone}</span>
           )}
         </div>
 
         {/* Items List - Large Font for Tablet reading */}
-        <div className="space-y-2 bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+        <div className="space-y-2 bg-[#F8FAFC] p-3 rounded-2xl border border-[#E2E8F0]">
           {order.items.map((item, idx) => (
             <div key={idx} className="flex items-start justify-between gap-3 text-sm">
               <div className="space-y-0.5 flex-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="w-6 h-6 rounded-lg bg-white border border-slate-200 text-brand-700 font-black text-xs flex items-center justify-center shrink-0">
+                  <span className="w-6 h-6 rounded-lg bg-white border border-[#E2E8F0] text-[#0D9488] font-black text-xs flex items-center justify-center shrink-0">
                     x{item.quantity}
                   </span>
-                  <span className="font-bold text-slate-900 leading-snug">
+                  <span className="font-bold text-[#0F172A] leading-snug">
                     {item.menuItem?.name || 'รายการอาหาร'}
                   </span>
                 </div>
                 {item.options && typeof item.options === 'object' && Object.keys(item.options).length > 0 && (
-                  <p className="text-xs text-brand-700 pl-8 font-medium">
+                  <p className="text-xs text-[#0D9488] pl-8 font-medium">
                     {Object.entries(item.options)
                       .map(([k, v]) => `${k}: ${v}`)
                       .join(', ')}
                   </p>
                 )}
               </div>
-              <span className="text-slate-700 font-bold text-xs shrink-0">
+              <span className="text-[#475569] font-bold text-xs shrink-0">
                 ฿{Number(item.subtotal)}
               </span>
             </div>
@@ -159,20 +177,20 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
 
         {/* Special Instructions Note */}
         {order.note && (
-          <div className="flex items-start gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-xs font-medium">
-            <MessageSquare className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
+          <div className="flex items-start gap-2 p-2.5 rounded-xl bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] text-xs font-medium">
+            <MessageSquare className="w-4 h-4 shrink-0 mt-0.5 text-[#D97706]" />
             <span className="leading-snug">
-              <strong className="text-amber-800">โน้ต:</strong> {order.note}
+              <strong className="text-[#D97706]">โน้ต:</strong> {order.note}
             </span>
           </div>
         )}
       </div>
 
       {/* Touch-Friendly Large Action Button Row */}
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+      <div className="pt-3 border-t border-[#E2E8F0] flex items-center justify-between gap-2">
         <div>
-          <span className="text-[11px] text-slate-500 font-medium">ยอดรวม</span>
-          <p className="text-base font-black text-slate-900">
+          <span className="text-[11px] text-[#94A3B8] font-medium">ยอดรวม</span>
+          <p className="text-base font-black text-[#0F172A]">
             ฿{Number(order.totalPrice).toLocaleString()}
           </p>
         </div>
@@ -183,7 +201,7 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
               <button
                 onClick={() => handleAction(OrderStatus.CANCELLED)}
                 disabled={isActionPending || isLoading}
-                className="p-3 text-xs rounded-xl bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 font-bold transition-all active:scale-95"
+                className="p-3 text-xs rounded-xl bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA] hover:bg-rose-100 font-bold transition-all active:scale-95"
                 title="ปฏิเสธคำสั่งซื้อ"
               >
                 <XCircle className="w-5 h-5" />
@@ -192,7 +210,7 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
               <button
                 onClick={() => handleAction(OrderStatus.ACCEPTED)}
                 disabled={isActionPending || isLoading}
-                className="flex items-center gap-2 px-5 py-3 text-sm rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold transition-all shadow-md shadow-brand-500/25 active:scale-95"
+                className="flex items-center gap-2 px-5 py-3 text-sm rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white font-bold transition-all shadow-md shadow-teal-500/25 active:scale-95"
               >
                 <Check className="w-4 h-4" />
                 <span>รับออเดอร์</span>
@@ -204,7 +222,7 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
             <button
               onClick={() => handleAction(OrderStatus.READY)}
               disabled={isActionPending || isLoading}
-              className="flex items-center gap-2 px-5 py-3 text-sm rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md shadow-emerald-600/30 active:scale-95 animate-pulse-subtle"
+              className="flex items-center gap-2 px-5 py-3 text-sm rounded-xl bg-[#059669] hover:bg-[#047857] text-white font-bold transition-all shadow-md shadow-emerald-600/30 active:scale-95 animate-pulse-subtle"
             >
               <BellRing className="w-4 h-4" />
               <span>เสร็จแล้ว (เรียกคิว)</span>
@@ -215,9 +233,9 @@ export function KdsCard({ order, onUpdateStatus, onPromptPrint, isLoading }: Kds
             <button
               onClick={() => handleAction(OrderStatus.COMPLETED)}
               disabled={isActionPending || isLoading}
-              className="flex items-center gap-2 px-5 py-3 text-sm rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold transition-all shadow-md active:scale-95"
+              className="flex items-center gap-2 px-5 py-3 text-sm rounded-xl bg-[#0F172A] hover:bg-slate-800 text-white font-bold transition-all shadow-md active:scale-95"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
               <span>ส่งมอบอาหารแล้ว</span>
             </button>
           )}

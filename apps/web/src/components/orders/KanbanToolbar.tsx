@@ -41,14 +41,14 @@ export function KanbanToolbar({
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
-      <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-[#E2E8F0] shadow-xs">
         <button
           onClick={() => onFilterChange('all')}
           className={clsx(
             'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all',
             filterType === 'all'
-              ? 'bg-brand-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
+              ? 'bg-[#0D9488] text-white shadow-xs'
+              : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F0FDFA]',
           )}
         >
           ทั้งหมด ({activeOrderCount})
@@ -58,8 +58,8 @@ export function KanbanToolbar({
           className={clsx(
             'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all',
             filterType === 'dine_in'
-              ? 'bg-brand-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
+              ? 'bg-[#0D9488] text-white shadow-xs'
+              : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F0FDFA]',
           )}
         >
           🍽️ ทานที่ร้าน
@@ -69,8 +69,8 @@ export function KanbanToolbar({
           className={clsx(
             'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all',
             filterType === 'takeaway'
-              ? 'bg-brand-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50',
+              ? 'bg-[#0D9488] text-white shadow-xs'
+              : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F0FDFA]',
           )}
         >
           🛍️ กลับบ้าน
@@ -81,7 +81,7 @@ export function KanbanToolbar({
         {/* Button: คิดเงินหน้าร้าน (POS) */}
         <button
           onClick={() => window.open('/pos', 'pos_window', 'width=1280,height=800,menubar=no,status=no,toolbar=no,resizable=yes')}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold shadow-sm shadow-amber-500/20 active:scale-95 transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-xs active:scale-95 transition-all"
           title="เปิดหน้าจอคิดเงินด่วนหน้าร้าน POS"
         >
           <span>🖥️</span>
@@ -91,7 +91,7 @@ export function KanbanToolbar({
         {/* Button 1: จอห้องครัว (KDS) */}
         <button
           onClick={handleOpenKds}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-sky-600 hover:from-brand-500 hover:to-sky-500 text-white text-xs font-bold shadow-sm shadow-brand-500/20 active:scale-95 transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-bold shadow-xs active:scale-95 transition-all"
           title="เปิดจอคิวสำหรับห้องครัวบน iPad / แท็บเล็ต"
         >
           <span>🍳</span>
@@ -101,7 +101,7 @@ export function KanbanToolbar({
         {/* Button 2: จอเรียกคิวลูกค้า */}
         <button
           onClick={handleOpenCustomerDisplay}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold shadow-xs active:scale-95 transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#ECFDF5] hover:bg-emerald-100 border border-[#A7F3D0] text-[#059669] text-xs font-bold shadow-xs active:scale-95 transition-all"
           title="เปิดจอแสดงผลเรียกคิวสำหรับลูกค้าหน้าร้าน / จอ TV"
         >
           <span>📺</span>
@@ -111,9 +111,9 @@ export function KanbanToolbar({
         <button
           onClick={onRefresh}
           disabled={isRefetching}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 hover:text-slate-900 shadow-xs transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-[#E2E8F0] text-xs font-semibold text-[#475569] hover:text-[#0F172A] shadow-xs transition-colors"
         >
-          <RefreshCw className={clsx('w-3.5 h-3.5', isRefetching && 'animate-spin text-brand-600')} />
+          <RefreshCw className={clsx('w-3.5 h-3.5', isRefetching && 'animate-spin text-[#0D9488]')} />
           <span>รีเฟรช</span>
         </button>
       </div>

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0284c7',
+  themeColor: '#0D9488',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -34,7 +34,7 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
-      <body className="bg-[#F4F8FC] text-slate-800 min-h-screen">
+      <body className="bg-[#F0FDFA] text-[#0F172A] min-h-screen">
         <Providers>{children}</Providers>
       </body>
     </html>

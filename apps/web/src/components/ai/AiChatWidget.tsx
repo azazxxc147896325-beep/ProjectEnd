@@ -81,7 +81,7 @@ export function AiChatWidget() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-brand-600 via-sky-500 to-blue-600 hover:from-brand-500 hover:to-sky-400 text-white font-bold shadow-xl shadow-sky-500/25 border border-white/40 transition-all transform hover:scale-105 active:scale-95"
+          className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-brand-600 via-teal-500 to-teal-600 hover:from-brand-700 hover:to-teal-600 text-white font-bold shadow-xl shadow-teal-500/25 border border-white/40 transition-all transform hover:scale-105 active:scale-95"
         >
           <div className="relative">
             <Bot className="w-5 h-5 animate-bounce text-white" />
@@ -93,9 +93,9 @@ export function AiChatWidget() {
 
       {/* Floating Chat Drawer */}
       {isOpen && (
-        <div className="bg-white w-96 sm:w-[420px] h-[540px] rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-200">
+        <div className="bg-white w-96 sm:w-[420px] h-[540px] rounded-3xl shadow-2xl border border-[#E2E8F0] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-200">
           {/* Header */}
-          <div className="px-5 py-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 border-b border-sky-700 flex items-center justify-between text-white">
+          <div className="px-5 py-4 bg-gradient-to-r from-[#0D9488] via-[#0F766E] to-[#14B8A6] border-b border-[#0F766E] flex items-center justify-between text-white">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white shadow-xs">
                 <Sparkles className="w-4 h-4" />
@@ -107,7 +107,7 @@ export function AiChatWidget() {
                     Claude 3.5
                   </span>
                 </h3>
-                <p className="text-[11px] text-sky-100 flex items-center gap-1">
+                <p className="text-[11px] text-teal-100 flex items-center gap-1">
                   <Database className="w-3 h-3 text-emerald-300" />
                   <span>ดึงข้อมูลจริงจากระบบร้านค้า</span>
                 </p>
@@ -123,7 +123,7 @@ export function AiChatWidget() {
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs bg-slate-50/50">
+          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs bg-[#F8FAFC]">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
@@ -133,7 +133,7 @@ export function AiChatWidget() {
                 )}
               >
                 {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-xl bg-sky-100 border border-sky-200 text-brand-700 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-xl bg-[#CCFBF1] border border-[#99F6E4] text-[#0D9488] flex items-center justify-center shrink-0 mt-0.5">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
@@ -142,15 +142,15 @@ export function AiChatWidget() {
                   className={clsx(
                     'p-3 rounded-2xl max-w-[82%] leading-relaxed whitespace-pre-wrap shadow-xs',
                     msg.role === 'user'
-                      ? 'bg-brand-600 text-white rounded-br-none shadow-brand-500/20'
-                      : 'bg-white text-slate-800 border border-slate-200/90 rounded-bl-none',
+                      ? 'bg-[#0D9488] text-white rounded-br-none shadow-teal-500/20'
+                      : 'bg-white text-[#0F172A] border border-[#E2E8F0] rounded-bl-none',
                   )}
                 >
                   {msg.content}
                 </div>
 
                 {msg.role === 'user' && (
-                  <div className="w-7 h-7 rounded-xl bg-sky-100 border border-sky-200 text-brand-700 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-xl bg-[#CCFBF1] border border-[#99F6E4] text-[#0D9488] flex items-center justify-center shrink-0 mt-0.5">
                     <User className="w-4 h-4" />
                   </div>
                 )}
@@ -158,8 +158,8 @@ export function AiChatWidget() {
             ))}
 
             {isLoading && (
-              <div className="flex items-center gap-2 text-brand-800 text-xs p-2.5 rounded-xl bg-sky-50 border border-sky-200 animate-pulse">
-                <RefreshCw className="w-3.5 h-3.5 animate-spin text-brand-600" />
+              <div className="flex items-center gap-2 text-[#0D9488] text-xs p-2.5 rounded-xl bg-[#CCFBF1] border border-[#99F6E4] animate-pulse">
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#0D9488]" />
                 <span>AI กำลังประมวลผลและดึงข้อมูลยอดขายจริงจากระบบ...</span>
               </div>
             )}
@@ -168,13 +168,13 @@ export function AiChatWidget() {
           </div>
 
           {/* Suggested Quick Prompts */}
-          <div className="px-3 py-2 border-t border-slate-100 bg-white overflow-x-auto whitespace-nowrap flex gap-1.5 scrollbar-none">
+          <div className="px-3 py-2 border-t border-[#E2E8F0] bg-white overflow-x-auto whitespace-nowrap flex gap-1.5 scrollbar-none">
             {suggestedActions.map((suggestion, sIdx) => (
               <button
                 key={sIdx}
                 onClick={() => handleSendMessage(suggestion)}
                 disabled={isLoading}
-                className="px-2.5 py-1 rounded-lg bg-sky-50 border border-sky-200 hover:border-sky-300 text-brand-700 text-[11px] font-medium transition-colors shrink-0 disabled:opacity-50"
+                className="px-2.5 py-1 rounded-lg bg-[#F0FDFA] border border-[#99F6E4] hover:bg-[#CCFBF1] text-[#0D9488] text-[11px] font-medium transition-colors shrink-0 disabled:opacity-50"
               >
                 ✨ {suggestion}
               </button>
@@ -182,7 +182,7 @@ export function AiChatWidget() {
           </div>
 
           {/* Input Box */}
-          <div className="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+          <div className="p-3 bg-white border-t border-[#E2E8F0] flex items-center gap-2">
             <input
               type="text"
               placeholder="พิมพ์คำถามถึง AI ผู้ช่วย..."
@@ -192,12 +192,12 @@ export function AiChatWidget() {
                 if (e.key === 'Enter') handleSendMessage();
               }}
               disabled={isLoading}
-              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+              className="flex-1 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2 text-xs text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20"
             />
             <button
               onClick={() => handleSendMessage()}
               disabled={!input.trim() || isLoading}
-              className="p-2 rounded-xl bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-500 hover:to-sky-400 text-white disabled:opacity-40 transition-all active:scale-95 shadow-sm"
+              className="p-2 rounded-xl bg-gradient-to-r from-brand-600 to-teal-500 hover:from-brand-700 hover:to-teal-600 text-white disabled:opacity-40 transition-all active:scale-95 shadow-sm"
             >
               <Send className="w-4 h-4" />
             </button>

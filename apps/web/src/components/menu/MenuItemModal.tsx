@@ -76,16 +76,16 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
         <div className="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-sky-50 text-brand-700 flex items-center justify-center border border-sky-200">
+              <div className="w-8 h-8 rounded-xl bg-[#CCFBF1] text-[#0D9488] flex items-center justify-center border border-[#99F6E4]">
                 <Utensils className="w-4 h-4" />
               </div>
-              <h3 className="font-bold text-lg text-slate-900">
+              <h3 className="font-bold text-lg text-[#0F172A]">
                 {initialData ? 'แก้ไขรายการอาหาร' : 'เพิ่มเมนูอาหารใหม่'}
               </h3>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors"
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[#475569] hover:text-[#0F172A] transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -93,24 +93,24 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">ชื่อเมนูอาหาร *</label>
+              <label className="block text-xs font-semibold text-[#0F172A] mb-1.5">ชื่อเมนูอาหาร *</label>
               <input
                 type="text"
                 required
                 placeholder="เช่น ข้าวกะเพราหมูกรอบไข่ดาว"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">หมวดหมู่อาหาร *</label>
+                <label className="block text-xs font-semibold text-[#0F172A] mb-1.5">หมวดหมู่อาหาร *</label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3 py-2.5 text-sm text-[#0F172A] focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20"
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
@@ -121,39 +121,39 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">ราคา (บาท) *</label>
+                <label className="block text-xs font-semibold text-[#0F172A] mb-1.5">ราคา (บาท) *</label>
                 <input
                   type="number"
                   required
                   min={0}
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#0F172A] focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-slate-700">รายละเอียดเมนู / ตัวเลือกตามสั่ง</label>
-                <span className="text-[11px] text-slate-400">ระบุวัตถุดิบ/ตัวเลือกเสริมได้</span>
+                <label className="block text-xs font-semibold text-[#0F172A]">รายละเอียดเมนู / ตัวเลือกตามสั่ง</label>
+                <span className="text-[11px] text-[#94A3B8]">ระบุวัตถุดิบ/ตัวเลือกเสริมได้</span>
               </div>
               <textarea
                 rows={2}
                 placeholder="เช่น เลือกเนื้อสัตว์: หมูสับ, ไก่, หมูกรอบ (+10฿) | ตัวเลือก: ไข่ดาว (+10฿), ไข่เจียว (+10฿) | เลือกระดับความเผ็ดได้..."
                 value={formData.description || ''}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20"
               />
             </div>
 
             {/* Image Mode Selector (ใส่รูป vs ไม่ใส่รูป) */}
-            <div className="space-y-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="space-y-3 p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0]">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold text-[#0F172A] mb-1.5">
                   เลือกรูปแบบเมนูอาหาร
                 </label>
-                <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200">
+                <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl border border-[#E2E8F0]">
                   <button
                     type="button"
                     onClick={() => {
@@ -163,8 +163,8 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
                     className={clsx(
                       'py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5',
                       !hasImage
-                        ? 'bg-white text-emerald-700 shadow-sm border border-slate-200'
-                        : 'text-slate-500 hover:text-slate-800',
+                        ? 'bg-white text-[#059669] shadow-xs border border-[#E2E8F0]'
+                        : 'text-[#475569] hover:text-[#0F172A]',
                     )}
                   >
                     <FileText className="w-3.5 h-3.5" />
@@ -177,8 +177,8 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
                     className={clsx(
                       'py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5',
                       hasImage
-                        ? 'bg-gradient-to-r from-brand-600 to-sky-500 text-white shadow-sm'
-                        : 'text-slate-500 hover:text-slate-800',
+                        ? 'bg-gradient-to-r from-brand-600 to-teal-500 text-white shadow-xs'
+                        : 'text-[#475569] hover:text-[#0F172A]',
                     )}
                   >
                     <ImageIcon className="w-3.5 h-3.5" />
@@ -188,13 +188,13 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
               </div>
 
               {hasImage ? (
-                <div className="pt-2 border-t border-slate-200 space-y-2 animate-in fade-in duration-150">
+                <div className="pt-2 border-t border-[#E2E8F0] space-y-2 animate-in fade-in duration-150">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-slate-700">ใส่ URL หรือสร้างรูปด้วย AI</label>
+                    <label className="text-xs font-semibold text-[#0F172A]">ใส่ URL หรือสร้างรูปด้วย AI</label>
                     <button
                       type="button"
                       onClick={() => setIsAiImageModalOpen(true)}
-                      className="flex items-center gap-1.5 text-xs font-bold text-brand-700 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg transition-all"
+                      className="flex items-center gap-1.5 text-xs font-bold text-[#0D9488] bg-[#CCFBF1] hover:bg-teal-100 border border-[#99F6E4] px-2.5 py-1 rounded-lg transition-all shadow-2xs"
                     >
                       <Wand2 className="w-3.5 h-3.5" />
                       <span>🪄 สร้างรูปด้วย AI</span>
@@ -203,7 +203,7 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
 
                   <div className="flex items-center gap-2.5">
                     {formData.imageUrl ? (
-                      <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 group">
+                      <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 border border-[#E2E8F0] shrink-0 group">
                         <img
                           src={formData.imageUrl}
                           alt="Preview"
@@ -231,13 +231,13 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
                         placeholder="วางลิงก์รูปภาพ หรือกดสร้างรูปด้วย AI..."
                         value={formData.imageUrl || ''}
                         onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                        className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3.5 py-2 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20"
                       />
                       {formData.imageUrl && (
                         <button
                           type="button"
                           onClick={() => setFormData((prev) => ({ ...prev, imageUrl: '' }))}
-                          className="absolute right-3 top-2.5 text-xs text-slate-400 hover:text-rose-500"
+                          className="absolute right-3 top-2.5 text-xs text-[#94A3B8] hover:text-[#DC2626]"
                         >
                           ล้าง
                         </button>
@@ -246,7 +246,7 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
                   </div>
                 </div>
               ) : (
-                <div className="pt-2 border-t border-slate-200 flex items-center gap-2.5 text-emerald-800 text-[11px] animate-in fade-in duration-150">
+                <div className="pt-2 border-t border-[#E2E8F0] flex items-center gap-2.5 text-[#059669] text-[11px] animate-in fade-in duration-150">
                   <span className="text-xl">🍛</span>
                   <span>
                     โหมด <strong>ไม่ใส่รูปภาพ</strong> — เหมาะสำหรับอาหารตามสั่ง ระบบจะเน้นชื่อเมนู, ราคา และตัวเลือกรายละเอียดที่ระบุด้านบน
@@ -256,13 +256,13 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
             </div>
 
             {/* Special & Availability Toggles */}
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-3">
               <label className="flex items-center justify-between cursor-pointer">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-amber-500" />
                   <div>
-                    <span className="text-xs font-bold text-slate-800">เมนูแนะนำพิเศษประจำวัน</span>
-                    <p className="text-[11px] text-slate-500">จะแสดงอยู่ด้านบนสุดพร้อมป้าย Special</p>
+                    <span className="text-xs font-bold text-[#0F172A]">เมนูแนะนำพิเศษประจำวัน</span>
+                    <p className="text-[11px] text-[#475569]">จะแสดงอยู่ด้านบนสุดพร้อมป้าย Special</p>
                   </div>
                 </div>
                 <input
@@ -273,12 +273,12 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
                 />
               </label>
 
-              <div className="border-t border-slate-200" />
+              <div className="border-t border-[#E2E8F0]" />
 
               <label className="flex items-center justify-between cursor-pointer">
                 <div>
-                  <span className="text-xs font-bold text-slate-800">สถานะพร้อมขาย (มีของ)</span>
-                  <p className="text-[11px] text-slate-500">ปลดเลือกหากวัตถุดิบหมดชั่วคราว</p>
+                  <span className="text-xs font-bold text-[#0F172A]">สถานะพร้อมขาย (มีของ)</span>
+                  <p className="text-[11px] text-[#475569]">ปลดเลือกหากวัตถุดิบหมดชั่วคราว</p>
                 </div>
                 <input
                   type="checkbox"
@@ -293,14 +293,14 @@ export function MenuItemModal({ isOpen, onClose, onSubmit, initialData }: MenuIt
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 rounded-xl bg-slate-100 hover:bg-slate-200"
+                className="px-4 py-2 text-xs font-medium text-[#475569] hover:text-[#0F172A] rounded-xl bg-slate-100 hover:bg-slate-200"
               >
                 ยกเลิก
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 text-xs font-bold text-white rounded-xl bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-500 hover:to-sky-400 shadow-md shadow-brand-500/25 active:scale-95 disabled:opacity-50"
+                className="px-5 py-2 text-xs font-bold text-white rounded-xl bg-gradient-to-r from-brand-600 to-teal-500 hover:from-brand-700 hover:to-teal-600 shadow-md shadow-brand-500/25 active:scale-95 disabled:opacity-50"
               >
                 {isSubmitting ? 'กำลังบันทึก...' : initialData ? 'บันทึกการแก้ไข' : 'เพิ่มเมนูอาหาร'}
               </button>
