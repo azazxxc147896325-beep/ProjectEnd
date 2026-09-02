@@ -7,3 +7,4 @@ export * from './order';
 export * from './analytics';
 export * from './events';
 export * from './ai';
+export * from './theme';

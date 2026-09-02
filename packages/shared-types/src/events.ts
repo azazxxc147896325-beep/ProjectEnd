@@ -9,6 +9,10 @@ export enum WsEvents {
   NEW_ORDER = 'new_order',
   ORDER_STATUS_UPDATED = 'order_status_updated',
   ORDER_READY = 'order_ready',
+  SHOW_PAYMENT_QR = 'show_payment_qr',
+  CLEAR_PAYMENT_QR = 'clear_payment_qr',
+  PRINT_QUEUE_TICKET = 'print_queue_ticket',
+  PAYMENT_SUCCESS = 'payment_success',
 }
 
 export interface JoinVendorRoomDto {
@@ -35,3 +39,25 @@ export interface NewOrderPayload {
   vendorId: string;
   order: Order;
 }
+
+export interface ShowPaymentQrPayload {
+  vendorId: string;
+  orderId: string;
+  queueNumber: number;
+  totalPrice: number;
+  promptpayQrPayload: string;
+  orderType: string;
+  itemsSummary: string[];
+  order?: Order;
+}
+
+export interface ClearPaymentQrPayload {
+  vendorId: string;
+  orderId?: string;
+}
+
+export interface PrintQueueTicketPayload {
+  vendorId: string;
+  order: Order;
+}
+

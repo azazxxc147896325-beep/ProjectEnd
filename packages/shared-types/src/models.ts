@@ -7,6 +7,7 @@ export interface User {
   role: Role;
   phone?: string | null;
   createdAt: string | Date;
+  updatedAt?: string | Date;
   vendor?: Vendor | null;
   orders?: Order[];
 }
@@ -18,7 +19,10 @@ export interface Vendor {
   name: string;
   description?: string | null;
   logoUrl?: string | null;
+  promptpayId?: string | null;
   isOpen: boolean;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
   menuItems?: MenuItem[];
   orders?: Order[];
 }
@@ -35,6 +39,8 @@ export interface MenuItem {
   isDailySpecial: boolean;
   isAvailable: boolean;
   deletedAt?: string | Date | null;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
   orderItems?: OrderItem[];
 }
 
@@ -54,6 +60,8 @@ export interface OrderItem {
   unitPrice: number;
   options?: OrderItemOption[] | Record<string, unknown> | null;
   subtotal: number;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface Order {
@@ -74,9 +82,9 @@ export interface Order {
   queueNumber: number;
   items: OrderItem[];
   createdAt: string | Date;
+  updatedAt?: string | Date;
   readyAt?: string | Date | null;
   completedAt?: string | Date | null;
   cancelledBy?: CancelledBy | null;
   cancelReason?: string | null;
 }
-
