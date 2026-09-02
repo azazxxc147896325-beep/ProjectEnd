@@ -1,29 +1,16 @@
 import { Injectable, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { MemoryCacheService } from '../common/cache/memory-cache.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
 import { Role } from '@campus-food/shared-types';
 
 @Injectable()
 export class VendorsService {
-  // In-memory cache for ultra-fast response times (1-2ms)
-  private cache = new Map<string, { data: any; expiresAt: number }>();
-  private readonly CACHE_TTL_MS = 15000; // 15 seconds cache
-
-  constructor(private prisma: PrismaService) {}
-
-  private getFromCache<T>(key: string): T | null {
-    const entry = this.cache.get(key);
-    if (entry && entry.expiresAt > Date.now()) {
-      return entry.data as T;
-    }
-    this.cache.delete(key);
-    return null;
-  }
-
-  private setCache(key: string, data: any) {
-    this.cache.set(key, { data, expiresAt: Date.now() + this.CACHE_TTL_MS });
-  }
+  constructor(
+    private prisma: PrismaService,
+    private cache: MemoryCacheService,
+  ) {}
 
   public clearCache() {
     this.cache.clear();
@@ -31,7 +18,7 @@ export class VendorsService {
 
   async findAll(onlyOpen?: boolean) {
     const cacheKey = `vendors:all:${onlyOpen ? 'open' : 'all'}`;
-    const cached = this.getFromCache<any[]>(cacheKey);
+    const cached = this.cache.get<any[]>(cacheKey);
     if (cached) return cached;
 
     const data = await this.prisma.vendor.findMany({
@@ -44,13 +31,13 @@ export class VendorsService {
       orderBy: { name: 'asc' },
     });
 
-    this.setCache(cacheKey, data);
+    this.cache.set(cacheKey, data);
     return data;
   }
 
   async findOne(id: string) {
     const cacheKey = `vendor:${id}`;
-    const cached = this.getFromCache<any>(cacheKey);
+    const cached = this.cache.get<any>(cacheKey);
     if (cached) return cached;
 
     const vendor = await this.prisma.vendor.findUnique({
@@ -70,7 +57,7 @@ export class VendorsService {
       throw new NotFoundException(`Vendor with ID ${id} not found`);
     }
 
-    this.setCache(cacheKey, vendor);
+    this.cache.set(cacheKey, vendor);
     return vendor;
   }
 
@@ -108,6 +95,7 @@ export class VendorsService {
         name: dto.name,
         description: dto.description,
         logoUrl: dto.logoUrl,
+        promptpayId: dto.promptpayId,
         isOpen: dto.isOpen ?? true,
       },
     });
@@ -127,10 +115,11 @@ export class VendorsService {
     return this.prisma.vendor.update({
       where: { id },
       data: {
-        name: dto.name,
-        description: dto.description,
-        logoUrl: dto.logoUrl,
-        isOpen: dto.isOpen,
+        ...(dto.name && { name: dto.name }),
+        ...(dto.description !== undefined && { description: dto.description }),
+        ...(dto.logoUrl !== undefined && { logoUrl: dto.logoUrl }),
+        ...(dto.promptpayId !== undefined && { promptpayId: dto.promptpayId }),
+        ...(dto.isOpen !== undefined && { isOpen: dto.isOpen }),
       },
     });
   }

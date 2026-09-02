@@ -26,6 +26,7 @@ describe('OrdersService', () => {
       findMany: jest.fn(),
       findUnique: jest.fn(),
     },
+    $transaction: jest.fn(),
   };
 
   const mockNotificationsService = {
@@ -116,6 +117,58 @@ describe('OrdersService', () => {
           items: [{ menuItemId: 'item-1', quantity: 1 }],
         }),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should create order and generate PromptPay QR payload with vendor custom promptpayId', async () => {
+      mockPrismaService.vendor.findUnique.mockResolvedValue({
+        id: 'vendor-1',
+        name: 'Somjai Kitchen',
+        promptpayId: '0899998888',
+        isOpen: true,
+      });
+
+      mockPrismaService.menuItem.findMany.mockResolvedValue([
+        {
+          id: 'item-1',
+          name: 'Basil Pork',
+          price: 50,
+          isAvailable: true,
+        },
+      ]);
+
+      const createdOrderMock = {
+        id: 'order-pp-1',
+        studentId: 'student-1',
+        vendorId: 'vendor-1',
+        totalPrice: 100,
+        queueNumber: 1,
+        status: OrderStatus.PENDING,
+        promptpayQrPayload: expect.any(String),
+      };
+
+      mockPrismaService.$transaction.mockImplementation(async (callback) => {
+        const txMock = {
+          order: {
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockImplementation((args) => {
+              expect(args.data.promptpayQrPayload).toBeDefined();
+              expect(args.data.promptpayQrPayload).toContain('0066899998888');
+              return createdOrderMock;
+            }),
+          },
+        };
+        return callback(txMock);
+      });
+
+      const order = await service.createOrder('student-1', {
+        vendorId: 'vendor-1',
+        orderType: OrderType.DINE_IN,
+        paymentMethod: 'promptpay' as any,
+        items: [{ menuItemId: 'item-1', quantity: 2 }],
+      });
+
+      expect(order).toEqual(createdOrderMock);
+      expect(mockNotificationsService.notifyNewOrder).toHaveBeenCalled();
     });
   });
 
@@ -241,4 +294,257 @@ describe('OrdersService', () => {
       expect(result.totalPages).toBe(3);
     });
   });
+
+  describe('verifyPayment', () => {
+    it('should verify payment successfully for own order', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.PENDING,
+        paymentStatus: 'pending',
+      });
+      mockPrismaService.order.update.mockResolvedValue({
+        id: 'order-1',
+        paymentStatus: 'paid',
+        transactionId: 'TXN-123',
+      });
+
+      const res = await service.verifyPayment('order-1', 'student-1', 'TXN-123');
+      expect(res.paymentStatus).toBe('paid');
+      expect(mockNotificationsService.notifyOrderStatusChanged).toHaveBeenCalled();
+    });
+
+    it('should throw ForbiddenException if another student tries to verify payment', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.PENDING,
+      });
+
+      await expect(
+        service.verifyPayment('order-1', 'intruder-student-2'),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should throw BadRequestException if order is cancelled', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        studentId: 'student-1',
+        status: OrderStatus.CANCELLED,
+      });
+
+      await expect(
+        service.verifyPayment('order-1', 'student-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('markPaid', () => {
+    it('should allow vendor owner to mark order paid', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.PENDING,
+        paymentMethod: 'cash',
+        paymentStatus: 'pending',
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+      mockPrismaService.order.update.mockResolvedValue({
+        id: 'order-1',
+        paymentStatus: 'paid',
+      });
+
+      const res = await service.markPaid('order-1', 'vendor-owner-1', Role.VENDOR);
+      expect(res.paymentStatus).toBe('paid');
+      expect(mockNotificationsService.notifyOrderStatusChanged).toHaveBeenCalled();
+    });
+
+    it('should throw ForbiddenException if another vendor tries to mark paid', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.PENDING,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+
+      await expect(
+        service.markPaid('order-1', 'different-vendor-owner-2', Role.VENDOR),
+      ).rejects.toThrow(ForbiddenException);
+    });
+  });
+
+  describe('getOrderById (IDOR Protection)', () => {
+    const mockOrder = {
+      id: 'order-target-1',
+      studentId: 'student-owner-1',
+      vendor: { ownerId: 'vendor-owner-1' },
+      items: [],
+      student: { id: 'student-owner-1', fullName: 'Target Student' },
+    };
+
+    it('should allow the student who placed the order to view it', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue(mockOrder);
+
+      const res = await service.getOrderById(
+        'order-target-1',
+        'student-owner-1',
+        Role.STUDENT,
+      );
+
+      expect(res).toEqual(mockOrder);
+    });
+
+    it('should allow the vendor owner to view the order', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue(mockOrder);
+
+      const res = await service.getOrderById(
+        'order-target-1',
+        'vendor-owner-1',
+        Role.VENDOR,
+      );
+
+      expect(res).toEqual(mockOrder);
+    });
+
+    it('should allow Admin to view any order', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue(mockOrder);
+
+      const res = await service.getOrderById(
+        'order-target-1',
+        'admin-user-id',
+        Role.ADMIN,
+      );
+
+      expect(res).toEqual(mockOrder);
+    });
+
+    it('should throw ForbiddenException if another student tries to view the order (IDOR)', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue(mockOrder);
+
+      await expect(
+        service.getOrderById('order-target-1', 'intruder-student-2', Role.STUDENT),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should throw NotFoundException if order does not exist', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.getOrderById('non-existent-order', 'student-1', Role.STUDENT),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('updateOrderStatus (State Machine Validation)', () => {
+    it('should allow valid transition from PENDING to ACCEPTED and COOKING', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.PENDING,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+      mockPrismaService.order.update.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.ACCEPTED,
+      });
+
+      const res = await service.updateOrderStatus(
+        'order-1',
+        'vendor-owner-1',
+        Role.VENDOR,
+        { status: OrderStatus.ACCEPTED },
+      );
+
+      expect(res.status).toBe(OrderStatus.ACCEPTED);
+      expect(mockNotificationsService.notifyOrderStatusChanged).toHaveBeenCalled();
+    });
+
+    it('should allow valid transition from COOKING to READY', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.COOKING,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+      mockPrismaService.order.update.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.READY,
+        readyAt: expect.any(Date),
+      });
+
+      const res = await service.updateOrderStatus(
+        'order-1',
+        'vendor-owner-1',
+        Role.VENDOR,
+        { status: OrderStatus.READY },
+      );
+
+      expect(res.status).toBe(OrderStatus.READY);
+    });
+
+    it('should throw BadRequestException on invalid jump from PENDING directly to COMPLETED', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.PENDING,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+
+      await expect(
+        service.updateOrderStatus(
+          'order-1',
+          'vendor-owner-1',
+          Role.VENDOR,
+          { status: OrderStatus.COMPLETED },
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw BadRequestException when attempting to transition a COMPLETED order (terminal state)', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.COMPLETED,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+
+      await expect(
+        service.updateOrderStatus(
+          'order-1',
+          'vendor-owner-1',
+          Role.VENDOR,
+          { status: OrderStatus.COOKING },
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw BadRequestException when attempting to transition a CANCELLED order (terminal state)', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.CANCELLED,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+
+      await expect(
+        service.updateOrderStatus(
+          'order-1',
+          'vendor-owner-1',
+          Role.VENDOR,
+          { status: OrderStatus.READY },
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw ForbiddenException if another vendor tries to update order status', async () => {
+      mockPrismaService.order.findUnique.mockResolvedValue({
+        id: 'order-1',
+        status: OrderStatus.PENDING,
+        vendor: { ownerId: 'vendor-owner-1' },
+      });
+
+      await expect(
+        service.updateOrderStatus(
+          'order-1',
+          'unauthorized-vendor-2',
+          Role.VENDOR,
+          { status: OrderStatus.ACCEPTED },
+        ),
+      ).rejects.toThrow(ForbiddenException);
+    });
+  });
 });
+

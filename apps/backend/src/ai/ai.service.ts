@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import Anthropic from '@anthropic-ai/sdk';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { AiToolsExecutor } from './tools/ai-tools.executor';
+import { AI_TOOLS_DEFINITIONS } from './tools/ai-tools.definitions';
 import { AiChatDto } from './dto/ai-chat.dto';
 import { AiRecommendFoodDto } from './dto/ai-recommend-food.dto';
 import { AiGenerateImageDto } from './dto/ai-generate-image.dto';
@@ -26,6 +28,7 @@ export class AiService {
     private configService: ConfigService,
     private analyticsService: AnalyticsService,
     private prisma: PrismaService,
+    private toolsExecutor: AiToolsExecutor,
   ) {
     const anthropicKey = this.configService.get<string>('ANTHROPIC_API_KEY');
     if (anthropicKey && anthropicKey.trim() !== '' && !anthropicKey.includes('your-anthropic-api-key')) {
@@ -91,48 +94,6 @@ export class AiService {
 
 
 
-  // Tool Definitions for Claude Function Calling
-  private getTools(): Anthropic.Tool[] {
-    return [
-      {
-        name: 'get_sales_summary',
-        description: 'ดึงข้อมูลสรุปยอดขายรวม จำนวนออเดอร์ มูลค่าเฉลี่ยต่อออเดอร์ และสถิติแนวโน้มรายวันของร้านค้า',
-        input_schema: {
-          type: 'object',
-          properties: {
-            period: {
-              type: 'string',
-              enum: ['today', 'week', 'month'],
-              description: 'ช่วงเวลาที่ต้องการดูสถิติ (today: วันนี้, week: 7 วันล่าสุด, month: 30 วันล่าสุด)',
-            },
-          },
-          required: ['period'],
-        },
-      },
-      {
-        name: 'get_top_selling_items',
-        description: 'ดึงรายการเมนูอาหารที่ขายดีที่สุด เรียงตามจำนวนจานที่ขายได้และรายได้รวม',
-        input_schema: {
-          type: 'object',
-          properties: {
-            limit: {
-              type: 'number',
-              description: 'จำนวนอันดับเมนูที่ต้องการ (เช่น 3, 5 หรือ 10)',
-            },
-          },
-        },
-      },
-      {
-        name: 'get_peak_hours',
-        description: 'ดึงช่วงเวลาที่ลูกค้าสั่งอาหารเยอะที่สุด (ชั่วโมงเร่งด่วน/Peak Hours) เพื่อใช้วางแผนสต็อกวัตถุดิบและกำลังคน',
-        input_schema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-    ];
-  }
-
   async askAi(dto: AiChatDto): Promise<AiChatResponse> {
     const { vendorId, message, history = [] } = dto;
 
@@ -165,7 +126,7 @@ export class AiService {
         max_tokens: 1024,
         system: systemPrompt,
         messages: formattedMessages,
-        tools: this.getTools(),
+        tools: AI_TOOLS_DEFINITIONS,
       });
 
       // Handle function calling / tool use loops
@@ -180,17 +141,11 @@ export class AiService {
 
         for (const block of toolUseBlocks) {
           const { id, name, input } = block;
-          let resultData: any = {};
-
-          if (name === 'get_sales_summary') {
-            const period = (input as any).period || 'today';
-            resultData = await this.analyticsService.getSummary(vendorId, period);
-          } else if (name === 'get_top_selling_items') {
-            const limit = (input as any).limit || 5;
-            resultData = await this.analyticsService.getPopularItems(vendorId, limit);
-          } else if (name === 'get_peak_hours') {
-            resultData = await this.analyticsService.getPeakHours(vendorId);
-          }
+          const resultData = await this.toolsExecutor.executeTool(
+            name,
+            input as Record<string, any>,
+            vendorId,
+          );
 
           toolLogs.push({
             toolName: name,
@@ -215,7 +170,7 @@ export class AiService {
             { role: 'assistant', content: response.content },
             { role: 'user', content: toolResultContents },
           ],
-          tools: this.getTools(),
+          tools: AI_TOOLS_DEFINITIONS,
         });
       }
 

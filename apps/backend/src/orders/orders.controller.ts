@@ -78,12 +78,28 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.VENDOR, Role.ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Vendor marks cash order as paid at counter' })
-  async markCashPaid(
+  @ApiOperation({ summary: 'Vendor/Admin marks order as paid (Cash or PromptPay verified at counter)' })
+  async markPaid(
     @Param('id') orderId: string,
     @CurrentUser('sub') userId: string,
+    @CurrentUser('role') role: Role,
+    @Body('transactionId') transactionId?: string,
   ) {
-    return this.ordersService.markCashPaid(orderId, userId);
+    return this.ordersService.markPaid(orderId, userId, role, transactionId);
+  }
+
+  @Post(':id/confirm-payment')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.VENDOR, Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Vendor/Admin confirms receipt of payment' })
+  async confirmPayment(
+    @Param('id') orderId: string,
+    @CurrentUser('sub') userId: string,
+    @CurrentUser('role') role: Role,
+    @Body('transactionId') transactionId?: string,
+  ) {
+    return this.ordersService.markPaid(orderId, userId, role, transactionId);
   }
 
 
@@ -139,8 +155,12 @@ export class OrdersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get order by ID' })
-  async getOrderById(@Param('id') orderId: string) {
-    return this.ordersService.getOrderById(orderId);
+  @ApiOperation({ summary: 'Get order by ID (restricted to order owner, vendor, or Admin)' })
+  async getOrderById(
+    @Param('id') orderId: string,
+    @CurrentUser('sub') userId: string,
+    @CurrentUser('role') role: Role,
+  ) {
+    return this.ordersService.getOrderById(orderId, userId, role);
   }
 }

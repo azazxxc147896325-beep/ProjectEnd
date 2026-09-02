@@ -51,6 +51,7 @@ export class AuthService {
           ownerId: user.id,
           name: `${user.fullName}'s Kitchen`,
           description: 'Delicious food made with love for campus students',
+          promptpayId: user.phone || null,
           isOpen: true,
         },
       });
@@ -121,6 +122,7 @@ export class AuthService {
               name: user.vendor.name,
               description: user.vendor.description,
               logoUrl: user.vendor.logoUrl,
+              promptpayId: user.vendor.promptpayId,
               isOpen: user.vendor.isOpen,
             }
           : null,
@@ -170,6 +172,7 @@ export class AuthService {
                 name: user.vendor.name,
                 description: user.vendor.description,
                 logoUrl: user.vendor.logoUrl,
+                promptpayId: user.vendor.promptpayId,
                 isOpen: user.vendor.isOpen,
               }
             : null,

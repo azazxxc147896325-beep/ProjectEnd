@@ -18,6 +18,11 @@ export class CreateVendorDto implements ICreateVendorDto {
   @IsString()
   logoUrl?: string;
 
+  @ApiPropertyOptional({ example: '0812345678' })
+  @IsOptional()
+  @IsString()
+  promptpayId?: string;
+
   @ApiPropertyOptional({ example: true, default: true })
   @IsOptional()
   @IsBoolean()

@@ -1,37 +1,20 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { MemoryCacheService } from '../common/cache/memory-cache.service';
 import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
 import { Role } from '@campus-food/shared-types';
 
 @Injectable()
 export class MenuService {
-  // In-memory cache for ultra-fast menu lookups (1-2ms)
-  private cache = new Map<string, { data: any; expiresAt: number }>();
-  private readonly CACHE_TTL_MS = 15000; // 15 seconds cache
-
-  constructor(private prisma: PrismaService) {}
-
-  private getFromCache<T>(key: string): T | null {
-    const entry = this.cache.get(key);
-    if (entry && entry.expiresAt > Date.now()) {
-      return entry.data as T;
-    }
-    this.cache.delete(key);
-    return null;
-  }
-
-  private setCache(key: string, data: any) {
-    this.cache.set(key, { data, expiresAt: Date.now() + this.CACHE_TTL_MS });
-  }
+  constructor(
+    private prisma: PrismaService,
+    private cache: MemoryCacheService,
+  ) {}
 
   public clearCache(vendorId?: string) {
     if (vendorId) {
-      for (const key of this.cache.keys()) {
-        if (key.includes(vendorId)) {
-          this.cache.delete(key);
-        }
-      }
+      this.cache.deleteByPrefix(vendorId);
     } else {
       this.cache.clear();
     }
@@ -39,7 +22,7 @@ export class MenuService {
 
   async findByVendor(vendorId: string, includeUnavailable: boolean = false) {
     const cacheKey = `menu:vendor:${vendorId}:${includeUnavailable ? 'all' : 'avail'}`;
-    const cached = this.getFromCache<any[]>(cacheKey);
+    const cached = this.cache.get<any[]>(cacheKey);
     if (cached) return cached;
 
     const data = await this.prisma.menuItem.findMany({
@@ -55,13 +38,13 @@ export class MenuService {
       ],
     });
 
-    this.setCache(cacheKey, data);
+    this.cache.set(cacheKey, data);
     return data;
   }
 
   async findOne(id: string) {
     const cacheKey = `menu:item:${id}`;
-    const cached = this.getFromCache<any>(cacheKey);
+    const cached = this.cache.get<any>(cacheKey);
     if (cached) return cached;
 
     const item = await this.prisma.menuItem.findFirst({
@@ -73,7 +56,7 @@ export class MenuService {
       throw new NotFoundException(`Menu item with ID ${id} not found`);
     }
 
-    this.setCache(cacheKey, item);
+    this.cache.set(cacheKey, item);
     return item;
   }
 

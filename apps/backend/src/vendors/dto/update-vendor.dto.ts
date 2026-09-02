@@ -18,6 +18,11 @@ export class UpdateVendorDto implements IUpdateVendorDto {
   @IsString()
   logoUrl?: string;
 
+  @ApiPropertyOptional({ example: '0812345678' })
+  @IsOptional()
+  @IsString()
+  promptpayId?: string;
+
   @ApiPropertyOptional({ example: true })
   @IsOptional()
   @IsBoolean()

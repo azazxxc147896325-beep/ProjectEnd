@@ -11,6 +11,29 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { OrderStatus, Role, CancelledBy, Order, PaymentMethod, PaymentStatus } from '@campus-food/shared-types';
 import { generatePromptPayPayload } from './promptpay.util';
+import { toDomainOrder } from './orders.mapper';
+
+export const VALID_ORDER_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  [OrderStatus.PENDING]: [
+    OrderStatus.ACCEPTED,
+    OrderStatus.COOKING,
+    OrderStatus.CANCELLED,
+  ],
+  [OrderStatus.ACCEPTED]: [
+    OrderStatus.COOKING,
+    OrderStatus.READY,
+    OrderStatus.CANCELLED,
+  ],
+  [OrderStatus.COOKING]: [
+    OrderStatus.READY,
+    OrderStatus.CANCELLED,
+  ],
+  [OrderStatus.READY]: [
+    OrderStatus.COMPLETED,
+  ],
+  [OrderStatus.COMPLETED]: [], // Terminal state
+  [OrderStatus.CANCELLED]: [], // Terminal state
+};
 
 @Injectable()
 export class OrdersService {
@@ -112,7 +135,8 @@ export class OrdersService {
     const paymentMethod = dto.paymentMethod || PaymentMethod.CASH;
     let promptpayQrPayload: string | null = null;
     if (paymentMethod === PaymentMethod.PROMPTPAY) {
-      promptpayQrPayload = generatePromptPayPayload('0812345678', totalPrice);
+      const promptpayTarget = vendor.promptpayId?.trim() || '0812345678';
+      promptpayQrPayload = generatePromptPayPayload(promptpayTarget, totalPrice);
     }
 
     // 🔒 Use a Transaction to atomically assign queue number + create order
@@ -151,7 +175,7 @@ export class OrdersService {
     });
 
     // Notify vendor dashboard in real-time
-    this.notificationsService.notifyNewOrder(dto.vendorId, order as unknown as Order);
+    this.notificationsService.notifyNewOrder(dto.vendorId, toDomainOrder(order));
 
     return order;
   }
@@ -177,6 +201,21 @@ export class OrdersService {
 
     const previousStatus = order.status as OrderStatus;
     const newStatus = dto.status;
+
+    // Idempotent: If status is already the desired status, return order
+    if (previousStatus === newStatus) {
+      return order;
+    }
+
+    // 🔒 State Machine Validation: Ensure requested transition is allowed
+    const allowedTransitions = VALID_ORDER_TRANSITIONS[previousStatus] || [];
+    if (!allowedTransitions.includes(newStatus)) {
+      throw new BadRequestException(
+        `Cannot transition order status from "${previousStatus}" to "${newStatus}". Valid transitions are: ${
+          allowedTransitions.length > 0 ? allowedTransitions.join(', ') : 'none (terminal state)'
+        }`,
+      );
+    }
 
     let readyAt = order.readyAt;
     let completedAt = order.completedAt;
@@ -212,7 +251,7 @@ export class OrdersService {
 
     // Notify real-time status update to both student app and vendor dashboard
     this.notificationsService.notifyOrderStatusChanged(
-      updatedOrder as unknown as Order,
+      toDomainOrder(updatedOrder),
       previousStatus,
       newStatus,
     );
@@ -270,7 +309,7 @@ export class OrdersService {
     });
 
     this.notificationsService.notifyOrderStatusChanged(
-      updatedOrder as unknown as Order,
+      toDomainOrder(updatedOrder),
       previousStatus,
       OrderStatus.CANCELLED,
     );
@@ -312,7 +351,7 @@ export class OrdersService {
     });
 
     this.notificationsService.notifyOrderStatusChanged(
-      updatedOrder as unknown as Order,
+      toDomainOrder(updatedOrder),
       previousStatus,
       OrderStatus.COMPLETED,
     );
@@ -418,7 +457,11 @@ export class OrdersService {
     return orders;
   }
 
-  async getOrderById(orderId: string) {
+  async getOrderById(
+    orderId: string,
+    requestingUserId?: string,
+    requestingRole?: Role,
+  ) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
       include: {
@@ -436,11 +479,24 @@ export class OrdersService {
       throw new NotFoundException(`Order with ID ${orderId} not found`);
     }
 
+    // 🔒 IDOR Guard: Verify that requesting user is the student who placed the order, the vendor owner, or an Admin
+    if (requestingUserId) {
+      const isAuthorized =
+        requestingRole === Role.ADMIN ||
+        order.studentId === requestingUserId ||
+        order.vendor?.ownerId === requestingUserId;
+
+      if (!isAuthorized) {
+        throw new ForbiddenException('You are not authorized to view this order');
+      }
+    }
+
     return order;
   }
 
   /**
-   * Verify PromptPay payment by student / mock bank gateway.
+   * Verify PromptPay payment by student / client.
+   * Ensures the order belongs to the student, is not cancelled, and updates payment state.
    */
   async verifyPayment(orderId: string, studentId: string, transactionId?: string) {
     const order = await this.prisma.order.findUnique({
@@ -456,12 +512,20 @@ export class OrdersService {
       throw new ForbiddenException('You can only verify payment for your own orders');
     }
 
+    if (order.status === OrderStatus.CANCELLED) {
+      throw new BadRequestException('Cannot verify payment for a cancelled order');
+    }
+
+    if (order.paymentStatus === PaymentStatus.PAID) {
+      return order; // Idempotent
+    }
+
     const updatedOrder = await this.prisma.order.update({
       where: { id: orderId },
       data: {
         paymentStatus: PaymentStatus.PAID,
         paidAt: new Date(),
-        transactionId: transactionId || `TXN-PP-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        transactionId: transactionId?.trim() || `TXN-PP-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
       },
       include: {
         items: { include: { menuItem: true } },
@@ -472,7 +536,7 @@ export class OrdersService {
 
     // Notify vendor dashboard in real-time
     this.notificationsService.notifyOrderStatusChanged(
-      updatedOrder as unknown as Order,
+      toDomainOrder(updatedOrder),
       order.status as OrderStatus,
       updatedOrder.status as OrderStatus,
     );
@@ -481,9 +545,14 @@ export class OrdersService {
   }
 
   /**
-   * Mark cash payment received at counter by vendor.
+   * Mark order payment as received (Cash or PromptPay verified at counter/bank app) by vendor or admin.
    */
-  async markCashPaid(orderId: string, vendorUserId: string) {
+  async markPaid(
+    orderId: string,
+    vendorUserId: string,
+    userRole: Role = Role.VENDOR,
+    transactionId?: string,
+  ) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
       include: { vendor: true, student: true, items: { include: { menuItem: true } } },
@@ -493,16 +562,29 @@ export class OrdersService {
       throw new NotFoundException(`Order with ID ${orderId} not found`);
     }
 
-    if (order.vendor.ownerId !== vendorUserId) {
-      throw new ForbiddenException('Only the vendor owner can mark this order as paid');
+    if (order.vendor.ownerId !== vendorUserId && userRole !== Role.ADMIN) {
+      throw new ForbiddenException('Only the vendor owner or admin can mark this order as paid');
     }
+
+    if (order.status === OrderStatus.CANCELLED) {
+      throw new BadRequestException('Cannot mark a cancelled order as paid');
+    }
+
+    if (order.paymentStatus === PaymentStatus.PAID) {
+      return order; // Idempotent
+    }
+
+    const defaultTxn =
+      order.paymentMethod === PaymentMethod.CASH
+        ? `CASH-${Date.now()}`
+        : `VENDOR-CONFIRM-PP-${Date.now()}`;
 
     const updatedOrder = await this.prisma.order.update({
       where: { id: orderId },
       data: {
         paymentStatus: PaymentStatus.PAID,
         paidAt: new Date(),
-        transactionId: `CASH-${Date.now()}`,
+        transactionId: transactionId?.trim() || defaultTxn,
       },
       include: {
         items: { include: { menuItem: true } },
@@ -513,12 +595,19 @@ export class OrdersService {
 
     // Notify real-time
     this.notificationsService.notifyOrderStatusChanged(
-      updatedOrder as unknown as Order,
+      toDomainOrder(updatedOrder),
       order.status as OrderStatus,
       updatedOrder.status as OrderStatus,
     );
 
     return updatedOrder;
+  }
+
+  /**
+   * Alias for backward compatibility with existing cash confirmation callers.
+   */
+  async markCashPaid(orderId: string, vendorUserId: string) {
+    return this.markPaid(orderId, vendorUserId, Role.VENDOR);
   }
 }
 

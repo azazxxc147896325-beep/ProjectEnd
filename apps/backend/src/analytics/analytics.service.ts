@@ -38,27 +38,49 @@ export class AnalyticsService {
 
     const { start, end } = this.getDateRange(period);
 
-    // Fetch all non-cancelled orders within range
-    const orders = await this.prisma.order.findMany({
+    // 1. Efficient Status Aggregations using DB groupBy
+    const statusGroups = await this.prisma.order.groupBy({
+      by: ['status'],
       where: {
         vendorId,
         createdAt: { gte: start, lte: end },
       },
-      include: {
-        items: {
-          include: { menuItem: true },
-        },
+      _count: { id: true },
+      _sum: { totalPrice: true },
+    });
+
+    let totalRevenue = 0;
+    let totalOrders = 0;
+    let completedOrders = 0;
+    let cancelledOrders = 0;
+
+    for (const group of statusGroups) {
+      if (group.status === OrderStatus.CANCELLED) {
+        cancelledOrders = group._count.id;
+      } else {
+        totalRevenue += Number(group._sum.totalPrice || 0);
+        totalOrders += group._count.id;
+        if (group.status === OrderStatus.COMPLETED) {
+          completedOrders = group._count.id;
+        }
+      }
+    }
+
+    const averageOrderValue = totalOrders > 0 ? Number((totalRevenue / totalOrders).toFixed(2)) : 0;
+
+    // 2. Fetch lightweight order timestamps for Daily Trends & Peak Hours
+    const validOrders = await this.prisma.order.findMany({
+      where: {
+        vendorId,
+        createdAt: { gte: start, lte: end },
+        status: { not: OrderStatus.CANCELLED },
+      },
+      select: {
+        totalPrice: true,
+        createdAt: true,
       },
       orderBy: { createdAt: 'asc' },
     });
-
-    const validOrders = orders.filter((o) => o.status !== OrderStatus.CANCELLED);
-    const completedOrders = orders.filter((o) => o.status === OrderStatus.COMPLETED).length;
-    const cancelledOrders = orders.filter((o) => o.status === OrderStatus.CANCELLED).length;
-
-    const totalRevenue = validOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0);
-    const totalOrders = validOrders.length;
-    const averageOrderValue = totalOrders > 0 ? Number((totalRevenue / totalOrders).toFixed(2)) : 0;
 
     // Aggregate daily sales
     const dailyMap = new Map<string, { totalSales: number; orderCount: number }>();
@@ -76,35 +98,50 @@ export class AnalyticsService {
       orderCount: data.orderCount,
     }));
 
-    // Aggregate popular items
-    const itemMap = new Map<string, { name: string; category: string; totalQuantity: number; totalRevenue: number }>();
-    for (const order of validOrders) {
-      for (const item of order.items) {
-        const key = item.menuItemId;
-        const current = itemMap.get(key) || {
-          name: item.menuItem?.name || 'Unknown Item',
-          category: item.menuItem?.category || 'General',
-          totalQuantity: 0,
-          totalRevenue: 0,
-        };
-        current.totalQuantity += item.quantity;
-        current.totalRevenue += Number(item.subtotal);
-        itemMap.set(key, current);
-      }
-    }
+    // 3. Database Aggregated Top Popular Items
+    const popularItemsRaw = await this.prisma.orderItem.groupBy({
+      by: ['menuItemId'],
+      where: {
+        order: {
+          vendorId,
+          createdAt: { gte: start, lte: end },
+          status: { not: OrderStatus.CANCELLED },
+        },
+      },
+      _sum: {
+        quantity: true,
+        subtotal: true,
+      },
+      orderBy: {
+        _sum: {
+          quantity: 'desc',
+        },
+      },
+      take: 10,
+    });
 
-    const popularItems: PopularMenuItem[] = Array.from(itemMap.entries())
-      .map(([menuItemId, data]) => ({
-        menuItemId,
-        name: data.name,
-        category: data.category,
-        totalQuantity: data.totalQuantity,
-        totalRevenue: Number(data.totalRevenue.toFixed(2)),
-      }))
-      .sort((a, b) => b.totalQuantity - a.totalQuantity)
-      .slice(0, 10);
+    const menuItemIds = popularItemsRaw.map((p) => p.menuItemId);
+    const menuItems = menuItemIds.length > 0
+      ? await this.prisma.menuItem.findMany({
+          where: { id: { in: menuItemIds } },
+          select: { id: true, name: true, category: true },
+        })
+      : [];
 
-    // Aggregate peak ordering hours (0 - 23)
+    const menuMap = new Map(menuItems.map((m) => [m.id, m]));
+
+    const popularItems: PopularMenuItem[] = popularItemsRaw.map((p) => {
+      const item = menuMap.get(p.menuItemId);
+      return {
+        menuItemId: p.menuItemId,
+        name: item?.name || 'Unknown Item',
+        category: item?.category || 'General',
+        totalQuantity: p._sum.quantity || 0,
+        totalRevenue: Number((p._sum.subtotal || 0).toFixed(2)),
+      };
+    });
+
+    // 4. Peak Ordering Hours Distribution
     const hourMap = new Map<number, { orderCount: number; totalSales: number }>();
     for (let h = 8; h <= 21; h++) {
       hourMap.set(h, { orderCount: 0, totalSales: 0 });
@@ -140,13 +177,87 @@ export class AnalyticsService {
     };
   }
 
-  async getPopularItems(vendorId: string, limit: number = 5) {
-    const summary = await this.getSummary(vendorId, 'month');
-    return summary.popularItems.slice(0, limit);
+  async getPopularItems(vendorId: string, limit: number = 5): Promise<PopularMenuItem[]> {
+    const { start, end } = this.getDateRange('month');
+
+    const popularItemsRaw = await this.prisma.orderItem.groupBy({
+      by: ['menuItemId'],
+      where: {
+        order: {
+          vendorId,
+          createdAt: { gte: start, lte: end },
+          status: { not: OrderStatus.CANCELLED },
+        },
+      },
+      _sum: {
+        quantity: true,
+        subtotal: true,
+      },
+      orderBy: {
+        _sum: {
+          quantity: 'desc',
+        },
+      },
+      take: limit,
+    });
+
+    const menuItemIds = popularItemsRaw.map((p) => p.menuItemId);
+    if (menuItemIds.length === 0) return [];
+
+    const menuItems = await this.prisma.menuItem.findMany({
+      where: { id: { in: menuItemIds } },
+      select: { id: true, name: true, category: true },
+    });
+
+    const menuMap = new Map(menuItems.map((m) => [m.id, m]));
+
+    return popularItemsRaw.map((p) => {
+      const item = menuMap.get(p.menuItemId);
+      return {
+        menuItemId: p.menuItemId,
+        name: item?.name || 'Unknown Item',
+        category: item?.category || 'General',
+        totalQuantity: p._sum.quantity || 0,
+        totalRevenue: Number((p._sum.subtotal || 0).toFixed(2)),
+      };
+    });
   }
 
-  async getPeakHours(vendorId: string) {
-    const summary = await this.getSummary(vendorId, 'month');
-    return summary.peakHours;
+  async getPeakHours(vendorId: string): Promise<PeakHour[]> {
+    const { start, end } = this.getDateRange('month');
+
+    const validOrders = await this.prisma.order.findMany({
+      where: {
+        vendorId,
+        createdAt: { gte: start, lte: end },
+        status: { not: OrderStatus.CANCELLED },
+      },
+      select: {
+        totalPrice: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    const hourMap = new Map<number, { orderCount: number; totalSales: number }>();
+    for (let h = 8; h <= 21; h++) {
+      hourMap.set(h, { orderCount: 0, totalSales: 0 });
+    }
+
+    for (const order of validOrders) {
+      const hour = new Date(order.createdAt).getHours();
+      const current = hourMap.get(hour) || { orderCount: 0, totalSales: 0 };
+      current.orderCount += 1;
+      current.totalSales += Number(order.totalPrice);
+      hourMap.set(hour, current);
+    }
+
+    return Array.from(hourMap.entries())
+      .map(([hour, data]) => ({
+        hour,
+        orderCount: data.orderCount,
+        totalSales: Number(data.totalSales.toFixed(2)),
+      }))
+      .sort((a, b) => a.hour - b.hour);
   }
 }
