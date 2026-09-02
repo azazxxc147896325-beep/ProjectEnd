@@ -97,27 +97,7 @@ stateDiagram-v2
 
 ---
 
-## 🤖 3. แผนภาพการทำงานของระบบ AI น้องหยก (AI Grounding Workflow)
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Student as 📱 นักศึกษา (Mobile App)
-    participant AI_Service as 🚀 Backend AI Service
-    participant DB as 🐘 PostgreSQL Database (Prisma)
-    participant LLM as 🤖 Google Gemini / Claude LLM
-
-    Student->>AI_Service: ถามคำถาม "มีงบ 60 บาท อยากกินอะไรร้อนๆ เผ็ดๆ"
-    AI_Service->>DB: ดึงข้อมูลร้านค้าและเมนูอาหารจริงที่ยัง 'isAvailable: true'
-    Note over AI_Service,DB: Dynamic Grounding ป้องกัน AI หลอน (Hallucination)
-    AI_Service->>LLM: ส่ง System Prompt (สวมบทบาทน้องหยก) + รายการเมนูจริงในฐานข้อมูล
-    LLM-->>AI_Service: ตอบกลับเป็นบทสนทนาภาษาไทยที่เป็นกันเอง + JSON รายการเมนูที่แนะนำ
-    AI_Service-->>Student: แสดงข้อความตอบกลับ พร้อม Render การ์ดเมนูที่มีปุ่ม "สั่งเมนูนี้เลย"
-```
-
----
-
-## 🛠️ 4. ตารางเทคโนโลยีและ Framework ที่เลือกใช้ (Technology Stack)
+## 🛠️ 3. ตารางเทคโนโลยีและ Framework ที่เลือกใช้ (Technology Stack)
 
 | เลเยอร์ / ส่วนงาน | เทคโนโลยีที่เลือกใช้ | ภาษา / เครื่องมือ | บทบาทและหน้าที่ในระบบ |
 | :--- | :--- | :--- | :--- |
@@ -140,7 +120,7 @@ sequenceDiagram
 
 ---
 
-## ⚡ 5. ระบบทำงานอย่างไร (How It Works & Capabilities)
+## ⚡ 4. ระบบทำงานอย่างไร (How It Works & Capabilities)
 
 ### 📱 1. สำหรับนักศึกษา (Student Mobile App)
 - **ร้านค้าและเมนูอาหาร**: เลือกร้านค้าในโรงอาหาร ดูเมนูแนะนำประจำวัน และสถานะเปิด/ปิดร้าน
@@ -176,7 +156,3 @@ sequenceDiagram
 - แสดงรายการสินค้าที่กำลังสั่งแบบ Real-time พร้อมแสดง PromptPay QR Code ขนาดใหญ่ให้ลูกค้าสแกนจ่าย
 
 ---
-
-<div align="center">
-  <b>🎓 Campus Food Ordering System</b> — พัฒนาด้วยความพิถีพิถัน เพื่อยกระดับประสบการณ์การสั่งอาหารในโรงอาหารมหาวิทยาลัยให้สะดวก รวดเร็ว และทันสมัยที่สุด ✨
-</div>
