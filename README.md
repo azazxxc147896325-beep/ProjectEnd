@@ -291,10 +291,10 @@ pnpm build:types
 ```env
 PORT=4000
 NODE_ENV=development
-DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:6543/postgres?pgbouncer=true"
-DIRECT_URL="postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres"
-JWT_SECRET="super-secret-jwt-key-change-in-production"
-JWT_REFRESH_SECRET="super-secret-jwt-refresh-key-change-in-production"
+DATABASE_URL="postgresql://user:password@localhost:5432/campus_food_db?schema=public"
+DIRECT_URL="postgresql://user:password@localhost:5432/campus_food_db?schema=public"
+JWT_SECRET="your-jwt-secret-key-here"
+JWT_REFRESH_SECRET="your-jwt-refresh-secret-key-here"
 FRONTEND_URL="http://localhost:3000"
 GEMINI_API_KEY="your-google-gemini-api-key"
 ANTHROPIC_API_KEY="your-anthropic-api-key"
@@ -320,7 +320,7 @@ EXPO_PUBLIC_WS_URL=http://localhost:4000
 # Push schema ขึ้นไปยังฐานข้อมูล
 pnpm --filter @campus-food/backend prisma:push
 
-# รัน Seed เพื่อสร้างร้านค้า 8 ร้าน และเมนูอาหารกว่า 35+ รายการ
+# รัน Seed เพื่อสร้างร้านค้าและเมนูอาหารตัวอย่าง
 pnpm --filter @campus-food/backend seed
 ```
 
@@ -374,19 +374,19 @@ docker compose down
 
 ## 👥 บัญชีผู้ใช้ตัวอย่างสำหรับทดสอบ (Demo Accounts & Seed Data)
 
-ระบบได้เตรียมข้อมูลร้านค้าจำลองในโรงอาหารไว้ 8 ร้าน พร้อมเมนูอาหารครบถ้วน (รหัสผ่านทุกบัญชีคือ: `password123`):
+ระบบได้เตรียมข้อมูลร้านค้าจำลองในโรงอาหารไว้ 8 ร้าน พร้อมเมนูอาหารครบถ้วน (รหัสผ่านเริ่มต้นสามารถดูได้จาก `apps/backend/prisma/seed.ts`):
 
-| บทบาท (Role) | ร้านค้า / ผู้ใช้ | อีเมล (Email) | รหัสผ่าน (Password) |
-| :--- | :--- | :--- | :--- |
-| 👩‍🍳 **Vendor 1** | ครัวป้าสมใจ (อาหารตามสั่ง/กะเพรา) | `vendor.somjai@campus.ac.th` | `password123` |
-| 🍗 **Vendor 2** | ข้าวมันไก่เฮียชัย ประตู 1 | `vendor.chaichicken@campus.ac.th` | `password123` |
-| 🍜 **Vendor 3** | เตี๋ยวเรืออยุธยา สูตรโบราณ | `vendor.boatnoodle@campus.ac.th` | `password123` |
-| 🥗 **Vendor 4** | แซ่บอีสาน ส้มตำ-ไก่ย่าง | `vendor.zaabisarn@campus.ac.th` | `password123` |
-| 🍛 **Vendor 5** | ข้าวแกงปักษ์ใต้ คุณนายเรณู | `vendor.southern@campus.ac.th` | `password123` |
-| ☕ **Vendor 6** | Green Canteen & Cafe (เครื่องดื่ม/เบเกอรี่) | `vendor.greencafe@campus.ac.th` | `password123` |
-| 🇯🇵 **Vendor 7** | Tokyo Donburi ข้าวหน้าญี่ปุ่น | `vendor.tokyodonburi@campus.ac.th` | `password123` |
-| 🍲 **Vendor 8** | ครัวฮาลาล ซาบีฮะห์ | `vendor.halalkitchen@campus.ac.th` | `password123` |
-| 🎓 **Student** | สมชาย สายกิน (นักศึกษา) | _สมัครสมาชิกใหม่ผ่านหน้าแอปมือถือได้ทันที_ | - |
+| บทบาท (Role) | ร้านค้า / ผู้ใช้ | อีเมลตัวอย่าง (Email) |
+| :--- | :--- | :--- |
+| 👩‍🍳 **Vendor 1** | ครัวป้าสมใจ (อาหารตามสั่ง/กะเพรา) | `vendor.somjai@campus.ac.th` |
+| 🍗 **Vendor 2** | ข้าวมันไก่เฮียชัย ประตู 1 | `vendor.chaichicken@campus.ac.th` |
+| 🍜 **Vendor 3** | เตี๋ยวเรืออยุธยา สูตรโบราณ | `vendor.boatnoodle@campus.ac.th` |
+| 🥗 **Vendor 4** | แซ่บอีสาน ส้มตำ-ไก่ย่าง | `vendor.zaabisarn@campus.ac.th` |
+| 🍛 **Vendor 5** | ข้าวแกงปักษ์ใต้ คุณนายเรณู | `vendor.southern@campus.ac.th` |
+| ☕ **Vendor 6** | Green Canteen & Cafe (เครื่องดื่ม/เบเกอรี่) | `vendor.greencafe@campus.ac.th` |
+| 🇯🇵 **Vendor 7** | Tokyo Donburi ข้าวหน้าญี่ปุ่น | `vendor.tokyodonburi@campus.ac.th` |
+| 🍲 **Vendor 8** | ครัวฮาลาล ซาบีฮะห์ | `vendor.halalkitchen@campus.ac.th` |
+| 🎓 **Student** | นักศึกษา | _สมัครสมาชิกใหม่ผ่านหน้าแอปมือถือได้ทันที_ |
 
 ---
 
