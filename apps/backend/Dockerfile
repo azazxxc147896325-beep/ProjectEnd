@@ -4,7 +4,7 @@
 
 # ---- Base Stage ----
 FROM node:20-alpine AS base
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11
 WORKDIR /app
 
 # ---- Dependencies Stage ----
@@ -13,7 +13,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/shared-types/package.json ./packages/shared-types/
 COPY apps/backend/package.json ./apps/backend/
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # ---- Build Stage ----
 FROM base AS build
