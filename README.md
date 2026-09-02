@@ -5,47 +5,7 @@
 
 ---
 
-## 📌 สารบัญ (Table of Contents)
-
-1. [🌟 ภาพรวมของโครงการและปัญหาที่แก้ไข (Project Overview & Problem Statement)](#-ภาพรวมของโครงการและปัญหาที่แก้ไข-project-overview--problem-statement)
-2. [🏗️ สถาปัตยกรรมระบบและแผนผังการทำงาน (System Architecture & Diagrams)](#️-สถาปัตยกรรมระบบและแผนผังการทำงาน-system-architecture--diagrams)
-3. [📦 ส่วนประกอบภายใน Monorepo (Project Modules Breakdown)](#-ส่วนประกอบภายใน-monorepo-project-modules-breakdown)
-4. [🛠️ ตารางเทคโนโลยีที่เลือกใช้ (Technology Stack Overview)](#️-ตารางเทคโนโลยีที่เลือกใช้-technology-stack-overview)
-5. [💡 เหตุผลเบื้องหลังการเลือก Framework & Tech Stack (Engineering Rationale / ADR)](#-เหตุผลเบื้องหลังการเลือก-framework--tech-stack-engineering-rationale--adr)
-6. [✨ ฟีเจอร์หลักของระบบ (Key Features & Capabilities)](#-ฟีเจอร์หลักของระบบ-key-features--capabilities)
-7. [🔒 ความปลอดภัยและคุณภาพซอฟต์แวร์ (Security & Quality Engineering)](#-ความปลอดภัยและคุณภาพซอฟต์แวร์-security--quality-engineering)
-8. [📁 โครงสร้างโฟลเดอร์ของโปรเจกต์ (Directory Structure)](#-โครงสร้างโฟลเดอร์ของโปรเจกต์-directory-structure)
-9. [🚀 คู่มือการติดตั้งและการเริ่มใช้งาน (Getting Started & Setup Guide)](#-คู่มือการติดตั้งและการเริ่มใช้งาน-getting-started--setup-guide)
-10. [🐳 การรันด้วย Docker Compose (Docker Containerization)](#-การรันด้วย-docker-compose-docker-containerization)
-11. [👥 บัญชีผู้ใช้ตัวอย่างสำหรับทดสอบ (Demo Accounts & Seed Data)](#-บัญชีผู้ใช้ตัวอย่างสำหรับทดสอบ-demo-accounts--seed-data)
-
----
-
-## 🌟 ภาพรวมของโครงการและปัญหาที่แก้ไข (Project Overview & Problem Statement)
-
-### 🔴 ปัญหาเดิมของโรงอาหารมหาวิทยาลัย (Pain Points)
-
-1. **ความแออัดและคิวยาวในช่วงเวลาพักเที่ยง**: นักศึกษาต้องเสียเวลาพักอันมีค่าไปกับการยืนรอคิวหน้าร้านอาหาร โดยไม่รู้ว่าต้องรอนานเท่าใด
-2. **ปัญหา "มื้อนี้กินอะไรดี?"**: นักศึกษาเกิดความลังเล มีข้อจำกัดด้านงบประมาณ หรือความต้องการทางโภชนาการเฉพาะ (คลีน, เผ็ดน้อย, ฮาลาล) แต่ไม่มีเครื่องมือช่วยตัดสินใจ
-3. **ความสับสนในการจัดการคิวของร้านค้า**: แม่ค้าต้องรับออเดอร์ จดมือ ทำอาหาร คิดเงิน และคอยตะโกนเรียกคิวพร้อมกัน ทำให้เกิดความผิดพลาด ลืมออเดอร์ หรือคิดเงินผิด
-4. **ขาดข้อมูลสถิติเพื่อการบริหารสต็อก**: ร้านค้าไม่ทราบช่วงเวลาเร่งด่วนที่แท้จริง (Peak Hours) และยอดขายรายเมนู ทำให้เตรียมวัตถุดิบขาดหรือเหลือทิ้ง
-
-### 🟢 โซลูชันของ Campus Food Ecosystem
-
-**Campus Food** เชื่อมต่อทุกภาคส่วนในโรงอาหารเข้าด้วยกันเป็นระบบดิจิทัลแบบครบวงจร (Single Unified Ecosystem):
-
-- **📱 Student Mobile App**: สั่งอาหารล่วงหน้า ระบุทานที่ร้านหรือสั่งกลับบ้าน ติดตามสถานะคิวแบบ Real-time และมี **AI "น้องหยก"** ช่วยแนะนำเมนูตามงบและรสชาติ
-- **💻 Vendor Web Dashboard**: จัดการออเดอร์ในรูปแบบ **Kanban Board**, จัดการเมนู/สต็อก และดูรายงานสถิติยอดขายพร้อมช่วงเวลาขายดี
-- **🧾 POS System (`/pos`)**: ระบบคิดเงินหน้าร้านสำหรับพนักงาน ออกบัตรคิว ชำระเงินผ่าน PromptPay Dynamic QR หรือเงินสด พร้อมสั่งพิมพ์สลิปความร้อน (Thermal Receipt)
-- **👨‍🍳 Kitchen Display System (`/kds`)**: หน้าจอสัมผัสสำหรับพ่อครัว/แม่ครัวในครัว เห็นออเดอร์ชัดเจน มีตัวจับเวลาความล่าช้า และเสียงกระดิ่งแจ้งเตือน
-- **📺 Customer Queue Display (`/queue-display`)**: หน้าจอทีวีขนาดใหญ่ติดตั้งหน้าร้าน/โรงอาหาร แสดงเลขคิว "กำลังปรุง" และ "พร้อมรับอาหาร" อัปเดตสดแบบเสี้ยววินาที
-- **🖥️ Sunmi Dual-Screen Display (`/sunmi`, `/sunmi-display`)**: ระบบจอแสดงผลสองด้านสำหรับเครื่อง Sunmi Android POS แสดงยอดเงินและ QR Code ให้ลูกค้าสแกนจ่าย
-
----
-
-## 🏗️ สถาปัตยกรรมระบบและแผนผังการทำงาน (System Architecture & Diagrams)
-
-### 1. แผนผังสถาปัตยกรรมภาพรวม (System Architecture Diagram)
+## 🏗️ 1. สถาปัตยกรรมระบบและแผนผังการทำงาน (System Architecture Diagram)
 
 ```mermaid
 graph TD
@@ -65,26 +25,25 @@ graph TD
 
     subgraph Backend Core Services
         Nest["🚀 NestJS 10 API Server<br/>(Modular, Dependency Injection, DTOs)"]
-        AuthMod["🔑 Auth & RBAC Module<br/>(JWT, Cookies, Silent Refresh)"]
+        AuthMod["🔑 Auth & RBAC Module<br/>(JWT, Passport, bcrypt)"]
         OrderMod["📋 Order & Queue Lifecycle Module<br/>(Atomic Transactions & State Machine)"]
-        MenuMod["🍲 Menu & Soft-Delete Module<br/>(In-Memory LRU Cache)"]
+        MenuMod["🍲 Menu & Soft-Delete Module<br/>(In-Memory Cache)"]
         AnalyticsMod["📊 Analytics & Peak Hours Module<br/>(SQL GroupBy Aggregation)"]
         AIMod["🤖 AI Engine Service & Tools<br/>(Anthropic Claude & Google Gemini 1.5)"]
-        HealthMod["🩺 Health Check & Monitoring<br/>(Liveness & DB Connectivity)"]
     end
 
     subgraph Data & Persistence Layer
-        Prisma["💎 Prisma ORM 6.x<br/>(Composite Indexes & Audit Timestamps)"]
-        Postgres[("🐘 PostgreSQL Database<br/>(Supabase / Local Postgres Docker)")]
-        SecureStore["🔐 SecureStore / Keystore<br/>(Hardware Keystore / Keychain)"]
+        Prisma["💎 Prisma ORM 6.x<br/>(Type-safe Query Builder)"]
+        Postgres[("🐘 PostgreSQL Database<br/>(ACID Relational Storage)")]
+        SecureStore["🔐 SecureStore / Keystore<br/>(Encrypted Device Token)"]
     end
 
     %% Client Connections
-    Mobile -->|REST API & Timeout| REST
+    Mobile -->|REST API| REST
     Mobile <-->|Live Queue & Order Events| WS
     Mobile -.->|Store Encrypted Token| SecureStore
 
-    WebDash -->|REST API & HTTP-Only Cookie| REST
+    WebDash -->|REST API| REST
     WebDash <-->|Order Kanban Updates| WS
 
     WebPOS -->|Create Counter Order| REST
@@ -104,20 +63,18 @@ graph TD
     Nest --> MenuMod
     Nest --> AnalyticsMod
     Nest --> AIMod
-    Nest --> HealthMod
 
     %% Persistence
     OrderMod --> Prisma
     MenuMod --> Prisma
     AnalyticsMod --> Prisma
     AuthMod --> Prisma
-    HealthMod --> Prisma
     Prisma --> Postgres
 ```
 
 ---
 
-### 2. วงจรชีวิตของคำสั่งซื้อ (Order Lifecycle State Machine)
+## 🔄 2. วงจรชีวิตของคำสั่งซื้อ (Order Lifecycle State Machine)
 
 ```mermaid
 stateDiagram-v2
@@ -140,253 +97,83 @@ stateDiagram-v2
 
 ---
 
-## 📦 ส่วนประกอบภายใน Monorepo (Project Modules Breakdown)
+## 🤖 3. แผนภาพการทำงานของระบบ AI น้องหยก (AI Grounding Workflow)
 
-```text
-campus-food-ordering-monorepo/
-├── apps/
-│   ├── backend/            # 🚀 NestJS REST API Server, WebSocket Gateway & AI Services
-│   ├── web/                # 💻 Next.js 14 Web App (Dashboard, POS, KDS, Queue TV, Sunmi)
-│   └── mobile/             # 📱 React Native Expo App (สำหรับนักศึกษา iOS & Android)
-├── packages/
-│   └── shared-types/       # 📦 คลัง Type Definitions, Enums, DTOs กลางที่แชร์ร่วมกัน 100%
-├── .github/workflows/      # ⚙️ GitHub Actions CI Pipeline
-├── docker-compose.yml      # 🐳 Full-stack Docker Orchestration
-├── pnpm-workspace.yaml     # กำหนดขอบเขต Workspace ของ Monorepo
-├── tsconfig.base.json      # Base TypeScript Configuration
-└── README.md
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Student as 📱 นักศึกษา (Mobile App)
+    participant AI_Service as 🚀 Backend AI Service
+    participant DB as 🐘 PostgreSQL Database (Prisma)
+    participant LLM as 🤖 Google Gemini / Claude LLM
+
+    Student->>AI_Service: ถามคำถาม "มีงบ 60 บาท อยากกินอะไรร้อนๆ เผ็ดๆ"
+    AI_Service->>DB: ดึงข้อมูลร้านค้าและเมนูอาหารจริงที่ยัง 'isAvailable: true'
+    Note over AI_Service,DB: Dynamic Grounding ป้องกัน AI หลอน (Hallucination)
+    AI_Service->>LLM: ส่ง System Prompt (สวมบทบาทน้องหยก) + รายการเมนูจริงในฐานข้อมูล
+    LLM-->>AI_Service: ตอบกลับเป็นบทสนทนาภาษาไทยที่เป็นกันเอง + JSON รายการเมนูที่แนะนำ
+    AI_Service-->>Student: แสดงข้อความตอบกลับ พร้อม Render การ์ดเมนูที่มีปุ่ม "สั่งเมนูนี้เลย"
 ```
 
 ---
 
-## 🛠️ ตารางเทคโนโลยีที่เลือกใช้ (Technology Stack Overview)
+## 🛠️ 4. ตารางเทคโนโลยีและ Framework ที่เลือกใช้ (Technology Stack)
 
-| เลเยอร์ / ส่วนงาน         | เทคโนโลยีที่เลือกใช้            | ภาษา / เครื่องมือ   | บทบาทและหน้าที่ในระบบ                                                         |
-| ------------------------- | ------------------------------- | ------------------- | ----------------------------------------------------------------------------- |
-| **Monorepo Architecture** | **pnpm Workspace v11**          | YAML / Node.js      | จัดการ Dependency, แชร์แพ็กเกจ และเร่งความเร็วในการ Build                     |
-| **Language Baseline**     | **TypeScript 5.x**              | TypeScript          | ภาษาหลัก 100% ทั้ง Frontend, Mobile, Backend และ Shared Packages              |
-| **Backend Framework**     | **NestJS 10**                   | TypeScript          | แบ็กเอนด์ระดับ Enterprise (Modular, Dependency Injection, Clean Architecture) |
-| **Database ORM**          | **Prisma ORM 6.x**              | Prisma Schema / SQL | ตัวเชื่อมฐานข้อมูลแบบ Type-safe, จัดการ Composite Indexes และ Audit Timestamps |
-| **Database**              | **PostgreSQL 16 (Supabase)**    | SQL / Relational    | ฐานข้อมูลหลัก รองรับ ACID Transactions และ PgBouncer Connection Pooling       |
-| **In-Memory Cache**       | **Bounded LRU Memory Cache**    | TypeScript          | แคชข้อมูลเมนูและร้านค้า ป้องกัน Memory Leak ด้วย Max Size 500 รายการ          |
-| **Real-time Engine**      | **Socket.IO (WebSockets)**      | WebSocket Protocol  | ระบบรับ-ส่งสัญญาณแจ้งเตือนออเดอร์และบัตรคิวแบบ Real-time พร้อม Connection Auth |
-| **Web Framework**         | **Next.js 14 (App Router)**     | TSX / React 18      | ระบบเว็บแอปพลิเคชันสำหรับ Dashboard, POS, KDS, Queue Display และ Sunmi Display |
-| **Web Styling**           | **Tailwind CSS + Lucide Icons** | PostCSS / CSS3      | ออกแบบดีไซน์ทันสมัย Responsive Dark Glassmorphism                             |
-| **Web Data & Cache**      | **TanStack React Query v5**     | TypeScript          | จัดการ Server State, Caching, Optimistic Updates และ Background Refetching    |
-| **Mobile Framework**      | **React Native (Expo SDK 54)**  | TSX / React 19      | พัฒนา Cross-Platform Mobile App (iOS & Android)                               |
-| **Mobile Routing**        | **Expo Router v6**              | TypeScript          | ระบบจัดการหน้าจอแบบ File-based Navigation Routing                             |
-| **Mobile Security**       | **Expo SecureStore Adapter**    | TypeScript          | จัดการ State น้ำหนักเบา (Zustand) พร้อมเข้ารหัส Token ใน Hardware Keystore    |
-| **AI Intelligence**       | **Anthropic Claude & Gemini**   | REST / AI SDK       | สมองกลผู้ช่วย AI "น้องหยก" และระบบ AI Analytics Copilot ด้วย Function Calling |
-| **DevOps & CI**           | **Docker & GitHub Actions**     | Dockerfile / YAML   | Multi-stage Docker Builds, Compose Orchestration และ Automated CI Pipeline     |
-| **Testing Suite**         | **Jest + ts-jest (81 Tests)**   | TypeScript          | ชุดทดสอบ Unit Tests ครอบคลุม 8 Test Suites ผ่าน 100%                          |
-
----
-
-## 🔒 ความปลอดภัยและคุณภาพซอฟต์แวร์ (Security & Quality Engineering)
-
-1. **Dynamic PromptPay per Vendor**:
-   - สร้าง Dynamic EMVCo QR Code ผูกตามเบอร์โทรศัพท์/เลขประจำตัวผู้เสียภาษีเฉพาะของแต่ละร้านค้า (`vendor.promptpayId`) จากฐานข้อมูลโดยตรง ป้องกันการ Hardcode
-2. **WebSocket Connection Authentication & Room Isolation**:
-   - ตรวจสอบ JWT Handshake ในช่วง Connection และบังคับ Authorization สิทธิ์การเข้าห้อง `vendor_{id}` เฉพาะเจ้าของร้านหรือ Admin
-3. **IDOR (Insecure Direct Object References) Protection**:
-   - ตรวจสอบสิทธิ์ความเป็นเจ้าของใน `GET /orders/:id` อนุญาตเฉพาะนักศึกษาเจ้าของออเดอร์ เจ้าของร้านค้าคู่กรณี หรือ Admin เท่านั้น
-4. **Order State Machine Transition Validation**:
-   - กำหนด `VALID_ORDER_TRANSITIONS` อย่างรัดกุม ป้องกันการข้ามขั้นตอน และบล็อกการแก้ไขออเดอร์ที่อยู่ในสถานะสิ้นสุด (`COMPLETED`, `CANCELLED`)
-5. **Database Aggregation for Analytics**:
-   - ใช้ `prisma.order.groupBy` และ `prisma.orderItem.groupBy` คำนวณยอดขาย สถิติช่วงเวลาเร่งด่วน และเมนูขายดีในระดับ Database Engine
-6. **In-Memory Bounded LRU Cache**:
-   - สร้าง Cache Layer แบบจำกัดขนาด (Max Size 500, TTL 15 วินาที) สำหรับ `MenuService` และ `VendorsService` ป้องกันปัญหา Memory Leak
-7. **HTTP-Only Cookies & Web Silent Refresh**:
-   - รองรับการจัดเก็บ Token ใน HTTP-Only Cookie และมีระบบ Silent Refresh Token อัตโนมัติใน Next.js Web Interceptor
-8. **Mobile Request Timeout & AbortController**:
-   - จำกัด Timeout 15 วินาทีใน Mobile API Client พร้อมแจ้งเตือนเป็นภาษาไทยเมื่อสัญญาณอินเทอร์เน็ตขาดหาย
-9. **Prisma Audit Fields & Composite Indexes**:
-   - เพิ่ม `updatedAt` (`@updatedAt`) ในทุก Entity และสร้าง Composite Indexes (`[vendorId, status]`, `[vendorId, createdAt, status]`) เพื่อเร่งความเร็วการ Query
-10. **CORS Hardening**:
-    - ล็อก Origin Whitelist อย่างเข้มงวดเมื่อรันบน Production และแสดง Warning Log ใน Development Mode
+| เลเยอร์ / ส่วนงาน | เทคโนโลยีที่เลือกใช้ | ภาษา / เครื่องมือ | บทบาทและหน้าที่ในระบบ |
+| :--- | :--- | :--- | :--- |
+| **Monorepo Architecture** | **pnpm Workspace** | YAML / Node.js | จัดการ Dependency และแชร์แพ็กเกจข้ามโปรเจกต์ |
+| **Language Baseline** | **TypeScript 5.x** | TypeScript | ภาษาหลัก 100% ทั้ง Frontend, Mobile, Backend และ Shared Types |
+| **Backend Framework** | **NestJS 10** | TypeScript | แบ็กเอนด์ระดับ Enterprise (Modular, Dependency Injection, Clean Architecture) |
+| **Database ORM** | **Prisma ORM 6.x** | Prisma Schema / SQL | ตัวเชื่อมฐานข้อมูลแบบ Type-safe และจัดการ Composite Indexes |
+| **Database** | **PostgreSQL 16** | SQL / Relational | ฐานข้อมูลหลัก รองรับ ACID Transactions และ Concurrent Connections |
+| **In-Memory Cache** | **Bounded LRU Memory Cache** | TypeScript | แคชข้อมูลเมนูและร้านค้า ป้องกัน Memory Leak (Bounded Max Size) |
+| **Real-time Engine** | **Socket.IO (WebSockets)** | WebSocket Protocol | ระบบรับ-ส่งสัญญาณแจ้งเตือนออเดอร์และบัตรคิวแบบ Real-time ความหน่วงต่ำ |
+| **Web Framework** | **Next.js 14 (App Router)** | TSX / React 18 | ระบบเว็บแอปพลิเคชันสำหรับ Dashboard, POS, KDS, Queue TV และ Sunmi Display |
+| **Web Styling** | **Tailwind CSS + Lucide Icons** | PostCSS / CSS3 | ออกแบบดีไซน์ทันสมัย Responsive Dark Glassmorphism |
+| **Web Data & Cache** | **TanStack React Query v5** | TypeScript | จัดการ Server State, Caching, และ Optimistic Updates |
+| **Mobile Framework** | **React Native (Expo SDK 54)** | TSX / React 19 | พัฒนา Cross-Platform Mobile App (iOS & Android) |
+| **Mobile Routing** | **Expo Router v6** | TypeScript | ระบบจัดการหน้าจอแบบ File-based Navigation Routing |
+| **Mobile Security** | **Expo SecureStore Adapter** | TypeScript | จัดการ State น้ำหนักเบา (Zustand) พร้อมเข้ารหัส Token ใน Hardware Keystore |
+| **AI Intelligence** | **Anthropic Claude & Gemini** | REST / AI SDK | สมองกลผู้ช่วย AI "น้องหยก" และระบบ AI Analytics Copilot ด้วย Function Calling |
+| **DevOps & Container** | **Docker & GitHub Actions** | Dockerfile / YAML | Multi-stage Docker Builds, Compose Orchestration และ Automated CI Pipeline |
+| **Testing Suite** | **Jest + ts-jest** | TypeScript | ชุดทดสอบ Unit Tests ครอบคลุม Business Logic ทั้งหมด |
 
 ---
 
-## 📁 โครงสร้างโฟลเดอร์ของโปรเจกต์ (Directory Structure)
+## ⚡ 5. ระบบทำงานอย่างไร (How It Works & Capabilities)
 
-```text
-proj/
-├── apps/
-│   ├── backend/                     # 🚀 NestJS REST API & WebSocket Server
-│   │   ├── Dockerfile               # Production Multi-stage Dockerfile (Node 22 Alpine)
-│   │   ├── prisma/
-│   │   │   ├── schema.prisma        # Database Schema & Index Definitions
-│   │   │   └── seed.ts              # Seeding 8 realistic vendors and 35+ menu items
-│   │   └── src/
-│   │       ├── ai/                  # AI Copilot & Extracted AiToolsExecutor
-│   │       ├── analytics/           # Sales Statistics & Peak Hours Aggregator
-│   │       ├── auth/                # JWT Auth, Refresh Token, Passport Strategies
-│   │       ├── common/cache/        # MemoryCacheService (LRU Bounded Cache)
-│   │       ├── health/              # HealthController (Liveness & DB Connectivity)
-│   │       ├── menu/                # Menu Management, Soft Delete & Cache
-│   │       ├── notifications/       # Socket.IO WebSocket Gateway with Auth & Rooms
-│   │       ├── orders/              # Order State Machine, Mapper & Transactions
-│   │       ├── prisma/              # Prisma Service & Database Connection
-│   │       └── vendors/             # Vendor Profile & Store Status
-│   │
-│   ├── mobile/                      # 📱 React Native (Expo SDK 54) Student App
-│   │   └── src/
-│   │       ├── app/                 # Expo Router Navigation (Tabs, Vendor, Order)
-│   │       ├── components/          # Reusable UI (Ai, Cart, Orders, Modals)
-│   │       ├── lib/                 # SecureStorageAdapter, API Client with Timeout
-│   │       └── stores/              # Zustand Stores (AuthStore, CartStore)
-│   │
-│   └── web/                         # 💻 Next.js 14 App Router (Vendor Suite)
-│       ├── Dockerfile               # Production Multi-stage Dockerfile
-│       └── src/
-│           ├── app/                 # Dashboard, POS, KDS, Queue TV, Sunmi
-│           ├── components/          # Kanban Cards, Charts, Slip Templates, Modals
-│           └── lib/                 # Axios with Silent Refresh, Sockets, Toast
-│
-├── packages/
-│   └── shared-types/                # 📦 Centralized Shared TypeScript Definitions
-│
-├── .github/workflows/ci.yml         # ⚙️ GitHub Actions CI Workflow
-├── docker-compose.yml               # 🐳 Full-stack Docker Orchestration
-├── pnpm-workspace.yaml             # pnpm Workspace Configuration
-├── tsconfig.base.json              # Shared Base TypeScript Rules
-├── .env.example                    # Sample Root Environment Variables
-└── README.md
-```
+### 📱 1. สำหรับนักศึกษา (Student Mobile App)
+- **ร้านค้าและเมนูอาหาร**: เลือกร้านค้าในโรงอาหาร ดูเมนูแนะนำประจำวัน และสถานะเปิด/ปิดร้าน
+- **Interactive Stepper**: ปรับจำนวนอาหาร `+` / `-` ได้ทันทีจากหน้ารายการเมนู
+- **Persistent Cart**: ตะกร้าสินค้าถูกบันทึกในเครื่อง ไม่สูญหายเมื่อปิดแอป
+- **Dynamic PromptPay & Cash**: ชำระเงินผ่าน PromptPay Dynamic QR Code ต่อร้านค้า หรือเงินสดหน้าร้าน
+- **Real-time Queue Tracking**: บัตรคิวพร้อมตัวเลขขนาดใหญ่ และ Timeline ติดตามสถานะแบบ Real-time
+- **AI น้องหยก Assistant**: แชทบอทแนะนำเมนูอาหารตามงบประมาณ รสชาติ และความต้องการ พร้อมปุ่มกดสั่งได้ทันที
 
----
+### 💻 2. สำหรับผู้ประกอบการร้านค้า (Vendor Dashboard)
+- **Live Kanban Order Board**: จัดการออเดอร์ 3 ขั้นตอน _(รอยืนยัน ➔ กำลังปรุง ➔ พร้อมรับอาหาร)_ พร้อมเสียงแจ้งเตือน
+- **Menu & Stock Management**: จัดการเมนูอาหาร เปิด-ปิดการขาย (In-stock / Out-of-stock) และ Soft Delete
+- **AI Food Photography**: สร้างรูปภาพเมนูอาหารคุณภาพสูงด้วย AI เพื่อนำไปใช้เป็นรูปประกอบเมนู
+- **Sales Analytics & Peak Hours**: วิเคราะห์สถิติยอดขายรวม จำนวนออเดอร์ และช่วงเวลาเร่งด่วนของร้านค้า
 
-## 🚀 คู่มือการติดตั้งและการเริ่มใช้งาน (Getting Started & Setup Guide)
+### 🧾 3. ระบบคิดเงินหน้าร้าน (POS System - `/pos`)
+- **Fast Touch Ordering**: พนักงานหน้าร้านเลือกเมนู ปรับตัวเลือก และเพิ่มลงตะกร้าได้อย่างรวดเร็ว
+- **Split Payment**: รองรับทั้งเงินสด (พร้อมระบบคำนวณเงินทอน) และสร้าง PromptPay Dynamic QR
+- **Thermal Receipt Slip Printing**: สั่งพิมพ์สลิปใบเสร็จและบัตรคิวขนาด 80mm/58mm อัตโนมัติ
 
-### 1. ความต้องการของระบบ (Prerequisites)
+### 👨‍🍳 4. ระบบจอสัมผัสในครัว (Kitchen Display System - `/kds`)
+- **High-Contrast Dark Theme**: ออกแบบให้อ่านง่าย ชัดเจน ในสภาพแวดล้อมครัว
+- **Order Preparation Timer**: มีตัวนับเวลาความล่าช้า แจ้งเตือนด้วยสีเมื่อออเดอร์รอนานเกินเกณฑ์
+- **Sound Alerts**: เสียงแจ้งเตือนระดับกระดิ่งครัวเมื่อมีออเดอร์ใหม่เข้ามา
 
-- **Node.js**: เวอร์ชัน `>= 22.13` (แนะนำ Node.js 22 LTS)
-- **pnpm**: เวอร์ชัน `>= 11.x` (`npm install -g pnpm@11`)
-- **PostgreSQL**: บัญชี [Supabase](https://supabase.com) (ฟรี) หรือ Local PostgreSQL
-- **Expo Go App**: สำหรับทดสอบ Mobile App บน iOS หรือ Android
+### 📺 5. จอแสดงผลคิวสำหรับลูกค้า (Queue Display Board - `/queue-display`)
+- **Full-Screen TV Display**: หน้าจอทีวีขนาดใหญ่ติดตั้งหน้าร้านหรือใจกลางโรงอาหาร
+- **Split View**: แยกฝั่งชัดเจนระหว่าง "กำลังปรุงอาหาร (Preparing)" และ "พร้อมรับอาหารแล้ว (Ready for Pickup)"
+- **Audio Chime System**: ส่งเสียงสัญญาณ Chime สองโทนแจ้งเตือนอัตโนมัติเมื่อมีหมายเลขคิวใหม่ที่อาหารปรุงเสร็จ
 
----
-
-### 2. ติดตั้ง Dependencies และ Build Types
-
-```bash
-# 1. โคลนโปรเจกต์
-git clone https://github.com/azazxxc147896325-beep/ProjectEnd.git
-cd ProjectEnd
-
-# 2. ติดตั้ง dependencies ทั้งหมดใน monorepo
-pnpm install
-
-# 3. คอมไพล์ shared-types
-pnpm build:types
-```
-
----
-
-### 3. ตั้งค่าตัวแปรสภาพแวดล้อม (Environment Variables)
-
-คัดลอกไฟล์ตัวอย่าง `.env.example` ไปยังแต่ละโมดูล:
-
-#### 🔹 `apps/backend/.env`:
-```env
-PORT=4000
-NODE_ENV=development
-DATABASE_URL="postgresql://user:password@localhost:5432/campus_food_db?schema=public"
-DIRECT_URL="postgresql://user:password@localhost:5432/campus_food_db?schema=public"
-JWT_SECRET="your-jwt-secret-key-here"
-JWT_REFRESH_SECRET="your-jwt-refresh-secret-key-here"
-FRONTEND_URL="http://localhost:3000"
-GEMINI_API_KEY="your-google-gemini-api-key"
-ANTHROPIC_API_KEY="your-anthropic-api-key"
-```
-
-#### 🔹 `apps/web/.env.local`:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:4000/api
-NEXT_PUBLIC_WS_URL=http://localhost:4000
-```
-
-#### 🔹 `apps/mobile/.env`:
-```env
-EXPO_PUBLIC_API_URL=http://localhost:4000/api
-EXPO_PUBLIC_WS_URL=http://localhost:4000
-```
-
----
-
-### 4. ซิงค์ฐานข้อมูลและสร้างข้อมูลตัวอย่าง (Database Migration & Seeding)
-
-```bash
-# Push schema ขึ้นไปยังฐานข้อมูล
-pnpm --filter @campus-food/backend prisma:push
-
-# รัน Seed เพื่อสร้างร้านค้าและเมนูอาหารตัวอย่าง
-pnpm --filter @campus-food/backend seed
-```
-
----
-
-### 5. คำสั่งสำหรับรันโปรเจกต์ (Development Scripts)
-
-| ส่วนงาน | คำสั่ง | URL เริ่มต้น / การเข้าถึง |
-| :--- | :--- | :--- |
-| **🚀 Backend API** | `pnpm dev:backend` | [http://localhost:4000/api](http://localhost:4000/api) (Swagger: `/api/docs`, Health: `/api/health`) |
-| **💻 Vendor Web Suite** | `pnpm dev:web` | [http://localhost:3000](http://localhost:3000) (Dashboard, POS, KDS, Queue) |
-| **📱 Student Mobile App** | `pnpm dev:mobile` | สแกน QR Code ผ่าน **Expo Go** หรือกด `i` (iOS Simulator) / `a` (Android) |
-
-#### 🔗 ทางลัดหน้า Web Suite สำหรับทดสอบ:
-- **Vendor Dashboard**: `http://localhost:3000/dashboard`
-- **POS หน้าร้าน**: `http://localhost:3000/pos`
-- **KDS จอในครัว**: `http://localhost:3000/kds`
-- **จอแสดงคิวลูกค้า TV**: `http://localhost:3000/queue-display`
-- **จอสอง Sunmi Display**: `http://localhost:3000/sunmi`
-
----
-
-### 6. การทดสอบ Unit Tests (Automated Testing)
-
-```bash
-# รัน Unit Tests ทั้งหมดใน Backend (81 Tests)
-pnpm --filter @campus-food/backend test
-```
-
----
-
-## 🐳 การรันด้วย Docker Compose (Docker Containerization)
-
-หากต้องการรันระบบทั้งหมด (PostgreSQL + Backend + Web) ในคำสั่งเดียว:
-
-```bash
-# เริ่มต้นการทำงานของ Container ทั้งหมด
-docker compose up -d
-
-# ตรวจสอบสถานะการทำงาน
-docker compose ps
-
-# ดูบันทึกการทำงาน (Logs)
-docker compose logs -f
-
-# หยุดการทำงาน
-docker compose down
-```
-
----
-
-## 👥 บัญชีผู้ใช้ตัวอย่างสำหรับทดสอบ (Demo Accounts & Seed Data)
-
-ระบบได้เตรียมข้อมูลร้านค้าจำลองในโรงอาหารไว้ 8 ร้าน พร้อมเมนูอาหารครบถ้วน (รหัสผ่านเริ่มต้นสามารถดูได้จาก `apps/backend/prisma/seed.ts`):
-
-| บทบาท (Role) | ร้านค้า / ผู้ใช้ | อีเมลตัวอย่าง (Email) |
-| :--- | :--- | :--- |
-| 👩‍🍳 **Vendor 1** | ครัวป้าสมใจ (อาหารตามสั่ง/กะเพรา) | `vendor.somjai@campus.ac.th` |
-| 🍗 **Vendor 2** | ข้าวมันไก่เฮียชัย ประตู 1 | `vendor.chaichicken@campus.ac.th` |
-| 🍜 **Vendor 3** | เตี๋ยวเรืออยุธยา สูตรโบราณ | `vendor.boatnoodle@campus.ac.th` |
-| 🥗 **Vendor 4** | แซ่บอีสาน ส้มตำ-ไก่ย่าง | `vendor.zaabisarn@campus.ac.th` |
-| 🍛 **Vendor 5** | ข้าวแกงปักษ์ใต้ คุณนายเรณู | `vendor.southern@campus.ac.th` |
-| ☕ **Vendor 6** | Green Canteen & Cafe (เครื่องดื่ม/เบเกอรี่) | `vendor.greencafe@campus.ac.th` |
-| 🇯🇵 **Vendor 7** | Tokyo Donburi ข้าวหน้าญี่ปุ่น | `vendor.tokyodonburi@campus.ac.th` |
-| 🍲 **Vendor 8** | ครัวฮาลาล ซาบีฮะห์ | `vendor.halalkitchen@campus.ac.th` |
-| 🎓 **Student** | นักศึกษา | _สมัครสมาชิกใหม่ผ่านหน้าแอปมือถือได้ทันที_ |
+### 🖥️ 6. ระบบจอสอง Sunmi POS (`/sunmi`, `/sunmi-display`)
+- รองรับเครื่อง POS แบรนด์ Sunmi หรือจอ Dual-Screen สำหรับหันหน้าให้ลูกค้า
+- แสดงรายการสินค้าที่กำลังสั่งแบบ Real-time พร้อมแสดง PromptPay QR Code ขนาดใหญ่ให้ลูกค้าสแกนจ่าย
 
 ---
 
